@@ -1,0 +1,7 @@
+{
+  "name": "docslab",
+  "version": "0.1.0",
+  "description": "interactive documentation",
+  "repository": "https://github.com/rerobots/docslab",
+  "license": "Apache-2.0"
+}
