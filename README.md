@@ -10,6 +10,12 @@ Run examples on real hardware in a safe and reproducible way.
 
 https://www.npmjs.com/package/docslab
 
+There are three ways to use docslab:
+
+1. copy-and-paste some code into your HTML file,
+2. import docslab as a TypeScript/ES6 dependency,
+3. use an integration for frameworks like Sphinx or Docusaurus.
+
 
 License
 -------
