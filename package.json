@@ -4,5 +4,18 @@
   "description": "interactive documentation",
   "homepage": "https://docslab.org/",
   "repository": "https://github.com/rerobots/docslab",
-  "license": "Apache-2.0"
+  "scripts": {
+    "build": "webpack",
+    "clean": "rm -r -f dist"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "xterm": "^5.2.1"
+  },
+  "devDependencies": {
+    "ts-loader": "^9.4.4",
+    "typescript": "^5.1.6",
+    "webpack": "^5.88.1",
+    "webpack-cli": "^5.1.4"
+  }
 }
