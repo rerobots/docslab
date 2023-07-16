@@ -6,7 +6,7 @@
   "repository": "https://github.com/rerobots/docslab",
   "scripts": {
     "build": "webpack",
-    "start": "webpack serve",
+    "start": "webpack serve --env example",
     "clean": "rm -r -f dist"
   },
   "license": "Apache-2.0",

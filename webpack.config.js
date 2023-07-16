@@ -1,16 +1,25 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 const webpack = require('webpack');
 
 
-module.exports = {
-    mode: 'development',
+var config = {
+    entry: './src/index.ts',
+    devServer: {
+        static: path.resolve(__dirname, 'dist'),
+    },
     output: {
         filename: 'docslab.js',
         path: path.resolve(__dirname, 'dist'),
+        clean: true,
+        library: {
+            name: 'docslab',
+            type: 'umd',
+        },
     },
     resolve: {
-        extensions: ['.ts'],
+        extensions: ['.ts', '.js'],
     },
     module: {
         rules: [
@@ -21,4 +30,21 @@ module.exports = {
             },
         ],
     },
+    plugins: [],
 };
+
+module.exports = (env, argv) => {
+    config.mode = argv.mode || 'development';
+    if (config.mode === 'development') {
+        config.devtool = 'eval-source-map';
+    }
+
+    if (env.example) {
+        config.plugins.push(new HtmlWebpackPlugin({
+            title: 'docslab',
+            template: 'examples/index.html',
+        }));
+    }
+
+    return config;
+}
