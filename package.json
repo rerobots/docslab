@@ -6,6 +6,7 @@
   "repository": "https://github.com/rerobots/docslab",
   "scripts": {
     "build": "webpack",
+    "start": "webpack serve",
     "clean": "rm -r -f dist"
   },
   "license": "Apache-2.0",
@@ -17,6 +18,7 @@
     "ts-loader": "^9.4.4",
     "typescript": "^5.1.6",
     "webpack": "^5.88.1",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
   }
 }
