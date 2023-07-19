@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>docslab example</title>
+  </head>
+  <body>
+    <p class="docslab" data-hardshareid="scott/0yGhD7qIcK9eiazG8ggE-A">
+      <a href="https://rerobots.net/u/scott/0yGhD7qIcK9eiazG8ggE-A" target="_blank">Try it</a>
+      <code><pre>
+#include &lt;Arduino.h&gt;
+#include &lt;SPI.h&gt;
+
+
+void setup()
+{
+    time_t timeout = millis();
+    Serial.begin(115200);
+    while (!Serial) {
+        if ((millis() - timeout) &lt; 5000) {
+            delay(100);
+        } else {
+            break;
+        }
+    }
+
+    Serial.println("Bienvenido!");
+}
+
+
+void loop()
+{
+    delay(1000);
+    Serial.println(".");
+}
+      </pre></code>
+    </p>
+    <button onclick="docslab.loadAll()">load</button>
+  </body>
+</html>
