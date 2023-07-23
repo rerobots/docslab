@@ -39,6 +39,10 @@ module.exports = (env, argv) => {
         config.devtool = 'eval-source-map';
     }
 
+    if (env.example || env.autoload) {
+        config.entry = './src/indexAutoload.ts';
+    }
+
     if (env.example) {
         config.plugins.push(new HtmlWebpackPlugin({
             title: 'docslab',
