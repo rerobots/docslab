@@ -12,7 +12,8 @@
   "license": "Apache-2.0",
   "dependencies": {
     "ace-code": "^1.23.4",
-    "xterm": "^5.2.1"
+    "xterm": "^5.2.1",
+    "xterm-addon-attach": "^0.8.0"
   },
   "devDependencies": {
     "html-webpack-plugin": "^5.5.3",
