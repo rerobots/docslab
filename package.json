@@ -11,6 +11,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
+    "ace-code": "^1.23.4",
     "xterm": "^5.2.1"
   },
   "devDependencies": {
