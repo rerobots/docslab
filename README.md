@@ -17,6 +17,13 @@ There are three ways to use docslab:
 3. use an integration for frameworks like Sphinx or Docusaurus.
 
 
+Contributing to docslab itself
+------------------------------
+
+Please report errors, odd behavior, or feature requests at
+<https://github.com/rerobots/docslab/issues>
+
+
 License
 -------
 
