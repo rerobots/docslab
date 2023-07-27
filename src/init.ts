@@ -43,7 +43,7 @@ export function prepareSnippet(root: HTMLElement)
     const initRunButton = () => {
         const runButtonCallback = () => {
             runButton.removeEventListener('click', runButtonCallback);
-            runCode(root, editor, runButton, initRunButton);
+            runCode(hardshareO, hardshareId, root, editor, runButton, initRunButton);
         };
         runButton.addEventListener('click', runButtonCallback);
     };
