@@ -8,6 +8,7 @@ export function prepareSnippet(root: HTMLElement)
     const readOnly = ('readonly' in root.dataset) || false;
     const hardshareO = root.dataset['hardshareo'];
     const hardshareId = root.dataset['hardshareid'];
+    const runCommand = root.dataset['command'] || null;
     const exampleBlockElement = document.getElementById(`cb-${hardshareId}`);
     const exampleBlock = exampleBlockElement.innerText;
 
@@ -43,7 +44,7 @@ export function prepareSnippet(root: HTMLElement)
     const initRunButton = () => {
         const runButtonCallback = () => {
             runButton.removeEventListener('click', runButtonCallback);
-            runCode(hardshareO, hardshareId, root, editor, runButton, initRunButton);
+            runCode(hardshareO, hardshareId, root, editor, readOnly, runCommand, runButton, initRunButton);
         };
         runButton.addEventListener('click', runButtonCallback);
     };
