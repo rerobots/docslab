@@ -9,6 +9,7 @@ export function prepareSnippet(root: HTMLElement)
     const hardshareO = root.dataset['hardshareo'];
     const hardshareId = root.dataset['hardshareid'];
     const runCommand = root.dataset['command'] || null;
+    const destpath = root.dataset['path'] || null;
     const exampleBlockElement = document.getElementById(`cb-${hardshareId}`);
     const exampleBlock = exampleBlockElement.innerText;
 
@@ -33,18 +34,18 @@ export function prepareSnippet(root: HTMLElement)
         resetButton = document.createElement('button');
         resetButton.innerText = 'Reset code';
         root.appendChild(resetButton);
-    }
-
-    if (!readOnly) {
         resetButton.addEventListener('click', () => {
             editor.setValue(exampleBlock, -1);
         });
     }
 
+    const statusBar = document.createElement('span');
+    root.appendChild(statusBar);
+
     const initRunButton = () => {
         const runButtonCallback = () => {
             runButton.removeEventListener('click', runButtonCallback);
-            runCode(hardshareO, hardshareId, root, editor, readOnly, runCommand, runButton, initRunButton);
+            runCode(hardshareO, hardshareId, root, editor, readOnly, runCommand, destpath, runButton, initRunButton, statusBar);
         };
         runButton.addEventListener('click', runButtonCallback);
     };
