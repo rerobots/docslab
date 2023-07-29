@@ -18,11 +18,11 @@ function getApiToken(hardshareO: string, hardshareId: string)
 {
     return new Promise((resolve, reject) => {
         let anon_id = localStorage.getItem('rr-api-token-anon-id');
-        let anon_nonce = localStorage.getItem('rr-api-token-anon-nonce');
+        const anon_nonce = localStorage.getItem('rr-api-token-anon-nonce');
         let retryCounter = 0;
 
         const requestApiToken = () => {
-            let options: RequestInit = {
+            const options: RequestInit = {
                 method: 'POST',
             };
             if (anon_id) {
@@ -186,7 +186,7 @@ export function runCode(hardshareO: string, hardshareId: string, root: HTMLEleme
     const fitAddon = new FitAddon();
     term.loadAddon(fitAddon);
 
-    let termDiv = document.createElement('div');
+    const termDiv = document.createElement('div');
     root.appendChild(termDiv);
     termDiv.style.width = '500px';
     termDiv.style.height = '200px';
@@ -194,7 +194,7 @@ export function runCode(hardshareO: string, hardshareId: string, root: HTMLEleme
     term.open(termDiv);
     fitAddon.fit();
 
-    let cameraImg = document.createElement('img');
+    const cameraImg = document.createElement('img');
     root.appendChild(cameraImg);
 
     clearTerminalButton.addEventListener('click', () => {
