@@ -6,8 +6,8 @@
   "repository": "https://github.com/rerobots/docslab",
   "scripts": {
     "build": "webpack",
-    "start": "webpack serve --env example",
-    "clean": "rm -r -f dist"
+    "clean": "rm -r -f dist",
+    "start": "webpack serve --env example"
   },
   "license": "Apache-2.0",
   "dependencies": {
