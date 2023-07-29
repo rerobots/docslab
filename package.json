@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "description": "interactive documentation",
   "homepage": "https://docslab.org/",
-  "repository": "https://github.com/rerobots/docslab",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rerobots/docslab.git"
+  },
   "scripts": {
     "build": "webpack",
     "clean": "rm -r -f dist",
