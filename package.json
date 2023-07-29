@@ -7,6 +7,7 @@
   "scripts": {
     "build": "webpack",
     "clean": "rm -r -f dist",
+    "lint": "eslint src --ext .ts && tsc --noEmit",
     "start": "webpack serve --env example"
   },
   "license": "Apache-2.0",
@@ -17,7 +18,10 @@
     "xterm-addon-fit": "^0.7.0"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.2.0",
+    "@typescript-eslint/parser": "^6.2.0",
     "css-loader": "^6.8.1",
+    "eslint": "^8.46.0",
     "html-webpack-plugin": "^5.5.3",
     "style-loader": "^3.3.3",
     "ts-loader": "^9.4.4",
