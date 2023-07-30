@@ -11,7 +11,7 @@
     "build": "webpack",
     "clean": "rm -r -f dist",
     "lint": "eslint src --ext .ts && tsc --noEmit",
-    "start": "webpack serve --env example"
+    "start": "webpack serve --env fullBundle --env example"
   },
   "license": "Apache-2.0",
   "dependencies": {

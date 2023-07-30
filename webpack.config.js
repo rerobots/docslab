@@ -47,6 +47,15 @@ module.exports = (env, argv) => {
         config.entry = './src/indexAutoload.ts';
     }
 
+    if (!env.fullBundle) {
+        config.externals = {
+            'ace-code': 'ace-code',
+            xterm: 'xterm',
+            'xterm-addon-attach': 'xterm-addon-attach',
+            'xterm-addon-fit': 'xterm-addon-fit',
+        };
+    }
+
     if (env.example) {
         config.plugins.push(new HtmlWebpackPlugin({
             title: 'docslab',
