@@ -168,7 +168,7 @@ function prepareShell(instanceInfo: InstanceInfo)
 }
 
 
-export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.Ace.Editor, runButton: HTMLButtonElement, initRunButton: () => void, statusBar: HTMLSpanElement)
+export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.Ace.Editor, runButton: HTMLButtonElement, initRunButton: () => void, statusBar: HTMLSpanElement, assignTerminationTimeout: (x: NodeJS.Timeout) => void)
 {
     const keyboardInterruptButton = document.createElement('button');
     keyboardInterruptButton.innerText = 'Interrupt';
@@ -223,13 +223,17 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
         return launchInstance(coderi.hardshareO, coderi.hardshareId, instanceInfo);
     }).then((instanceInfo: InstanceInfo) => {
         teardownButton.addEventListener('click', () => {
-            fetch('https://api.rerobots.net/terminate/' + instanceInfo.id, {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer ' + instanceInfo.token,
-                    'Content-Type': 'application/json',
-                }
-            });
+            const timeout = setTimeout(() => {
+                assignTerminationTimeout(null);
+                fetch('https://api.rerobots.net/terminate/' + instanceInfo.id, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + instanceInfo.token,
+                        'Content-Type': 'application/json',
+                    }
+                });
+            }, 10000);
+            assignTerminationTimeout(timeout);
         });
         statusBar.innerText = 'hardware reserved; preparing sandbox...'
         return prepareShell(instanceInfo);

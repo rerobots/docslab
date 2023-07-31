@@ -68,10 +68,17 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
     const statusBar = document.createElement('span');
     root.appendChild(statusBar);
 
+    let terminationTimeout: NodeJS.Timeout | null = null;
+    const assignTerminationTimeout = (x: NodeJS.Timeout) => {
+        terminationTimeout = x;
+    };
     const initRunButton = () => {
         const runButtonCallback = () => {
+            if (terminationTimeout !== null) {
+                clearTimeout(terminationTimeout);
+            }
             runButton.removeEventListener('click', runButtonCallback);
-            runCode(coderi, root, editor, runButton, initRunButton, statusBar);
+            runCode(coderi, root, editor, runButton, initRunButton, statusBar, assignTerminationTimeout);
         };
         runButton.addEventListener('click', runButtonCallback);
     };
