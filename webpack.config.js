@@ -57,10 +57,16 @@ module.exports = (env, argv) => {
     }
 
     if (env.example) {
-        config.plugins.push(new HtmlWebpackPlugin({
-            title: 'docslab',
-            template: 'examples/index.html',
-        }));
+        [
+            'index.html',
+            'esp32.html',
+        ].forEach((filename) => {
+            config.plugins.push(new HtmlWebpackPlugin({
+                title: 'docslab',
+                filename: filename,
+                template: 'examples/' + filename,
+            }));
+        });
     }
 
     return config;
