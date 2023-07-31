@@ -3,25 +3,51 @@ import { runCode } from './sandbox';
 import * as ace from 'ace-code';
 
 
-export function prepareSnippet(root: HTMLElement)
+export interface CodeRuntimeInfo {
+    hardshareO: string,
+    hardshareId: string,
+    runCommand?: string,
+    destpath?: string,
+    exampleCode?: string,
+    readOnly: boolean,
+}
+
+
+function parseRootData(root: HTMLDivElement): CodeRuntimeInfo
 {
-    const readOnly = ('readonly' in root.dataset) || false;
-    const hardshareO = root.dataset['hardshareo'];
-    const hardshareId = root.dataset['hardshareid'];
-    const runCommand = root.dataset['command'] || null;
-    const destpath = root.dataset['path'] || null;
-    const exampleBlockElement = document.getElementById(`cb-${hardshareId}`);
-    const exampleBlock = exampleBlockElement.innerText;
+    const coderi: CodeRuntimeInfo = {
+        readOnly: ('readonly' in root.dataset) || false,
+        hardshareO: root.dataset['hardshareo'],
+        hardshareId: root.dataset['hardshareid'],
+    };
+    const exampleBlockElement = document.getElementById(`cb-${coderi.hardshareId}`);
+    if (exampleBlockElement) {
+        coderi.exampleCode = exampleBlockElement.innerText;
+        root.removeChild(exampleBlockElement.parentElement);
+    }
+    if ('command' in root.dataset) {
+        coderi.runCommand = root.dataset['command'];
+    }
+    if ('path' in root.dataset) {
+        coderi.destpath = root.dataset['path'];
+    }
+    return coderi;
+}
+
+
+// If codeRuntimeInfo is provided, then do not read values from given element.
+export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRuntimeInfo)
+{
+    const coderi: CodeRuntimeInfo = codeRuntimeInfo || parseRootData(root);
 
     const editorDiv = document.createElement('div');
     root.appendChild(editorDiv);
-    root.removeChild(exampleBlockElement.parentElement);
     editorDiv.style.width = '500px';
     editorDiv.style.height = '200px';
 
     const editor = ace.edit(editorDiv);
-    editor.setValue(exampleBlock, -1);
-    if (readOnly) {
+    editor.setValue(coderi.exampleCode, -1);
+    if (coderi.readOnly) {
         editor.setReadOnly(true);
     }
 
@@ -30,12 +56,12 @@ export function prepareSnippet(root: HTMLElement)
     root.appendChild(runButton);
 
     let resetButton;
-    if (!readOnly) {
+    if (!coderi.readOnly) {
         resetButton = document.createElement('button');
         resetButton.innerText = 'Reset code';
         root.appendChild(resetButton);
         resetButton.addEventListener('click', () => {
-            editor.setValue(exampleBlock, -1);
+            editor.setValue(coderi.exampleCode, -1);
         });
     }
 
@@ -45,7 +71,7 @@ export function prepareSnippet(root: HTMLElement)
     const initRunButton = () => {
         const runButtonCallback = () => {
             runButton.removeEventListener('click', runButtonCallback);
-            runCode(hardshareO, hardshareId, root, editor, readOnly, runCommand, destpath, runButton, initRunButton, statusBar);
+            runCode(coderi, root, editor, runButton, initRunButton, statusBar);
         };
         runButton.addEventListener('click', runButtonCallback);
     };
@@ -64,6 +90,6 @@ export function loadAll()
 {
     const codeBlocks = document.getElementsByClassName("docslab");
     for (let j = 0; j < codeBlocks.length; j++) {
-        prepareSnippet(codeBlocks[j] as HTMLElement);
+        prepareSnippet(codeBlocks[j] as HTMLDivElement);
     }
 }

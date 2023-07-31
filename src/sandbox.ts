@@ -4,6 +4,8 @@ import 'xterm/css/xterm.css';
 import { AttachAddon } from 'xterm-addon-attach';
 import { FitAddon } from 'xterm-addon-fit';
 
+import { CodeRuntimeInfo } from './init';
+
 
 interface InstanceInfo {
     id?: string;
@@ -166,7 +168,7 @@ function prepareShell(instanceInfo: InstanceInfo)
 }
 
 
-export function runCode(hardshareO: string, hardshareId: string, root: HTMLElement, editor: ace.Ace.Editor, readOnly: boolean, runCommand: null | string, destpath: null | string, runButton: HTMLButtonElement, initRunButton: () => void, statusBar: HTMLSpanElement)
+export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.Ace.Editor, runButton: HTMLButtonElement, initRunButton: () => void, statusBar: HTMLSpanElement)
 {
     const keyboardInterruptButton = document.createElement('button');
     keyboardInterruptButton.innerText = 'Interrupt';
@@ -217,8 +219,8 @@ export function runCode(hardshareO: string, hardshareId: string, root: HTMLEleme
     };
     teardownButton.addEventListener('click', cleanUp);
 
-    const initPromise = getApiToken(hardshareO, hardshareId).then((instanceInfo: InstanceInfo) => {
-        return launchInstance(hardshareO, hardshareId, instanceInfo);
+    const initPromise = getApiToken(coderi.hardshareO, coderi.hardshareId).then((instanceInfo: InstanceInfo) => {
+        return launchInstance(coderi.hardshareO, coderi.hardshareId, instanceInfo);
     }).then((instanceInfo: InstanceInfo) => {
         teardownButton.addEventListener('click', () => {
             fetch('https://api.rerobots.net/terminate/' + instanceInfo.id, {
@@ -232,17 +234,17 @@ export function runCode(hardshareO: string, hardshareId: string, root: HTMLEleme
         statusBar.innerText = 'hardware reserved; preparing sandbox...'
         return prepareShell(instanceInfo);
     }).then((instanceInfo: InstanceInfo) => {
-        if (runCommand) {
-            instanceInfo.runCommand = runCommand;
+        if (coderi.runCommand) {
+            instanceInfo.runCommand = coderi.runCommand;
         }
-        if (destpath) {
-            instanceInfo.destpath = destpath;
+        if (coderi.destpath) {
+            instanceInfo.destpath = coderi.destpath;
         }
         const cmdshWs = new WebSocket(`wss://api.rerobots.net/addon/cmdsh/${instanceInfo.id}/new/${instanceInfo.token64}`);
         keyboardInterruptButton.addEventListener('click', () => {
             cmdshWs.send(String.fromCharCode(3));
         });
-        const attachAddon = new AttachAddon(cmdshWs, {bidirectional: !readOnly});
+        const attachAddon = new AttachAddon(cmdshWs, {bidirectional: !coderi.readOnly});
         term.loadAddon(attachAddon);
         runButtonCallback = () => {
             fetch('https://api.rerobots.net/addon/cmdsh/' + instanceInfo.id + '/file', {
