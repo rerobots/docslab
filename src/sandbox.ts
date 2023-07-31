@@ -232,7 +232,7 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
                         'Content-Type': 'application/json',
                     }
                 });
-            }, 10000);
+            }, 3000);
             assignTerminationTimeout(timeout);
         });
         statusBar.innerText = 'hardware reserved; preparing sandbox...'
