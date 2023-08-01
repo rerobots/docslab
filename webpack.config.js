@@ -58,8 +58,8 @@ module.exports = (env, argv) => {
 
     if (env.example) {
         [
-            'index.html',
             'esp32.html',
+            'index.html',
         ].forEach((filename) => {
             config.plugins.push(new HtmlWebpackPlugin({
                 title: 'docslab',
