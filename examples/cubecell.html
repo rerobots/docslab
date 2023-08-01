@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>docslab example</title>
+  </head>
+  <body>
+    <p>This tutorial explores development on a <a href="https://docs.helium.com/network-iot/devices/development/heltec/cubecell-dev-board-plus" target="_blank">Heltec CubeCell board with a screen</a>. It is based on a <a href="https://github.com/HelTecAutomation/CubeCell-Arduino/blob/16549f2000362873ca0eb9788101054defb92f4c/libraries/DISPLAY/examples/OLED/OnBoardOLED_AB02(SH1107_I2C)/DrawingDemo/DrawingDemo.ino" target="_blank">drawing example in the Heltec Automation repository</a>.</p>
+    <p>First, let's write some text:</p>
+    <div class="docslab" data-readonly data-hardshareo="heliumdev" data-hardshareid="cubecell-draw-demo" data-path="/root/cubecell-helium-us915-basic/src/main.cpp" data-command="source /root/.platformio/penv/bin/activate && cd /root/cubecell-helium-us915-basic && pio run -t upload">
+      <a href="https://rerobots.net/u/heliumdev/cubecell-draw-demo" target="_blank">Try it</a>
+      <pre><code id="cb-cubecell-draw-demo">#include &lt;Wire.h&gt;
+#include "HT_SH1107Wire.h"
+
+SH1107Wire  display(0x3c, 500000, SDA, SCL ,GEOMETRY_128_64,GPIO10); // addr, freq, sda, scl, resolution, rst
+
+
+void VextON(void)
+{
+  pinMode(Vext,OUTPUT);
+  digitalWrite(Vext, LOW);
+}
+
+void VextOFF(void) //Vext default OFF
+{
+  pinMode(Vext,OUTPUT);
+  digitalWrite(Vext, HIGH);
+}
+
+void setup() {
+
+  VextON();
+  delay(100);
+
+  display.init();
+  display.clear();
+  display.display();
+
+  display.setContrast(255);
+
+  display.setTextAlignment(TEXT_ALIGN_CENTER);
+  display.clear();
+  display.display();
+  display.screenRotate(ANGLE_180_DEGREE);
+  display.setFont(ArialMT_Plain_16);
+  display.drawString(64, 32-16/2, "Hola, mundo!");
+  display.display();
+
+  delay(1000);
+  display.clear();
+}
+
+void loop() { }
+</code></pre>
+    </div>
+
+    <p>Next, let's draw some lines:</p>
+    <div class="docslab" data-readonly data-hardshareo="heliumdev" data-hardshareid="cubecell-draw-demo" data-path="/root/cubecell-helium-us915-basic/src/main.cpp" data-command="source /root/.platformio/penv/bin/activate && cd /root/cubecell-helium-us915-basic && pio run -t upload">
+      <a href="https://rerobots.net/u/heliumdev/cubecell-draw-demo" target="_blank">Try it</a>
+      <pre><code id="cb-cubecell-draw-demo">#include &lt;Wire.h&gt;
+#include "HT_SH1107Wire.h"
+
+SH1107Wire  display(0x3c, 500000, SDA, SCL ,GEOMETRY_128_64,GPIO10); // addr, freq, sda, scl, resolution, rst
+
+
+void drawLines() {
+  for (int16_t i=0; i&lt;display.getWidth(); i+=4) {
+    display.drawLine(0, 0, i, display.getHeight()-1);
+    display.display();
+    delay(10);
+  }
+  for (int16_t i=0; i&lt;display.getHeight(); i+=4) {
+    display.drawLine(0, 0, display.getWidth()-1, i);
+    display.display();
+    delay(10);
+  }
+  delay(250);
+
+  display.clear();
+  for (int16_t i=0; i&lt;display.getWidth(); i+=4) {
+    display.drawLine(0, display.getHeight()-1, i, 0);
+    display.display();
+    delay(10);
+  }
+  for (int16_t i=display.getHeight()-1; i&gt;=0; i-=4) {
+    display.drawLine(0, display.getHeight()-1, display.getWidth()-1, i);
+    display.display();
+    delay(10);
+  }
+  delay(250);
+
+  display.clear();
+  for (int16_t i=display.getWidth()-1; i&gt;=0; i-=4) {
+    display.drawLine(display.getWidth()-1, display.getHeight()-1, i, 0);
+    display.display();
+    delay(10);
+  }
+  for (int16_t i=display.getHeight()-1; i&gt;=0; i-=4) {
+    display.drawLine(display.getWidth()-1, display.getHeight()-1, 0, i);
+    display.display();
+    delay(10);
+  }
+  delay(250);
+  display.clear();
+  for (int16_t i=0; i&lt;display.getHeight(); i+=4) {
+    display.drawLine(display.getWidth()-1, 0, 0, i);
+    display.display();
+    delay(10);
+  }
+  for (int16_t i=0; i&lt;display.getWidth(); i+=4) {
+    display.drawLine(display.getWidth()-1, 0, i, display.getHeight()-1);
+    display.display();
+    delay(10);
+  }
+  delay(250);
+}
+
+void VextON(void)
+{
+  pinMode(Vext,OUTPUT);
+  digitalWrite(Vext, LOW);
+}
+
+void VextOFF(void) //Vext default OFF
+{
+  pinMode(Vext,OUTPUT);
+  digitalWrite(Vext, HIGH);
+}
+
+void setup() {
+
+  VextON();
+  delay(100);
+
+  display.init();
+  display.clear();
+  display.display();
+
+  display.setContrast(255);
+
+  drawLines();
+  delay(1000);
+  display.clear();
+}
+
+void loop() { }
+</code></pre>
+    </div>
+
+    <p>If you encounter problems, hit the "Interrupt" button to interrupt the current process. Failing that, hit the "Teardown sandbox" button, then run it again. Note that "Teardown sandbox" destroys the environment that you were using and allows other users to take a turn. You may need to wait a few minutes before another board becomes available.</p>
+  </body>
+</html>

@@ -58,6 +58,7 @@ module.exports = (env, argv) => {
 
     if (env.example) {
         [
+            'cubecell.html',
             'esp32.html',
             'index.html',
         ].forEach((filename) => {
