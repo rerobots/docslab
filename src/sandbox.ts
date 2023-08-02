@@ -263,6 +263,7 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
                 }),
             }).then((res) => {
                 if (res.ok) {
+                    cmdshWs.send(String.fromCharCode(3));
                     cmdshWs.send('bash -c \'' + instanceInfo.runCommand + '\'\r');
                     return;
                 }
