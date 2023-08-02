@@ -320,7 +320,7 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
     }).then(() => {
         runButtonCallback();
     }).catch(() => {
-        statusBar.innerText = 'none available; try again soon.';
         cleanUp();
+        statusBar.innerText = 'None available; try again soon.';
     });
 }
