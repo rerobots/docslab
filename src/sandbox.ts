@@ -9,6 +9,7 @@ import { CodeRuntimeInfo } from './init';
 
 interface InstanceInfo {
     id?: string;
+    expiration?: number;
     token?: string;
     token64?: string;
     destpath?: string;
@@ -182,7 +183,7 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
     teardownButton.innerText = 'Teardown sandbox';
     root.insertBefore(teardownButton, statusBar);
 
-    statusBar.innerText = 'searching for available hardware...';
+    statusBar.innerText = 'Searching for available hardware...';
 
     const term = new Terminal();
     const fitAddon = new FitAddon();
@@ -216,12 +217,50 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
         clearTerminalButton.remove();
         cameraImg.remove();
         initRunButton();
+        statusBar.innerText = '';
     };
     teardownButton.addEventListener('click', cleanUp);
 
     const initPromise = getApiToken(coderi.hardshareO, coderi.hardshareId).then((instanceInfo: InstanceInfo) => {
         return launchInstance(coderi.hardshareO, coderi.hardshareId, instanceInfo);
     }).then((instanceInfo: InstanceInfo) => {
+        const instanceStatusWatcher = setInterval(() => {
+            if (teardownButton.parentElement === null) {
+                clearInterval(instanceStatusWatcher);
+                return;
+            }
+            fetch('https://api.rerobots.net/instance/' + instanceInfo.id, {
+                headers: {
+                    'Authorization': 'Bearer ' + instanceInfo.token,
+                    'Content-Type': 'application/json',
+                },
+            }).then((res) => {
+                if (res.ok) {
+                    return res.json();
+                }
+                throw new Error(res.url);
+            }).then((payload) => {
+                if (teardownButton.parentElement === null) {
+                    clearInterval(instanceStatusWatcher);
+                    return;
+                }
+
+                if (!instanceInfo.expiration) {
+                    instanceInfo.expiration = (new Date(payload.expires + 'Z')).valueOf();
+                }
+                if (payload.status !== 'INIT' && payload.status !== 'READY') {
+                    statusBar.innerText = 'Instance terminated.'
+                    clearInterval(instanceStatusWatcher);
+                } else if ((instanceInfo.expiration - Date.now())/1000.0 <= 60) {
+                    statusBar.innerText = 'Less than 60 seconds of access remaining'
+                }
+
+            }).catch((err) => {
+                console.log(err);
+                clearInterval(instanceStatusWatcher);
+            });
+        }, 10000);
+
         teardownButton.addEventListener('click', () => {
             const timeout = setTimeout(() => {
                 assignTerminationTimeout(null);
@@ -235,7 +274,7 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
             }, 3000);
             assignTerminationTimeout(timeout);
         });
-        statusBar.innerText = 'hardware reserved; preparing sandbox...'
+        statusBar.innerText = 'Hardware reserved; preparing sandbox...'
         return prepareShell(instanceInfo);
     }).then((instanceInfo: InstanceInfo) => {
         if (coderi.runCommand) {
