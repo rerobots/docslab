@@ -9,6 +9,8 @@ export interface CodeRuntimeInfo {
     runCommand?: string,
     destpath?: string,
     exampleCode?: string,
+    repoUrl?: string,
+    repoScript?: string,
     readOnly: boolean,
 }
 
@@ -30,6 +32,12 @@ function parseRootData(root: HTMLDivElement): CodeRuntimeInfo
     }
     if ('path' in root.dataset) {
         coderi.destpath = root.dataset['path'];
+    }
+    if ('repo' in root.dataset) {
+        coderi.repoUrl = root.dataset['repo'];
+    }
+    if ('iscript' in root.dataset) {
+        coderi.repoScript = root.dataset['iscript'];
     }
     return coderi;
 }

@@ -16,6 +16,16 @@ interface InstanceInfo {
     runCommand?: string;
 }
 
+interface InstanceParams {
+    allow_noop: boolean;
+    feasibleWdeployments: string[];
+    expirationDuration: string;
+    repo?: {
+        url: string;
+        path?: string;
+    };
+}
+
 
 function getApiToken(hardshareO: string, hardshareId: string)
 {
@@ -64,12 +74,12 @@ function getApiToken(hardshareO: string, hardshareId: string)
 }
 
 
-function launchInstance(hardshareO: string, hardshareId: string, instanceInfo: InstanceInfo)
+function launchInstance(coderi: CodeRuntimeInfo, instanceInfo: InstanceInfo)
 {
     return new Promise((resolve, reject) => {
         let retryCounter = 0;
         const requestSandboxInfo = () => {
-            fetch(`https://rerobots.net/eapi/hardshare/${hardshareO}/${hardshareId}`, {
+            fetch(`https://rerobots.net/eapi/hardshare/${coderi.hardshareO}/${coderi.hardshareId}`, {
                 method: 'GET',
             }).then((res) => {
                 if (res.ok) {
@@ -77,8 +87,19 @@ function launchInstance(hardshareO: string, hardshareId: string, instanceInfo: I
                 }
                 throw new Error(res.url);
             }).then((payload) => {
-                const feasibleWdeployments = payload.wds;
-                const expirationDuration = payload.expire_d.anon;
+                const newInstanceParams: InstanceParams = {
+                    allow_noop: true,
+                    feasibleWdeployments: payload.wds,
+                    expirationDuration: payload.expire_d.anon,
+                };
+                if (coderi.repoUrl) {
+                    newInstanceParams.repo = {
+                        url: coderi.repoUrl,
+                    };
+                    if (coderi.repoScript) {
+                        newInstanceParams.repo.path = coderi.repoScript;
+                    }
+                }
                 instanceInfo.destpath = payload.destpath;
                 instanceInfo.runCommand = payload.btn_command || 'echo "no run command set"';
                 return fetch('https://api.rerobots.net/new', {
@@ -87,11 +108,7 @@ function launchInstance(hardshareO: string, hardshareId: string, instanceInfo: I
                         'Authorization': 'Bearer ' + instanceInfo.token,
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        wds: feasibleWdeployments,
-                        allow_noop: true,
-                        expire_d: expirationDuration,
-                    })
+                    body: JSON.stringify(newInstanceParams),
                 });
             }).then((res) => {
                 if (res.status === 503) {
@@ -222,7 +239,7 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
     teardownButton.addEventListener('click', cleanUp);
 
     const initPromise = getApiToken(coderi.hardshareO, coderi.hardshareId).then((instanceInfo: InstanceInfo) => {
-        return launchInstance(coderi.hardshareO, coderi.hardshareId, instanceInfo);
+        return launchInstance(coderi, instanceInfo);
     }).then((instanceInfo: InstanceInfo) => {
         const instanceStatusWatcher = setInterval(() => {
             if (teardownButton.parentElement === null) {
