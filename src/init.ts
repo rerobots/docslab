@@ -11,6 +11,7 @@ export interface CodeRuntimeInfo {
     exampleCode?: string,
     repoUrl?: string,
     repoScript?: string,
+    urlfile?: string,
     readOnly: boolean,
 }
 
@@ -39,6 +40,9 @@ function parseRootData(root: HTMLDivElement): CodeRuntimeInfo
     if ('iscript' in root.dataset) {
         coderi.repoScript = root.dataset['iscript'];
     }
+    if ('urlfile' in root.dataset) {
+        coderi.urlfile = root.dataset['urlfile'];
+    }
     return coderi;
 }
 
@@ -54,7 +58,25 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
     editorDiv.style.height = '200px';
 
     const editor = ace.edit(editorDiv);
-    editor.setValue(coderi.exampleCode, -1);
+    if (coderi.urlfile) {
+        fetch(coderi.urlfile).then((res) => {
+            if (res.ok) {
+                return res.text();
+            }
+            throw new Error(res.url);
+        }).then((text) => {
+            coderi.exampleCode = text;
+            editor.setValue(text, -1);
+        }).catch((err) => {
+            console.log(err);
+            if (coderi.exampleCode) {
+                editor.setValue(coderi.exampleCode, -1);
+            }
+        });
+    } else if (coderi.exampleCode) {
+        editor.setValue(coderi.exampleCode, -1);
+    }
+
     if (coderi.readOnly) {
         editor.setReadOnly(true);
     }
