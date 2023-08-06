@@ -24,6 +24,14 @@ Please report errors, odd behavior, or feature requests at
 <https://github.com/rerobots/docslab/issues>
 
 
+### Implementation notes
+
+Generated HTML has a `<div>` block with attributes that specify how to prepare
+the runtime environment. Optionally, the example code can be given at a URL
+declared among these attributes, or it can be written in a `<code>` block
+inside the main `<div>`.
+
+
 License
 -------
 
