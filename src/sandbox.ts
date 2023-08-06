@@ -18,8 +18,8 @@ interface InstanceInfo {
 
 interface InstanceParams {
     allow_noop: boolean;
-    feasibleWdeployments: string[];
-    expirationDuration: string;
+    wds: string[];
+    expire_d: string;
     repo?: {
         url: string;
         path?: string;
@@ -89,8 +89,8 @@ function launchInstance(coderi: CodeRuntimeInfo, instanceInfo: InstanceInfo)
             }).then((payload) => {
                 const newInstanceParams: InstanceParams = {
                     allow_noop: true,
-                    feasibleWdeployments: payload.wds,
-                    expirationDuration: payload.expire_d.anon,
+                    wds: payload.wds,
+                    expire_d: payload.expire_d.anon,
                 };
                 if (coderi.repoUrl) {
                     newInstanceParams.repo = {
