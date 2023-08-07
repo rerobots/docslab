@@ -267,6 +267,10 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
                 }
                 if (payload.status !== 'INIT' && payload.status !== 'READY') {
                     statusBar.innerText = 'Instance terminated.'
+                    if (runButtonCallback) {
+                        runButton.removeEventListener('click', runButtonCallback);
+                        runButtonCallback = null;
+                    }
                     clearInterval(instanceStatusWatcher);
                 } else if ((instanceInfo.expiration - Date.now())/1000.0 <= 60) {
                     statusBar.innerText = 'Less than 60 seconds of access remaining'
@@ -326,6 +330,11 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
                 throw new Error(res.url);
             });
         };
+
+        cmdshWs.addEventListener('open', (event) => {
+            runButtonCallback();
+        });
+
         runButton.addEventListener('click', runButtonCallback);
         statusBar.innerText = '';
 
@@ -334,8 +343,6 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
             cameraImg.src = event.data;
         });
 
-    }).then(() => {
-        runButtonCallback();
     }).catch(() => {
         cleanUp();
         statusBar.innerText = 'None available; try again soon.';
