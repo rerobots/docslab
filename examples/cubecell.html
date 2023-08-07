@@ -9,7 +9,7 @@
   <body>
     <p>This tutorial explores development on a <a href="https://docs.helium.com/network-iot/devices/development/heltec/cubecell-dev-board-plus" target="_blank">Heltec CubeCell board with a screen</a>. It is based on a <a href="https://github.com/HelTecAutomation/CubeCell-Arduino/blob/16549f2000362873ca0eb9788101054defb92f4c/libraries/DISPLAY/examples/OLED/OnBoardOLED_AB02(SH1107_I2C)/DrawingDemo/DrawingDemo.ino" target="_blank">drawing example in the Heltec Automation repository</a>.</p>
     <p>First, let's write some text:</p>
-    <div class="docslab" data-readonly data-hardshareo="heliumdev" data-hardshareid="cubecell-draw-demo" data-path="/root/cubecell-helium-us915-basic/src/main.cpp" data-command="source /root/.platformio/penv/bin/activate && cd /root/cubecell-helium-us915-basic && pio run -t upload">
+    <div class="docslab" data-readonly data-hardshareo="heliumdev" data-hardshareid="cubecell-draw-demo" data-path="platform-heltec-cubecell/examples/LoRa/LoRaWAN/LoRaWAN/src/main.cpp" data-command="source .platformio/penv/bin/activate && cd platform-heltec-cubecell/examples/LoRa/LoRaWAN/LoRaWAN && pio run -t upload">
       <a href="https://rerobots.net/u/heliumdev/cubecell-draw-demo" target="_blank">Try it</a>
       <pre><code id="cb-cubecell-draw-demo">#include &lt;Wire.h&gt;
 #include "HT_SH1107Wire.h"
@@ -57,7 +57,7 @@ void loop() { }
     </div>
 
     <p>Next, let's draw some lines:</p>
-    <div class="docslab" data-readonly data-hardshareo="heliumdev" data-hardshareid="cubecell-draw-demo" data-path="/root/cubecell-helium-us915-basic/src/main.cpp" data-command="source /root/.platformio/penv/bin/activate && cd /root/cubecell-helium-us915-basic && pio run -t upload">
+    <div class="docslab" data-readonly data-hardshareo="heliumdev" data-hardshareid="cubecell-draw-demo" data-path="platform-heltec-cubecell/examples/LoRa/LoRaWAN/LoRaWAN/src/main.cpp" data-command="source .platformio/penv/bin/activate && cd platform-heltec-cubecell/examples/LoRa/LoRaWAN/LoRaWAN && pio run -t upload">
       <a href="https://rerobots.net/u/heliumdev/cubecell-draw-demo" target="_blank">Try it</a>
       <pre><code id="cb-cubecell-draw-demo">#include &lt;Wire.h&gt;
 #include "HT_SH1107Wire.h"
@@ -152,7 +152,7 @@ void loop() { }
     <p>If you encounter problems, hit the "Interrupt" button to interrupt the current process. Failing that, hit the "Teardown sandbox" button, then run it again. Note that "Teardown sandbox" destroys the environment that you were using and allows other users to take a turn. You may need to wait a few minutes before another board becomes available.</p>
 
     <p>Now that we have experience writing to the screen, let's learn to send data on the Helium network. Consider the following code simplified from <a href="https://github.com/HelTecAutomation/platform-heltec-cubecell/blob/6df74f88f241d9ee6c14dedaf8506b70042d4aff/examples/LoRa/LoRaWAN/LoRaWAN/src/LoRaWan.ino" target="_blank-">an example in the Heltec Automation repository</a>:</p>
-    <div class="docslab" data-hardshareo="heliumdev" data-hardshareid="cubecell-draw-demo" data-path="/root/cubecell-helium-us915-basic/src/main.cpp" data-command="source /root/.platformio/penv/bin/activate && cd /root/cubecell-helium-us915-basic && pio run -t upload && pio device monitor">
+    <div class="docslab" data-hardshareo="heliumdev" data-hardshareid="cubecell-draw-demo" data-path="platform-heltec-cubecell/examples/LoRa/LoRaWAN/LoRaWAN/src/main.cpp" data-command="source .platformio/penv/bin/activate && cd platform-heltec-cubecell/examples/LoRa/LoRaWAN/LoRaWAN && pio run -t upload && pio device monitor">
       <a href="https://rerobots.net/u/heliumdev/cubecell-draw-demo" target="_blank">Try it</a>
       <pre><code id="cb-cubecell-draw-demo">#include "LoRaWan_APP.h"
 #include "Arduino.h"
