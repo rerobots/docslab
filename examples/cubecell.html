@@ -14,7 +14,7 @@
       <pre><code id="cb-cubecell-draw-demo">#include &lt;Wire.h&gt;
 #include "HT_SH1107Wire.h"
 
-SH1107Wire  display(0x3c, 500000, SDA, SCL ,GEOMETRY_128_64,GPIO10); // addr, freq, sda, scl, resolution, rst
+SH1107Wire  display(0x3c, 500000, SDA, SCL, GEOMETRY_128_64, GPIO10); // addr, freq, sda, scl, resolution, rst
 
 
 void VextON(void)
@@ -62,7 +62,7 @@ void loop() { }
       <pre><code id="cb-cubecell-draw-demo">#include &lt;Wire.h&gt;
 #include "HT_SH1107Wire.h"
 
-SH1107Wire  display(0x3c, 500000, SDA, SCL ,GEOMETRY_128_64,GPIO10); // addr, freq, sda, scl, resolution, rst
+SH1107Wire  display(0x3c, 500000, SDA, SCL, GEOMETRY_128_64, GPIO10); // addr, freq, sda, scl, resolution, rst
 
 
 void drawLines() {
