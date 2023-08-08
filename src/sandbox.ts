@@ -9,6 +9,7 @@ import { CodeRuntimeInfo } from './init';
 
 interface InstanceInfo {
     id?: string;
+    status?: string;
     expiration?: number;
     token?: string;
     token64?: string;
@@ -51,6 +52,7 @@ function getApiToken(hardshareO: string, hardshareId: string)
                 throw new Error(res.url);
             }).then((payload) => {
                 const instanceInfo: InstanceInfo = {
+
                     token: payload.tok,
                     token64: payload.tok64,
                 };
@@ -124,6 +126,7 @@ function launchInstance(coderi: CodeRuntimeInfo, instanceInfo: InstanceInfo)
                     return;
                 }
                 instanceInfo.id = payload.id;
+                instanceInfo.status = 'INIT';
                 resolve(instanceInfo);
             }).catch((err) => {
                 console.log(err);
@@ -215,7 +218,6 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
     fitAddon.fit();
 
     const cameraImg = document.createElement('img');
-    root.appendChild(cameraImg);
 
     clearTerminalButton.addEventListener('click', () => {
         term.reset();
@@ -241,7 +243,7 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
     const initPromise = getApiToken(coderi.hardshareO, coderi.hardshareId).then((instanceInfo: InstanceInfo) => {
         return launchInstance(coderi, instanceInfo);
     }).then((instanceInfo: InstanceInfo) => {
-        const instanceStatusWatcher = setInterval(() => {
+        const instanceStatusWatcherFn = (instanceStatusWatcher: NodeJS.Timer) => {
             if (teardownButton.parentElement === null) {
                 clearInterval(instanceStatusWatcher);
                 return;
@@ -262,6 +264,40 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
                     return;
                 }
 
+                if (payload.status === 'READY' && instanceInfo.status === 'INIT') {
+                    clearInterval(instanceStatusWatcher);
+                    const instanceStatusWatcherSlow = setInterval(() => {
+                        instanceStatusWatcherFn(instanceStatusWatcherSlow);
+                    }, 10000);
+
+                    fetch('https://api.rerobots.net/addon/cam/' + instanceInfo.id, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + instanceInfo.token,
+                            'Content-Type': 'application/json',
+                        },
+                    }).then((res) => {
+                        if (res.ok) {
+                            return res.json();
+                        }
+                        if (res.status === 404) {
+                            return;
+                        }
+                        throw new Error(res.url);
+                    }).then((payload) => {
+                        if (payload.status === 'active') {
+                            root.appendChild(cameraImg);
+                            const camWs = new WebSocket(`wss://api.rerobots.net/addon/cam/${instanceInfo.id}/0/feed/${instanceInfo.token64}`);
+                            camWs.addEventListener('message', function (event) {
+                                cameraImg.src = event.data;
+                            });
+                        }
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                }
+                instanceInfo.status = payload.status;
+
                 if (!instanceInfo.expiration) {
                     instanceInfo.expiration = (new Date(payload.expires + 'Z')).valueOf();
                 }
@@ -280,7 +316,10 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
                 console.log(err);
                 clearInterval(instanceStatusWatcher);
             });
-        }, 10000);
+        };
+        const instanceStatusWatcher = setInterval(() => {
+            instanceStatusWatcherFn(instanceStatusWatcher);
+        }, 1000);
 
         teardownButton.addEventListener('click', () => {
             const timeout = setTimeout(() => {
@@ -337,11 +376,6 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
 
         runButton.addEventListener('click', runButtonCallback);
         statusBar.innerText = '';
-
-        const camWs = new WebSocket(`wss://api.rerobots.net/addon/cam/${instanceInfo.id}/0/feed/${instanceInfo.token64}`);
-        camWs.addEventListener('message', function (event) {
-            cameraImg.src = event.data;
-        });
 
     }).catch(() => {
         cleanUp();
