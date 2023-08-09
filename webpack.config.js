@@ -61,6 +61,7 @@ module.exports = (env, argv) => {
             'cubecell.html',
             'esp32.html',
             'index.html',
+            'repo.html',
         ].forEach((filename) => {
             config.plugins.push(new HtmlWebpackPlugin({
                 title: 'docslab',
