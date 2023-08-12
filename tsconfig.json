@@ -4,6 +4,9 @@
     "noImplicitAny": true,
     "module": "es6",
     "target": "es5",
-    "moduleResolution": "node"
-  }
+    "moduleResolution": "nodenext"
+  },
+  "include": [
+    "src/**/*"
+  ]
 }
