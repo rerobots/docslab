@@ -1,0 +1,26 @@
+{
+  "name": "@docslab/docusaurus-theme",
+  "version": "0.1.0",
+  "description": "Docusaurus theme to support docslab-enabled code examples",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rerobots/docslab.git"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -r -f lib"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "docslab": "^0.2.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.20",
+    "typescript": "^5.1.6"
+  }
+}

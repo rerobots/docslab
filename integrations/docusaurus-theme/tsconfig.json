@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib",
+    "jsx": "react",
+    "module": "nodenext",
+    "target": "es6",
+    "declaration": true,
+    "moduleResolution": "nodenext",
+    "noImplicitAny": true,
+    "strict": true
+  }
+}
