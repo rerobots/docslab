@@ -1,12 +1,12 @@
-import React from 'react';
+import * as React from 'react';
 
-import CodeBlock from '@theme-init/CodeBlock'
+import CodeBlock from '@theme-init/CodeBlock';
 import type { DocslabCodeBlockProps } from '../types';
 
 
 function componentWrapper(Component: typeof CodeBlock)
 {
-    return (props: DocslabCodeBlockProps) => {
+    return (props: DocslabCodeBlockProps): JSX.Element => {
         if (props.docslab) {
         }
         return <CodeBlock {...props} />;
