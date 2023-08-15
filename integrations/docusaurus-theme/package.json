@@ -2,6 +2,13 @@
   "name": "@docslab/docusaurus-theme",
   "version": "0.1.0",
   "description": "Docusaurus theme to support docslab-enabled code examples",
+  "keywords": [
+    "docs",
+    "documentation",
+    "docusaurus",
+    "editor",
+    "hardware"
+  ],
   "main": "lib/index.js",
   "repository": {
     "type": "git",

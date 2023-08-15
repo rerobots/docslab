@@ -2,6 +2,12 @@
   "name": "docslab",
   "version": "0.2.0",
   "description": "interactive documentation",
+  "keywords": [
+    "docs",
+    "documentation",
+    "editor",
+    "hardware"
+  ],
   "homepage": "https://docslab.org/",
   "repository": {
     "type": "git",
