@@ -10,7 +10,7 @@ var config = {
         static: path.resolve(__dirname, 'dist'),
     },
     output: {
-        filename: 'docslab.js',
+        filename: 'index.js',
         path: path.resolve(__dirname, 'dist'),
         clean: true,
         library: {
