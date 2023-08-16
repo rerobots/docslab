@@ -67,6 +67,7 @@ function getApiToken(hardshareO: string, hardshareId: string)
                 retryCounter++;
                 if (retryCounter > 8) {
                     reject();
+                    return;
                 }
                 setTimeout(requestApiToken, 1000*(2**(retryCounter)));
             });
@@ -133,6 +134,7 @@ function launchInstance(coderi: CodeRuntimeInfo, instanceInfo: InstanceInfo)
                 retryCounter++;
                 if (retryCounter > 8) {
                     reject();
+                    return;
                 }
                 setTimeout(requestSandboxInfo, 1000*(2**(retryCounter)));
             });
