@@ -17,7 +17,8 @@
   "scripts": {
     "build": "webpack",
     "clean": "rm -r -f dist",
-    "lint": "eslint src --ext .ts && tsc --noEmit",
+    "lint": "eslint --ext .ts src && tsc --noEmit",
+    "lint:fix": "eslint --fix --ext .ts src",
     "start": "webpack serve --env fullBundle --env example"
   },
   "license": "Apache-2.0",
