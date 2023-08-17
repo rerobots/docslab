@@ -4,15 +4,15 @@ import * as ace from 'ace-code';
 
 
 export interface CodeRuntimeInfo {
-    hardshareO: string,
-    hardshareId: string,
-    runCommand?: string,
-    destpath?: string,
-    exampleCode?: string,
-    repoUrl?: string,
-    repoScript?: string,
-    urlfile?: string,
-    readOnly: boolean,
+    hardshareO: string;
+    hardshareId: string;
+    runCommand?: string;
+    destpath?: string;
+    exampleCode?: string;
+    repoUrl?: string;
+    repoScript?: string;
+    urlfile?: string;
+    readOnly: boolean;
 }
 
 
