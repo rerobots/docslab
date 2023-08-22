@@ -17,6 +17,7 @@ var config = {
             name: 'docslab',
             type: 'umd',
         },
+        globalObject: 'this',
     },
     resolve: {
         extensions: ['.ts', '.js'],
