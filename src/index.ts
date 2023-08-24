@@ -1,2 +1,6 @@
-export { prepareSnippet, loadAll } from './init';
+export {
+    loadAll,
+    parseHardsharePath,
+    prepareSnippet,
+} from './init';
 export type { CodeRuntimeInfo } from './init';

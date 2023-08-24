@@ -3,9 +3,13 @@ import { runCode } from './sandbox';
 import * as ace from 'ace-code';
 
 
-export interface CodeRuntimeInfo {
+export interface HardsharePath {
     hardshareO: string;
     hardshareId: string;
+}
+
+
+export interface CodeRuntimeInfo extends HardsharePath {
     runCommand?: string;
     destpath?: string;
     exampleCode?: string;
@@ -44,6 +48,20 @@ function parseRootData(root: HTMLDivElement): CodeRuntimeInfo
         coderi.urlfile = root.dataset['urlfile'];
     }
     return coderi;
+}
+
+
+export function parseHardsharePath(hspath: string): HardsharePath
+{
+    const sep = hspath.indexOf('/');
+    if (sep < 1 || sep >= hspath.length - 1) {
+        throw new Error(`separator '/' not found in '${hspath}'`);
+    }
+
+    return {
+        hardshareO: hspath.substring(0, sep),
+        hardshareId: hspath.substring(sep + 1),
+    };
 }
 
 
