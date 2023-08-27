@@ -4,7 +4,7 @@ import 'xterm/css/xterm.css';
 import { AttachAddon } from 'xterm-addon-attach';
 import { FitAddon } from 'xterm-addon-fit';
 
-import { CodeRuntimeInfo } from './init';
+import { CodeRuntimeInfo } from './types';
 
 
 interface InstanceInfo {
@@ -14,7 +14,7 @@ interface InstanceInfo {
     token?: string;
     token64?: string;
     destpath?: string;
-    runCommand?: string;
+    command?: string;
 }
 
 interface InstanceParams {
@@ -104,7 +104,7 @@ function launchInstance(coderi: CodeRuntimeInfo, instanceInfo: InstanceInfo)
                     }
                 }
                 instanceInfo.destpath = payload.destpath;
-                instanceInfo.runCommand = payload.btn_command || 'echo "no run command set"';
+                instanceInfo.command = payload.btn_command || 'echo "no run command set"';
                 return fetch('https://api.rerobots.net/new', {
                     method: 'POST',
                     headers: {
@@ -339,8 +339,8 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
         statusBar.innerText = 'Hardware reserved; preparing sandbox...'
         return prepareShell(instanceInfo);
     }).then((instanceInfo: InstanceInfo) => {
-        if (coderi.runCommand) {
-            instanceInfo.runCommand = coderi.runCommand;
+        if (coderi.command) {
+            instanceInfo.command = coderi.command;
         }
         if (coderi.destpath) {
             instanceInfo.destpath = coderi.destpath;
@@ -365,7 +365,7 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
             }).then((res) => {
                 if (res.ok) {
                     cmdshWs.send(String.fromCharCode(3));
-                    cmdshWs.send('bash -c \'' + instanceInfo.runCommand + '\'\r');
+                    cmdshWs.send('bash -c \'' + instanceInfo.command + '\'\r');
                     return;
                 }
                 throw new Error(res.url);
