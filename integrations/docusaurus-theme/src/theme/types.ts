@@ -9,9 +9,8 @@ export interface CodeBlockSwitchProps extends Props {
     readonly readonly?: boolean;
 }
 
-export interface DocslabCodeBlockProps extends PreludeMap {
+export interface DocslabCodeBlockProps extends PreludeMap, Props {
     hardshare: string;
     noPrelude?: boolean;
     readOnly?: boolean;
-    readonly children: string;
 }
