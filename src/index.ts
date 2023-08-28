@@ -4,4 +4,8 @@ export {
     parsePrelude,
     prepareSnippet,
 } from './init';
-export type { CodeRuntimeInfo, PreludeMap } from './types';
+export type {
+    CodeRuntimeInfo,
+    PreludeKey,
+    PreludeMap,
+} from './types';
