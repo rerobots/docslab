@@ -147,7 +147,7 @@ function launchInstance(coderi: CodeRuntimeInfo, instanceInfo: InstanceInfo)
 function prepareShell(instanceInfo: InstanceInfo)
 {
     return new Promise((resolve, reject) => {
-        let timer: any;
+        let timer: NodeJS.Timer | null = null;
         let retryCounter = 0;
         const fetchAddonStatus = () => {
             fetch('https://api.rerobots.net/addon/cmdsh/' + instanceInfo.id, {
@@ -225,7 +225,7 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
         term.reset();
     });
 
-    let runButtonCallback: any = null;
+    let runButtonCallback: (() => void) | null = null;
 
     const cleanUp = () => {
         if (runButtonCallback) {
