@@ -1,4 +1,7 @@
 import * as ace from 'ace-code';
+import * as aceCppMode from 'ace-code/src/mode/c_cpp';
+import * as acePythonMode from 'ace-code/src/mode/python';
+import * as aceShMode from 'ace-code/src/mode/sh';
 
 import { runCode } from './sandbox';
 import type {
@@ -7,6 +10,13 @@ import type {
     PreludeKey,
     PreludeMap,
 } from './types';
+
+
+const highlightMap: {[key: string]: any} = {
+    c_cpp: aceCppMode,
+    python: acePythonMode,
+    sh: aceShMode,
+};
 
 
 export function parsePrelude(codeBlob: string): PreludeMap
@@ -116,7 +126,7 @@ export function parseHardsharePath(hspath: string): HardsharePath
 
 
 // If codeRuntimeInfo is provided, then do not read values from given element.
-export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRuntimeInfo)
+export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRuntimeInfo, syntaxHighlight?: string)
 {
     const coderi: CodeRuntimeInfo = codeRuntimeInfo || parseRootData(root);
 
@@ -126,6 +136,18 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
     editorDiv.style.height = '200px';
 
     const editor = ace.edit(editorDiv);
+    if (syntaxHighlight) {
+        if (syntaxHighlight === 'c' || syntaxHighlight === 'cpp') {
+            syntaxHighlight = 'c_cpp';
+        } else if (syntaxHighlight === 'bash') {
+            syntaxHighlight = 'sh';
+        }
+        if (!Object.keys(highlightMap).includes(syntaxHighlight)) {
+            console.log('Unknown syntax highlighting mode:', syntaxHighlight);
+        } else {
+            editor.session.setMode(new highlightMap[syntaxHighlight].Mode());
+        }
+    }
     if (coderi.urlfile) {
         fetch(coderi.urlfile).then((res) => {
             if (res.ok) {
