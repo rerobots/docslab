@@ -47,11 +47,16 @@ export function DocslabCodeBlock(props: DocslabCodeBlockProps): JSX.Element
 
                 if (props.exampleCode) {
                     coderi.exampleCode = props.exampleCode;
-                } else if (props.children) {
+                } else if (props.children && (noPrelude || !coderi.exampleCode)) {
                     coderi.exampleCode = props.children;
                 }
 
-                docslab.prepareSnippet(mainDiv.current, coderi);
+                if (props.className && props.className !== 'language-docslab' && props.className.startsWith('language-')) {
+                    const syntaxHighlight = props.className.substring(9);
+                    docslab.prepareSnippet(mainDiv.current, coderi, syntaxHighlight);
+                } else {
+                    docslab.prepareSnippet(mainDiv.current, coderi);
+                }
             })
         }
 
