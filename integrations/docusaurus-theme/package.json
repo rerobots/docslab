@@ -20,7 +20,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "docslab": "^0.2.0"
+    "docslab": "^0.3.0"
   },
   "peerDependencies": {
     "react": "^18.0.0",
