@@ -12,7 +12,7 @@ import type {
 } from './types';
 
 
-const highlightMap: {[key: string]: any} = {
+const highlightMap: {[key: string]: typeof aceCppMode} = {
     c_cpp: aceCppMode,
     python: acePythonMode,
     sh: aceShMode,
