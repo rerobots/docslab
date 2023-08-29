@@ -1,3 +1,14 @@
+docslab (0.3.0)
+
+  * Docusaurus theme to make code blocks with docslab interactive
+
+  * Syntax highlighting using a subset of ACE highlighters
+
+  * Various improvements to types, style
+
+ -- Scott C. Livingston <scott@rerobots.net>  Tue, 29 Aug 2023 15:45:11 -0700
+
+
 docslab (0.2.0)
 
   * First release with support for HTML embedding with repository URLs.
