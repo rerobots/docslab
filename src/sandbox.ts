@@ -31,7 +31,7 @@ interface InstanceParams {
 function getApiToken(hardshareO: string, hardshareId: string)
 {
     return new Promise((resolve, reject) => {
-        let anon_id = localStorage.getItem('rr-api-token-anon-id');
+        let anon_id: null | string = localStorage.getItem('rr-api-token-anon-id');
         const anon_nonce = localStorage.getItem('rr-api-token-anon-nonce');
         let retryCounter = 0;
 
@@ -49,10 +49,12 @@ function getApiToken(hardshareO: string, hardshareId: string)
                 if (res.ok) {
                     return res.json();
                 }
+                if (res.status === 403) {
+                    anon_id = null;
+                }
                 throw new Error(res.url);
             }).then((payload) => {
                 const instanceInfo: InstanceInfo = {
-
                     token: payload.tok,
                     token64: payload.tok64,
                 };
