@@ -131,9 +131,14 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
     const coderi: CodeRuntimeInfo = codeRuntimeInfo || parseRootData(root);
 
     const editorDiv = document.createElement('div');
+    editorDiv.className = 'docslabEditor';
     root.appendChild(editorDiv);
-    editorDiv.style.width = '500px';
-    editorDiv.style.height = '200px';
+
+    // If scroll height is too small, infer need to apply minimum size style
+    if (editorDiv.scrollHeight < 10) {
+        editorDiv.style.width = '500px';
+        editorDiv.style.height = '200px';
+    }
 
     const editor = ace.edit(editorDiv);
     if (syntaxHighlight) {
