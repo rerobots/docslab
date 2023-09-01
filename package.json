@@ -1,6 +1,6 @@
 {
   "name": "docslab",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "interactive documentation",
   "keywords": [
     "docs",
@@ -13,11 +13,15 @@
     "type": "git",
     "url": "https://github.com/rerobots/docslab.git"
   },
-  "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/**/*.d.ts",
+    "yarn.lock"
+  ],
   "scripts": {
     "build": "webpack",
-    "clean": "rm -r -f dist",
+    "clean": "rm -r -f lib",
     "lint": "eslint --ext .ts,.tsx src integrations/docusaurus-theme/src && tsc --noEmit",
     "lint:fix": "eslint --fix --ext .ts,.tsx src integrations/docusaurus-theme/src",
     "start": "webpack serve --env fullBundle --env example"
