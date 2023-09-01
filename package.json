@@ -1,6 +1,6 @@
 {
   "name": "docslab",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "interactive documentation",
   "keywords": [
     "docs",
@@ -13,7 +13,8 @@
     "type": "git",
     "url": "https://github.com/rerobots/docslab.git"
   },
-  "main": "dist/index.js",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "scripts": {
     "build": "webpack",
     "clean": "rm -r -f dist",

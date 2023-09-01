@@ -7,11 +7,11 @@ const webpack = require('webpack');
 var config = {
     entry: './src/index.ts',
     devServer: {
-        static: path.resolve(__dirname, 'dist'),
+        static: path.resolve(__dirname, 'lib'),
     },
     output: {
         filename: 'index.js',
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'lib'),
         clean: true,
         library: {
             name: 'docslab',
