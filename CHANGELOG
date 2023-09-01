@@ -1,3 +1,12 @@
+docslab (0.3.1)
+
+  * If anonymous ID denied by rerobots, try to get new one.
+
+  * Support defining size from stylesheets.
+
+ -- Scott C. Livingston <scott@rerobots.net>  Fri, 01 Sep 2023 12:01:12 -0700
+
+
 docslab (0.3.0)
 
   * Docusaurus theme to make code blocks with docslab interactive
