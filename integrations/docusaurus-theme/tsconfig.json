@@ -1,13 +1,20 @@
 {
+  "extends": "@tsconfig/docusaurus/tsconfig.json",
+  "references": [{"path": "./tsconfig.client.json"}],
   "compilerOptions": {
+    "noEmit": false,
     "rootDir": "src",
     "outDir": "lib",
     "jsx": "react",
     "module": "nodenext",
-    "target": "es6",
+    "target": "es2020",
     "declaration": true,
     "moduleResolution": "nodenext",
     "noImplicitAny": true,
     "strict": true
-  }
+  },
+  "include": ["src"],
+  "exclude": [
+    "src/theme"
+  ]
 }

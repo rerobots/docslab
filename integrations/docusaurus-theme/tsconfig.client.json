@@ -1,0 +1,20 @@
+{
+    "extends": "@tsconfig/docusaurus/tsconfig.json",
+    "compilerOptions": {
+      "noEmit": false,
+      "composite": true,
+      "rootDir": "src",
+      "outDir": "lib",
+      "jsx": "react",
+      "module": "esnext",
+      "target": "esnext",
+      "declaration": true,
+      "moduleResolution": "bundler",
+      "noImplicitAny": true,
+      "strict": true
+    },
+    "include": [
+        "src/theme",
+        "src/*.d.ts"
+    ]
+  }

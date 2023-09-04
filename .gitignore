@@ -2,3 +2,4 @@
 node_modules/
 /lib/
 /integrations/docusaurus-theme/lib/
+*.tsbuildinfo
