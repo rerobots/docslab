@@ -10,6 +10,7 @@
     "target": "es2020",
     "declaration": true,
     "moduleResolution": "nodenext",
+    "esModuleInterop": true,
     "noImplicitAny": true,
     "strict": true
   },
