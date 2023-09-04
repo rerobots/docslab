@@ -10,23 +10,27 @@
     "hardware"
   ],
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/rerobots/docslab.git"
   },
   "scripts": {
-    "build": "tsc",
-    "clean": "rm -r -f lib"
+    "build": "tsc --build",
+    "clean": "rm -r -f lib tsconfig.client.tsbuildinfo"
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "docslab": "^0.3.0"
+    "docslab": "^0.3.3"
   },
   "peerDependencies": {
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
   },
   "devDependencies": {
+    "@docusaurus/module-type-aliases": "^2.4.1",
+    "@docusaurus/theme-classic": "^2.4.1",
+    "@tsconfig/docusaurus": "^2.0.0",
     "@types/react": "^18.2.20",
     "typescript": "^5.1.6"
   }
