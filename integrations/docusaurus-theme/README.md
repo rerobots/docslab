@@ -41,7 +41,7 @@ To make a code block interactive, add `docslab` to the language meta string, e.g
 
 or use the JSX component without Markdown, e.g.,
 
-    import { DocslabCodeBlock } from 'docslab-docusaurus'
+    import { DocslabCodeBlock } from 'docslab-docusaurus/lib/theme/DocslabCodeBlock'
 
     <DocslabCodeBlock
       hardshare="heliumdev/cubecell-draw-demo"
