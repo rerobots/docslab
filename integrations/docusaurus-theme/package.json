@@ -11,6 +11,11 @@
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "files": [
+    "lib/**/*.js",
+    "lib/**/*.d.ts",
+    "yarn.lock"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/rerobots/docslab.git"
