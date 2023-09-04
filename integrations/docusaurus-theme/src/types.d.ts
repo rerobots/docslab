@@ -1,3 +1,5 @@
+/// <reference types="@docusaurus/module-type-alias" />
+
 declare module '@theme-init/CodeBlock' {
     export interface Props {
         readonly children: string;
