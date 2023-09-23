@@ -58,18 +58,27 @@ module.exports = (env, argv) => {
     }
 
     if (env.example) {
-        [
+        const examples = [
             'cubecell.html',
             'esp32.html',
-            'index.html',
             'repo.html',
-        ].forEach((filename) => {
+            'wisblock.html',
+        ];
+        examples.forEach((filename) => {
             config.plugins.push(new HtmlWebpackPlugin({
                 title: 'docslab',
                 filename: filename,
                 template: 'examples/' + filename,
             }));
         });
+        config.plugins.push(new HtmlWebpackPlugin({
+            title: 'docslab',
+            filename: 'index.html',
+            template: 'examples/index.ejs',
+            templateParameters: {
+                examples: examples,
+            }
+        }));
     }
 
     return config;
