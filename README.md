@@ -23,6 +23,13 @@ Contributing to docslab itself
 Please report errors, odd behavior, or feature requests at
 <https://github.com/rerobots/docslab/issues>
 
+For local development, clone the repository, and then `yarn install`.
+To run the examples,
+
+    yarn start
+
+and open the displayed URL (likely <http://localhost:8080/>) in your browser.
+
 
 ### Implementation notes
 
