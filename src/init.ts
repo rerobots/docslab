@@ -82,15 +82,21 @@ export function parsePrelude(codeBlob: string): PreludeMap
 
 function parseRootData(root: HTMLDivElement): CodeRuntimeInfo
 {
+    if (!('hardshareo' in root.dataset)) {
+        throw new Error('hardshareo not defined');
+    }
+    if (!('hardshareid' in root.dataset)) {
+        throw new Error('hardshareid not defined');
+    }
     const coderi: CodeRuntimeInfo = {
         readOnly: ('readonly' in root.dataset) || false,
-        hardshareO: root.dataset['hardshareo'],
-        hardshareId: root.dataset['hardshareid'],
+        hardshareO: root.dataset['hardshareo'] as string,
+        hardshareId: root.dataset['hardshareid'] as string,
     };
     const exampleBlockElement = document.getElementById(`cb-${coderi.hardshareId}`);
     if (exampleBlockElement) {
         coderi.exampleCode = exampleBlockElement.innerText;
-        root.removeChild(exampleBlockElement.parentElement);
+        root.removeChild(exampleBlockElement.parentElement as Node);
     }
     if ('command' in root.dataset) {
         coderi.command = root.dataset['command'];
