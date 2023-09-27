@@ -192,6 +192,7 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
         resetButton.innerText = 'Reset code';
         root.appendChild(resetButton);
         resetButton.addEventListener('click', () => {
+            coderi.exampleCode ||= '';
             editor.setValue(coderi.exampleCode, -1);
         });
     }
