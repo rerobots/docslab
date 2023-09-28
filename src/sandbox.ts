@@ -32,7 +32,6 @@ function getApiToken(hardshareO: string, hardshareId: string)
 {
     return new Promise((resolve, reject) => {
         let anon_id: null | string = localStorage.getItem('rr-api-token-anon-id');
-        const anon_nonce = localStorage.getItem('rr-api-token-anon-nonce');
         let retryCounter = 0;
 
         const requestApiToken = () => {
@@ -40,6 +39,7 @@ function getApiToken(hardshareO: string, hardshareId: string)
                 method: 'POST',
             };
             if (anon_id) {
+                const anon_nonce = localStorage.getItem('rr-api-token-anon-nonce') || '';
                 const formData = new FormData();
                 formData.append('anon_id', anon_id);
                 formData.append('nonce', anon_nonce);
@@ -59,7 +59,7 @@ function getApiToken(hardshareO: string, hardshareId: string)
                     token64: payload.tok64,
                 };
                 if (payload.nonce && !anon_id) {
-                    anon_id = payload.u.substring(payload.u.lastIndexOf('_')+1);
+                    anon_id = payload.u.substring(payload.u.lastIndexOf('_')+1) as string;
                     localStorage.setItem('rr-api-token-anon-id', anon_id);
                     localStorage.setItem('rr-api-token-anon-nonce', payload.nonce);
                 }
