@@ -149,9 +149,8 @@ function launchInstance(coderi: CodeRuntimeInfo, instanceInfo: InstanceInfo)
 function prepareShell(instanceInfo: InstanceInfo)
 {
     return new Promise((resolve, reject) => {
-        let timer: NodeJS.Timer | null = null;
         let retryCounter = 0;
-        const fetchAddonStatus = () => {
+        const timer = setInterval(() => {
             fetch('https://api.rerobots.net/addon/cmdsh/' + instanceInfo.id, {
                 headers: {
                     'Authorization': 'Bearer ' + instanceInfo.token,
@@ -187,8 +186,7 @@ function prepareShell(instanceInfo: InstanceInfo)
                     }
                 }
             });
-        };
-        timer = setInterval(fetchAddonStatus, 1000);
+        }, 1000);
     });
 }
 
