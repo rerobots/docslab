@@ -201,7 +201,7 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
     root.appendChild(statusBar);
 
     let terminationTimeout: NodeJS.Timeout | null = null;
-    const assignTerminationTimeout = (x: NodeJS.Timeout) => {
+    const assignTerminationTimeout = (x: NodeJS.Timeout | null) => {
         terminationTimeout = x;
     };
     const initRunButton = () => {

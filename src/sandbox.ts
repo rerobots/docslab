@@ -28,7 +28,7 @@ interface InstanceParams {
 }
 
 
-function getApiToken(hardshareO: string, hardshareId: string)
+function getApiToken(hardshareO: string, hardshareId: string): Promise<InstanceInfo>
 {
     return new Promise((resolve, reject) => {
         let anon_id: null | string = localStorage.getItem('rr-api-token-anon-id');
@@ -79,7 +79,7 @@ function getApiToken(hardshareO: string, hardshareId: string)
 }
 
 
-function launchInstance(coderi: CodeRuntimeInfo, instanceInfo: InstanceInfo)
+function launchInstance(coderi: CodeRuntimeInfo, instanceInfo: InstanceInfo): Promise<InstanceInfo>
 {
     return new Promise((resolve, reject) => {
         let retryCounter = 0;
@@ -146,7 +146,7 @@ function launchInstance(coderi: CodeRuntimeInfo, instanceInfo: InstanceInfo)
 }
 
 
-function prepareShell(instanceInfo: InstanceInfo)
+function prepareShell(instanceInfo: InstanceInfo): Promise<InstanceInfo>
 {
     return new Promise((resolve, reject) => {
         let retryCounter = 0;
@@ -191,7 +191,7 @@ function prepareShell(instanceInfo: InstanceInfo)
 }
 
 
-export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.Ace.Editor, runButton: HTMLButtonElement, initRunButton: () => void, statusBar: HTMLSpanElement, assignTerminationTimeout: (x: NodeJS.Timeout) => void)
+export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.Ace.Editor, runButton: HTMLButtonElement, initRunButton: () => void, statusBar: HTMLSpanElement, assignTerminationTimeout: (x: NodeJS.Timeout | null) => void)
 {
     const keyboardInterruptButton = document.createElement('button');
     keyboardInterruptButton.innerText = 'Interrupt';
@@ -373,7 +373,9 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
         };
 
         cmdshWs.addEventListener('open', (event) => {
-            runButtonCallback();
+            if (runButtonCallback) {
+                runButtonCallback();
+            }
         });
 
         runButton.addEventListener('click', runButtonCallback);
