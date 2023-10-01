@@ -372,7 +372,7 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
             });
         };
 
-        cmdshWs.addEventListener('open', (event) => {
+        cmdshWs.addEventListener('open', () => {
             if (runButtonCallback) {
                 runButtonCallback();
             }
