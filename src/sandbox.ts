@@ -27,8 +27,24 @@ interface InstanceParams {
     };
 }
 
+interface CancelFlag {
+    cancelled: boolean;
+}
 
-function getApiToken(hardshareO: string, hardshareId: string): Promise<InstanceInfo>
+
+function checkIfCancelled(cancelFlag?: CancelFlag, reject?: () => void)
+{
+    if (cancelFlag && cancelFlag.cancelled) {
+        if (reject) {
+            reject();
+        } else {
+            throw 'cancel';
+        }
+    }
+}
+
+
+function getApiToken(hardshareO: string, hardshareId: string, cancelFlag?: CancelFlag): Promise<InstanceInfo>
 {
     return new Promise((resolve, reject) => {
         let anon_id: null | string = localStorage.getItem('rr-api-token-anon-id');
@@ -45,7 +61,9 @@ function getApiToken(hardshareO: string, hardshareId: string): Promise<InstanceI
                 formData.append('nonce', anon_nonce);
                 options.body = formData;
             }
+            checkIfCancelled(cancelFlag, reject);
             fetch(`https://rerobots.net/eapi/token/up/sandbox/${hardshareO}/${hardshareId}`, options).then((res) => {
+                checkIfCancelled(cancelFlag);
                 if (res.ok) {
                     return res.json();
                 }
@@ -65,6 +83,10 @@ function getApiToken(hardshareO: string, hardshareId: string): Promise<InstanceI
                 }
                 resolve(instanceInfo);
             }).catch((err) => {
+                if (err === 'cancel') {
+                    reject();
+                    return;
+                }
                 console.log(err);
                 retryCounter++;
                 if (retryCounter > 8) {
@@ -79,14 +101,16 @@ function getApiToken(hardshareO: string, hardshareId: string): Promise<InstanceI
 }
 
 
-function launchInstance(coderi: CodeRuntimeInfo, instanceInfo: InstanceInfo): Promise<InstanceInfo>
+function launchInstance(coderi: CodeRuntimeInfo, instanceInfo: InstanceInfo, cancelFlag?: CancelFlag): Promise<InstanceInfo>
 {
     return new Promise((resolve, reject) => {
         let retryCounter = 0;
         const requestSandboxInfo = () => {
+            checkIfCancelled(cancelFlag, reject);
             fetch(`https://rerobots.net/eapi/hardshare/${coderi.hardshareO}/${coderi.hardshareId}`, {
                 method: 'GET',
             }).then((res) => {
+                checkIfCancelled(cancelFlag);
                 if (res.ok) {
                     return res.json();
                 }
@@ -107,6 +131,7 @@ function launchInstance(coderi: CodeRuntimeInfo, instanceInfo: InstanceInfo): Pr
                 }
                 instanceInfo.destpath = payload.destpath;
                 instanceInfo.command = payload.btn_command || 'echo "no run command set"';
+                checkIfCancelled(cancelFlag);
                 return fetch('https://api.rerobots.net/new', {
                     method: 'POST',
                     headers: {
@@ -116,6 +141,7 @@ function launchInstance(coderi: CodeRuntimeInfo, instanceInfo: InstanceInfo): Pr
                     body: JSON.stringify(newInstanceParams),
                 });
             }).then((res) => {
+                checkIfCancelled(cancelFlag);
                 if (res.status === 503) {
                     reject();
                     return;
@@ -132,6 +158,10 @@ function launchInstance(coderi: CodeRuntimeInfo, instanceInfo: InstanceInfo): Pr
                 instanceInfo.status = 'INIT';
                 resolve(instanceInfo);
             }).catch((err) => {
+                if (err === 'cancel') {
+                    reject();
+                    return;
+                }
                 console.log(err);
                 retryCounter++;
                 if (retryCounter > 8) {
@@ -146,16 +176,21 @@ function launchInstance(coderi: CodeRuntimeInfo, instanceInfo: InstanceInfo): Pr
 }
 
 
-function prepareShell(instanceInfo: InstanceInfo): Promise<InstanceInfo>
+function prepareShell(instanceInfo: InstanceInfo, cancelFlag?: CancelFlag): Promise<InstanceInfo>
 {
     return new Promise((resolve, reject) => {
         let retryCounter = 0;
         const timer = setInterval(() => {
+            checkIfCancelled(cancelFlag, () => {
+                clearInterval(timer);
+                reject();
+            });
             fetch('https://api.rerobots.net/addon/cmdsh/' + instanceInfo.id, {
                 headers: {
                     'Authorization': 'Bearer ' + instanceInfo.token,
                 },
             }).then((res) => {
+                checkIfCancelled(cancelFlag);
                 if (res.ok) {
                     return res.json();
                 } else if (res.status === 404) {
@@ -164,6 +199,7 @@ function prepareShell(instanceInfo: InstanceInfo): Promise<InstanceInfo>
                 throw new Error(res.url);
             }).then((data) => {
                 if (data.status === 'notfound') {
+                    checkIfCancelled(cancelFlag);
                     fetch('https://api.rerobots.net/addon/cmdsh/' + instanceInfo.id, {
                         method: 'POST',
                         headers: {
@@ -185,6 +221,13 @@ function prepareShell(instanceInfo: InstanceInfo): Promise<InstanceInfo>
                         reject();
                     }
                 }
+            }).catch((err) => {
+                if (err === 'cancel') {
+                    clearInterval(timer);
+                    reject();
+                    return;
+                }
+                console.log(err);
             });
         }, 1000);
     });
@@ -227,7 +270,11 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
 
     let runButtonCallback: (() => void) | null = null;
 
+    const cancelFlag = {
+        cancelled: false,
+    };
     const cleanUp = () => {
+        cancelFlag.cancelled = true;
         if (runButtonCallback) {
             runButton.removeEventListener('click', runButtonCallback);
         }
@@ -242,8 +289,8 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
     };
     teardownButton.addEventListener('click', cleanUp);
 
-    const initPromise = getApiToken(coderi.hardshareO, coderi.hardshareId).then((instanceInfo: InstanceInfo) => {
-        return launchInstance(coderi, instanceInfo);
+    getApiToken(coderi.hardshareO, coderi.hardshareId, cancelFlag).then((instanceInfo: InstanceInfo) => {
+        return launchInstance(coderi, instanceInfo, cancelFlag);
     }).then((instanceInfo: InstanceInfo) => {
         const instanceStatusWatcherFn = (instanceStatusWatcher: NodeJS.Timer) => {
             if (teardownButton.parentElement === null) {
@@ -337,7 +384,7 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
             assignTerminationTimeout(timeout);
         });
         statusBar.innerText = 'Hardware reserved; preparing sandbox...'
-        return prepareShell(instanceInfo);
+        return prepareShell(instanceInfo, cancelFlag);
     }).then((instanceInfo: InstanceInfo) => {
         if (coderi.command) {
             instanceInfo.command = coderi.command;
@@ -382,7 +429,10 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
         statusBar.innerText = '';
 
     }).catch(() => {
-        cleanUp();
-        statusBar.innerText = 'None available; try again soon.';
+        if (!cancelFlag.cancelled) {
+            cleanUp();
+            statusBar.innerText = 'None available; try again soon.';
+        }
+        // If cancelFlag.cancelled true, then cleanUp() was already called
     });
 }
