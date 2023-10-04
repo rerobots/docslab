@@ -24,6 +24,7 @@
     "clean": "rm -r -f lib",
     "lint": "eslint --ext .ts,.tsx src integrations/docusaurus-theme/src && tsc --noEmit",
     "lint:fix": "eslint --fix --ext .ts,.tsx src integrations/docusaurus-theme/src",
+    "test:end-to-end": "cypress run",
     "start": "webpack serve --env fullBundle --env example"
   },
   "license": "Apache-2.0",
