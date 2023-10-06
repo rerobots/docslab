@@ -1,9 +1,11 @@
 export {
     loadAll,
     parseHardsharePath,
-    parsePrelude,
     prepareSnippet,
 } from './init';
+export {
+    parsePrelude,
+} from './util';
 export type {
     CodeRuntimeInfo,
     PreludeKey,
