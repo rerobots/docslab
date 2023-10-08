@@ -207,8 +207,9 @@ function prepareShell(instanceInfo: InstanceInfo, cancelFlag?: CancelFlag): Prom
                         },
                     });
                     retryCounter++;
-                    if (retryCounter > 10) {
+                    if (retryCounter > 30) {
                         clearInterval(timer);
+                        console.log('timeout: command shell did not start');
                         reject();
                     }
                 } else if (data.status === 'active') {
@@ -216,8 +217,9 @@ function prepareShell(instanceInfo: InstanceInfo, cancelFlag?: CancelFlag): Prom
                     resolve(instanceInfo);
                 } else {
                     retryCounter++;
-                    if (retryCounter > 10) {
+                    if (retryCounter > 30) {
                         clearInterval(timer);
+                        console.log('timeout: command shell did not become active');
                         reject();
                     }
                 }
