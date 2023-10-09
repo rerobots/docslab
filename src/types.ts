@@ -24,4 +24,5 @@ export interface CodeRuntimeInfo extends HardsharePath, PreludeMap {
     readOnly: boolean;
     startShowIndex?: number;  // Index corresponding to lineRange[0]
     endShowIndex?: number;  // Index corresponding to lineRange[1]
+    maxLine?: number;
 }

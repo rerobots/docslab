@@ -27,7 +27,7 @@ export function getCodeRegion(codeBlob: string, lineRange: LineRange, lineEnding
     let start = 0;
     let end = codeBlob.indexOf(lineEnding);
     let currentLine = 0;
-    while (startLineIndex === undefined || endLineIndex === undefined || lineRange[1] === -1) {
+    while (start < codeBlob.length) {
         currentLine += 1;
         if (startLineIndex === undefined && currentLine === lineRange[0]) {
             startLineIndex = start;
@@ -36,10 +36,10 @@ export function getCodeRegion(codeBlob: string, lineRange: LineRange, lineEnding
             break;
         }
 
-        if (end === codeBlob.length - 1) {
+        start = end + lineEnding.length;
+        if (start >= codeBlob.length) {
             break;
         }
-        start = end + lineEnding.length;
         end = codeBlob.indexOf(lineEnding, start);
         if (end < 0) {
             end = codeBlob.length - 1;

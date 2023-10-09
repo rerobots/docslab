@@ -18,6 +18,29 @@ const highlightMap: {[key: string]: typeof aceCppMode} = {
 };
 
 
+function showAllCode(coderi: CodeRuntimeInfo, editor: ace.Ace.Editor)
+{
+    if (!coderi.lineRange || !coderi.exampleCode) {
+        throw new Error('cannot show all code');
+    }
+    editor.setValue(coderi.exampleCode, -1);
+    editor.setOption('firstLineNumber', 1);
+    if (coderi.maxLine) {
+        editor.setOption('maxLines', coderi.maxLine);
+    }
+}
+
+function hideSurroundingCode(coderi: CodeRuntimeInfo, editor: ace.Ace.Editor)
+{
+    if (!coderi.lineRange || !coderi.exampleCode || !coderi.startShowIndex) {
+        throw new Error('cannot hide surrounding code');
+    }
+    editor.setOption('firstLineNumber', coderi.lineRange[0]);
+    editor.setValue(coderi.exampleCode.substring(coderi.startShowIndex, coderi.endShowIndex), -1);
+    editor.setOption('maxLines', coderi.lineRange[1] - coderi.lineRange[0] + 1);
+}
+
+
 function parseRootData(root: HTMLDivElement): CodeRuntimeInfo
 {
     if (!('hardshareo' in root.dataset)) {
@@ -124,14 +147,11 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
     }
     if (coderi.exampleCode) {
         if (coderi.lineRange) {
-            const [startShowIndex, endShowIndex, maxLine] = getCodeRegion(coderi.exampleCode, coderi.lineRange, '\n');
-            [coderi.startShowIndex, coderi.endShowIndex] = [startShowIndex, endShowIndex];
+            [coderi.startShowIndex, coderi.endShowIndex, coderi.maxLine] = getCodeRegion(coderi.exampleCode, coderi.lineRange, '\n');
             if (coderi.lineRange[1] === -1) {
-                coderi.lineRange[1] = maxLine;
+                coderi.lineRange[1] = coderi.maxLine;
             }
-            editor.setOption('firstLineNumber', coderi.lineRange[0]);
-            editor.setValue(coderi.exampleCode.substring(coderi.startShowIndex, coderi.endShowIndex), -1);
-            editor.setOption('maxLines', coderi.lineRange[1] - coderi.lineRange[0] + 1);
+            hideSurroundingCode(coderi, editor);
         } else {
             editor.setValue(coderi.exampleCode, -1);
         }
@@ -140,6 +160,25 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
     const runButton = document.createElement('button');
     runButton.innerText = 'Run';
     root.appendChild(runButton);
+
+    let showAllButton: HTMLButtonElement;
+    if (coderi.lineRange && coderi.exampleCode) {
+        showAllButton = document.createElement('button');
+        showAllButton.innerText = 'Show all';
+        root.appendChild(showAllButton);
+        let showingAllCode = false;
+        showAllButton.addEventListener('click', () => {
+            if (showingAllCode) {
+                showingAllCode = false;
+                hideSurroundingCode(coderi, editor);
+                showAllButton.innerText = 'Show all';
+            } else {
+                showingAllCode = true;
+                showAllCode(coderi, editor);
+                showAllButton.innerText = 'Hide surrounding code';
+            }
+        });
+    }
 
     let resetButton;
     if (!coderi.readOnly) {
