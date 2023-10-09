@@ -129,6 +129,19 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
             editor.session.setMode(new highlightMap[syntaxHighlight].Mode());
         }
     }
+
+    const initialShowCode = () => {
+        if (coderi.lineRange && coderi.exampleCode) {
+            [coderi.startShowIndex, coderi.endShowIndex, coderi.maxLine] = getCodeRegion(coderi.exampleCode, coderi.lineRange, '\n');
+            if (coderi.lineRange[1] === -1) {
+                coderi.lineRange[1] = coderi.maxLine;
+            }
+            hideSurroundingCode(coderi, editor);
+        } else {
+            editor.setValue(coderi.exampleCode || '', -1);
+        }
+    };
+
     if (coderi.urlfile) {
         fetch(coderi.urlfile).then((res) => {
             if (res.ok) {
@@ -137,24 +150,16 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
             throw new Error(res.url);
         }).then((text) => {
             coderi.exampleCode = text;
+            initialShowCode();
         }).catch((err) => {
             console.log(err);
         });
+    } else if (coderi.exampleCode) {
+        initialShowCode();
     }
 
     if (coderi.readOnly) {
         editor.setReadOnly(true);
-    }
-    if (coderi.exampleCode) {
-        if (coderi.lineRange) {
-            [coderi.startShowIndex, coderi.endShowIndex, coderi.maxLine] = getCodeRegion(coderi.exampleCode, coderi.lineRange, '\n');
-            if (coderi.lineRange[1] === -1) {
-                coderi.lineRange[1] = coderi.maxLine;
-            }
-            hideSurroundingCode(coderi, editor);
-        } else {
-            editor.setValue(coderi.exampleCode, -1);
-        }
     }
 
     const runButton = document.createElement('button');
