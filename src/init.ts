@@ -4,6 +4,7 @@ import * as acePythonMode from 'ace-code/src/mode/python';
 import * as aceShMode from 'ace-code/src/mode/sh';
 
 import { runCode } from './sandbox';
+import { getCodeRegion } from './util';
 import type {
     CodeRuntimeInfo,
     HardsharePath,
@@ -49,6 +50,15 @@ function parseRootData(root: HTMLDivElement): CodeRuntimeInfo
     }
     if ('urlfile' in root.dataset) {
         coderi.urlfile = root.dataset['urlfile'];
+    }
+    if ('lrange' in root.dataset && root.dataset['lrange']) {
+        const parts = root.dataset['lrange'].split(',').map((x) => (
+            x.trim()
+        ));
+        if (parts.length !== 2) {
+            throw new Error('unexpected number of parameters in lrange');
+        }
+        coderi.lineRange = [Number(parts[0]), Number(parts[1])];
     }
     return coderi;
 }
@@ -104,19 +114,27 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
             throw new Error(res.url);
         }).then((text) => {
             coderi.exampleCode = text;
-            editor.setValue(text, -1);
         }).catch((err) => {
             console.log(err);
-            if (coderi.exampleCode) {
-                editor.setValue(coderi.exampleCode, -1);
-            }
         });
-    } else if (coderi.exampleCode) {
-        editor.setValue(coderi.exampleCode, -1);
     }
 
     if (coderi.readOnly) {
         editor.setReadOnly(true);
+    }
+    if (coderi.exampleCode) {
+        if (coderi.lineRange) {
+            const [startShowIndex, endShowIndex, maxLine] = getCodeRegion(coderi.exampleCode, coderi.lineRange, '\n');
+            [coderi.startShowIndex, coderi.endShowIndex] = [startShowIndex, endShowIndex];
+            if (coderi.lineRange[1] === -1) {
+                coderi.lineRange[1] = maxLine;
+            }
+            editor.setOption('firstLineNumber', coderi.lineRange[0]);
+            editor.setValue(coderi.exampleCode.substring(coderi.startShowIndex, coderi.endShowIndex), -1);
+            editor.setOption('maxLines', coderi.lineRange[1] - coderi.lineRange[0] + 1);
+        } else {
+            editor.setValue(coderi.exampleCode, -1);
+        }
     }
 
     const runButton = document.createElement('button');
@@ -130,7 +148,11 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
         root.appendChild(resetButton);
         resetButton.addEventListener('click', () => {
             coderi.exampleCode ||= '';
-            editor.setValue(coderi.exampleCode, -1);
+            if (coderi.startShowIndex) {
+                editor.setValue(coderi.exampleCode.substring(coderi.startShowIndex, coderi.endShowIndex), -1);
+            } else {
+                editor.setValue(coderi.exampleCode, -1);
+            }
         });
     }
 

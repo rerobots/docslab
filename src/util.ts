@@ -1,7 +1,57 @@
 import type {
+    LineRange,
     PreludeKey,
     PreludeMap,
 } from './types';
+
+
+export function getCodeRegion(codeBlob: string, lineRange: LineRange, lineEnding?: '\n' | '\r\n'): [number, number, number]
+{
+    if (!lineEnding) {
+        const firstLineFeed = codeBlob.indexOf('\n');
+        if (firstLineFeed === 0) {
+            lineEnding = '\n';
+        } else if (codeBlob[firstLineFeed-1] === '\r') {
+            lineEnding = '\r\n';
+        } else {
+            lineEnding = '\n';
+        }
+    }
+    let startLineIndex;
+    let endLineIndex;
+
+    if (lineRange[1] === -1) {
+        endLineIndex = codeBlob.length - 1;
+    }
+
+    let start = 0;
+    let end = codeBlob.indexOf(lineEnding);
+    let currentLine = 0;
+    while (startLineIndex === undefined || endLineIndex === undefined || lineRange[1] === -1) {
+        currentLine += 1;
+        if (startLineIndex === undefined && currentLine === lineRange[0]) {
+            startLineIndex = start;
+        } else if (endLineIndex === undefined && currentLine === lineRange[1]) {
+            endLineIndex = end;
+            break;
+        }
+
+        if (end === codeBlob.length - 1) {
+            break;
+        }
+        start = end + lineEnding.length;
+        end = codeBlob.indexOf(lineEnding, start);
+        if (end < 0) {
+            end = codeBlob.length - 1;
+        }
+    }
+
+    if (startLineIndex === undefined || endLineIndex === undefined) {
+        throw new Error('Line range outside given code');
+    }
+
+    return [startLineIndex, endLineIndex, currentLine];
+}
 
 
 export function parsePrelude(codeBlob: string): PreludeMap
@@ -12,6 +62,7 @@ export function parsePrelude(codeBlob: string): PreludeMap
         'repoUrl',
         'repoScript',
         'urlfile',
+        'lineRange',
     ];
     const pm: PreludeMap = {};
 
@@ -51,11 +102,27 @@ export function parsePrelude(codeBlob: string): PreludeMap
             }
             break;
         }
-        const key = line.substring(0, sep).trim();
-        if (!knownKeys.includes(key as PreludeKey)) {
+        const key = line.substring(0, sep).trim() as PreludeKey;
+        if (!knownKeys.includes(key)) {
             break;
         }
-        pm[key as PreludeKey] = line.substring(sep + 1).trim();
+        if (key === 'lineRange') {
+            const parts = line.substring(sep + 1).trim().split(',').map((x) => (
+                x.trim()
+            ));
+            if (parts.length !== 2) {
+                throw new Error('unexpected number of parameters in lineRange');
+            }
+            pm.lineRange = [Number(parts[0]), Number(parts[1])];
+            if (pm.lineRange[0] < 1) {
+                throw new Error('start line must be >= 1');
+            }
+            if (pm.lineRange[1] < -1 || pm.lineRange[1] === 0) {
+                throw new Error('end line must be -1 or >= 1');
+            }
+        } else {
+            pm[key] = line.substring(sep + 1).trim();
+        }
     }
     if (end > 0) {
         pm.exampleCode = codeBlob.substring(start);
