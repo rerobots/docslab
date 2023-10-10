@@ -130,6 +130,10 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
         }
     }
 
+    const runButton = document.createElement('button');
+    runButton.innerText = 'Run';
+    root.appendChild(runButton);
+
     const initialShowCode = () => {
         if (coderi.lineRange && coderi.exampleCode) {
             [coderi.startShowIndex, coderi.endShowIndex, coderi.maxLine] = getCodeRegion(coderi.exampleCode, coderi.lineRange, '\n');
@@ -137,6 +141,23 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
                 coderi.lineRange[1] = coderi.maxLine;
             }
             hideSurroundingCode(coderi, editor);
+
+            const showAllButton: HTMLButtonElement = document.createElement('button');
+            showAllButton.innerText = 'Show all';
+            root.appendChild(showAllButton);
+            let showingAllCode = false;
+            showAllButton.addEventListener('click', () => {
+                if (showingAllCode) {
+                    showingAllCode = false;
+                    hideSurroundingCode(coderi, editor);
+                    showAllButton.innerText = 'Show all';
+                } else {
+                    showingAllCode = true;
+                    showAllCode(coderi, editor);
+                    showAllButton.innerText = 'Hide surrounding code';
+                }
+            });
+
         } else {
             editor.setValue(coderi.exampleCode || '', -1);
         }
@@ -160,29 +181,6 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
 
     if (coderi.readOnly) {
         editor.setReadOnly(true);
-    }
-
-    const runButton = document.createElement('button');
-    runButton.innerText = 'Run';
-    root.appendChild(runButton);
-
-    let showAllButton: HTMLButtonElement;
-    if (coderi.lineRange && coderi.exampleCode) {
-        showAllButton = document.createElement('button');
-        showAllButton.innerText = 'Show all';
-        root.appendChild(showAllButton);
-        let showingAllCode = false;
-        showAllButton.addEventListener('click', () => {
-            if (showingAllCode) {
-                showingAllCode = false;
-                hideSurroundingCode(coderi, editor);
-                showAllButton.innerText = 'Show all';
-            } else {
-                showingAllCode = true;
-                showAllCode(coderi, editor);
-                showAllButton.innerText = 'Hide surrounding code';
-            }
-        });
     }
 
     let resetButton;
