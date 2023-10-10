@@ -1,3 +1,14 @@
+docslab (0.3.4)
+
+  * New option: only show some lines in example code, specified by `lrange` in HTML data- attributes or `lineRange` in prelude blocks.
+
+  * More tests; TypeScript strict type checking
+
+  * Increase timeout of shell start.
+
+ -- Scott C. Livingston <scott@rerobots.net>  Mon, 09 Oct 2023 22:15:17 -0700
+
+
 docslab (0.3.1)
 
   * If anonymous ID denied by rerobots, try to get new one.
