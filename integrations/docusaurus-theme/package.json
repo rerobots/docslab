@@ -22,6 +22,7 @@
   },
   "scripts": {
     "build": "tsc --build",
+    "pub": "test -f lib/index.js && yarn publish",
     "clean": "rm -r -f lib tsconfig.client.tsbuildinfo"
   },
   "license": "Apache-2.0",
