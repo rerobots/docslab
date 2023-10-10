@@ -1,6 +1,6 @@
 {
   "name": "docslab-docusaurus",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Docusaurus theme to support docslab-enabled code examples",
   "keywords": [
     "docs",
@@ -26,7 +26,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "docslab": "^0.3.4"
+    "docslab": "^0.3.5"
   },
   "peerDependencies": {
     "react": "^18.0.0",
