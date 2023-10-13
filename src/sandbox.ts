@@ -236,19 +236,19 @@ function prepareShell(instanceInfo: InstanceInfo, cancelFlag?: CancelFlag): Prom
 }
 
 
-export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.Ace.Editor, runButton: HTMLButtonElement, initRunButton: () => void, statusBar: HTMLSpanElement, assignTerminationTimeout: (x: NodeJS.Timeout | null) => void)
+export function runCode(coderi: CodeRuntimeInfo, controlPanel: HTMLElement, editor: ace.Ace.Editor, runButton: HTMLButtonElement, initRunButton: () => void, statusBar: HTMLSpanElement, assignTerminationTimeout: (x: NodeJS.Timeout | null) => void)
 {
     const keyboardInterruptButton = document.createElement('button');
     keyboardInterruptButton.innerText = 'Interrupt';
-    root.insertBefore(keyboardInterruptButton, statusBar);
+    controlPanel.insertBefore(keyboardInterruptButton, statusBar);
 
     const clearTerminalButton = document.createElement('button');
     clearTerminalButton.innerText = 'Clear terminal';
-    root.insertBefore(clearTerminalButton, statusBar);
+    controlPanel.insertBefore(clearTerminalButton, statusBar);
 
     const teardownButton = document.createElement('button');
     teardownButton.innerText = 'Teardown sandbox';
-    root.insertBefore(teardownButton, statusBar);
+    controlPanel.insertBefore(teardownButton, statusBar);
 
     statusBar.innerText = 'Searching for available hardware...';
 
@@ -257,9 +257,9 @@ export function runCode(coderi: CodeRuntimeInfo, root: HTMLElement, editor: ace.
     term.loadAddon(fitAddon);
 
     const termDiv = document.createElement('div');
+
+    const root = controlPanel.parentElement as HTMLElement;
     root.appendChild(termDiv);
-    termDiv.style.width = '500px';
-    termDiv.style.height = '200px';
 
     term.open(termDiv);
     fitAddon.fit();

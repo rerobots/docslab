@@ -3,6 +3,7 @@ import * as aceCppMode from 'ace-code/src/mode/c_cpp';
 import * as acePythonMode from 'ace-code/src/mode/python';
 import * as aceShMode from 'ace-code/src/mode/sh';
 
+import './main.css';
 import { runCode } from './sandbox';
 import { getCodeRegion } from './util';
 import type {
@@ -110,12 +111,6 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
     editorDiv.className = 'docslabEditor';
     root.appendChild(editorDiv);
 
-    // If scroll height is too small, infer need to apply minimum size style
-    if (editorDiv.scrollHeight < 10) {
-        editorDiv.style.width = '500px';
-        editorDiv.style.height = '200px';
-    }
-
     const editor = ace.edit(editorDiv);
     if (syntaxHighlight) {
         if (syntaxHighlight === 'c' || syntaxHighlight === 'cpp') {
@@ -130,9 +125,12 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
         }
     }
 
+    const controlPanel = document.createElement('div');
+    controlPanel.className = 'docslabPanel';
+
     const runButton = document.createElement('button');
     runButton.innerText = 'Run';
-    root.appendChild(runButton);
+    controlPanel.appendChild(runButton);
 
     const initialShowCode = () => {
         if (coderi.lineRange && coderi.exampleCode) {
@@ -144,7 +142,7 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
 
             const showAllButton: HTMLButtonElement = document.createElement('button');
             showAllButton.innerText = 'Show all';
-            root.appendChild(showAllButton);
+            controlPanel.appendChild(showAllButton);
             let showingAllCode = false;
             showAllButton.addEventListener('click', () => {
                 if (showingAllCode) {
@@ -187,7 +185,7 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
     if (!coderi.readOnly) {
         resetButton = document.createElement('button');
         resetButton.innerText = 'Reset code';
-        root.appendChild(resetButton);
+        controlPanel.appendChild(resetButton);
         resetButton.addEventListener('click', () => {
             coderi.exampleCode ||= '';
             if (coderi.startShowIndex) {
@@ -199,7 +197,15 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
     }
 
     const statusBar = document.createElement('span');
-    root.appendChild(statusBar);
+    statusBar.className = 'docslabStatus';
+    controlPanel.appendChild(statusBar);
+
+    const poweredBy = document.createElement('span');
+    poweredBy.innerHTML = 'powered by <a href="https://github.com/rerobots/docslab" target="_blank">docslab</a>';
+    poweredBy.className = 'docslabPowered';
+    controlPanel.appendChild(poweredBy);
+
+    root.appendChild(controlPanel);
 
     let terminationTimeout: NodeJS.Timeout | null = null;
     const assignTerminationTimeout = (x: NodeJS.Timeout | null) => {
@@ -211,7 +217,7 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
                 clearTimeout(terminationTimeout);
             }
             runButton.removeEventListener('click', runButtonCallback);
-            runCode(coderi, root, editor, runButton, initRunButton, statusBar, assignTerminationTimeout);
+            runCode(coderi, controlPanel, editor, runButton, initRunButton, statusBar, assignTerminationTimeout);
         };
         runButton.addEventListener('click', runButtonCallback);
     };
