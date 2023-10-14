@@ -1,6 +1,8 @@
 .docslabPowered {
     font-size: 10pt;
     color: #999;
+    display: flex;
+    align-items: end;
 }
 
 .docslab button {
@@ -10,6 +12,7 @@
 
 .docslabPowered a {
     color: #999;
+    padding-left: .3vw;
 }
 
 .docslabStatus {
