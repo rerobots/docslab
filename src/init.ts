@@ -21,10 +21,17 @@ const highlightMap: {[key: string]: typeof aceCppMode} = {
 
 function showAllCode(coderi: CodeRuntimeInfo, editor: ace.Ace.Editor)
 {
-    if (!coderi.lineRange || !coderi.exampleCode) {
+    if (!coderi.lineRange || !coderi.exampleCode || !coderi.startShowIndex || !coderi.endShowIndex) {
         throw new Error('cannot show all code');
     }
-    editor.setValue(coderi.exampleCode, -1);
+    const originalRegion = coderi.exampleCode.substring(coderi.startShowIndex, coderi.endShowIndex);
+    const possiblyEditedRegion = editor.getValue();
+    if (originalRegion === possiblyEditedRegion) {
+        editor.setValue(coderi.exampleCode, -1);
+    } else {
+        const exampleCode = coderi.exampleCode.substring(0, coderi.startShowIndex) + possiblyEditedRegion + coderi.exampleCode.substring(coderi.endShowIndex);
+        editor.setValue(exampleCode, -1);
+    }
     editor.setOption('firstLineNumber', 1);
     if (coderi.maxLine) {
         editor.setOption('maxLines', coderi.maxLine);
@@ -36,8 +43,13 @@ function hideSurroundingCode(coderi: CodeRuntimeInfo, editor: ace.Ace.Editor)
     if (!coderi.lineRange || !coderi.exampleCode || !coderi.startShowIndex) {
         throw new Error('cannot hide surrounding code');
     }
+    const region = editor.getValue() ? (
+        editor.getValue().substring(coderi.startShowIndex, coderi.endShowIndex)
+    ) : (
+        coderi.exampleCode.substring(coderi.startShowIndex, coderi.endShowIndex)
+    );
     editor.setOption('firstLineNumber', coderi.lineRange[0]);
-    editor.setValue(coderi.exampleCode.substring(coderi.startShowIndex, coderi.endShowIndex), -1);
+    editor.setValue(region, -1);
     editor.setOption('maxLines', coderi.lineRange[1] - coderi.lineRange[0] + 1);
 }
 
@@ -188,10 +200,9 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
         controlPanel.appendChild(resetButton);
         resetButton.addEventListener('click', () => {
             coderi.exampleCode ||= '';
+            editor.setValue(coderi.exampleCode, -1);
             if (coderi.startShowIndex) {
-                editor.setValue(coderi.exampleCode.substring(coderi.startShowIndex, coderi.endShowIndex), -1);
-            } else {
-                editor.setValue(coderi.exampleCode, -1);
+                hideSurroundingCode(coderi, editor);
             }
         });
     }
