@@ -17,8 +17,10 @@
 }
 
 .docslabStatus {
-    padding: 1px;
+    padding-left: .4vw;
     flex: 1 1 auto;
+    display: flex;
+    align-items: center;
 }
 
 .docslabEditor {
