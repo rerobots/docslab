@@ -144,6 +144,8 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
     runButton.innerText = 'Run';
     controlPanel.appendChild(runButton);
 
+    let resetShowingAllCode: (() => void) | null = null;
+
     const initialShowCode = () => {
         if (coderi.lineRange && coderi.exampleCode) {
             [coderi.startShowIndex, coderi.endShowIndex, coderi.maxLine] = getCodeRegion(coderi.exampleCode, coderi.lineRange, '\n');
@@ -167,6 +169,12 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
                     showAllButton.innerText = 'Hide surrounding code';
                 }
             });
+            resetShowingAllCode = () => {
+                if (showingAllCode) {
+                    showingAllCode = false;
+                    showAllButton.innerText = 'Show all';
+                }
+            };
 
         } else {
             editor.setValue(coderi.exampleCode || '', -1);
@@ -201,7 +209,8 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
         resetButton.addEventListener('click', () => {
             coderi.exampleCode ||= '';
             editor.setValue(coderi.exampleCode, -1);
-            if (coderi.startShowIndex) {
+            if (resetShowingAllCode) {
+                resetShowingAllCode();
                 hideSurroundingCode(coderi, editor);
             }
         });
