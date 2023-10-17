@@ -1,3 +1,12 @@
+docslab (0.3.6)
+
+  * Move CSS to separate files, instead of JS-embedded
+
+  * Add "powered by" link to docslab repository
+
+ -- Scott C. Livingston <scott@rerobots.net>  Tue, 17 Oct 2023 12:15:44 -0700
+
+
 docslab (0.3.4)
 
   * New option: only show some lines in example code, specified by `lrange` in HTML data- attributes or `lineRange` in prelude blocks.
