@@ -1,6 +1,6 @@
 {
   "name": "docslab",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "interactive documentation",
   "keywords": [
     "docs",
@@ -17,6 +17,7 @@
   "types": "lib/index.d.ts",
   "files": [
     "lib/**/*.d.ts",
+    "lib/**/*.css",
     "yarn.lock"
   ],
   "scripts": {
