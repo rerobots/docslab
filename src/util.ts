@@ -60,6 +60,7 @@ export function parsePrelude(codeBlob: string): PreludeMap
         'command',
         'destpath',
         'repoUrl',
+        'refUrl',
         'repoScript',
         'urlfile',
         'lineRange',
