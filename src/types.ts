@@ -6,6 +6,11 @@ export interface PreludeMap {
     urlfile?: string;
     exampleCode?: string;
     lineRange?: LineRange;
+
+    // Link to include in the sandbox panel. If repoUrl and this are both
+    // defined, then refUrl is used. If repoUrl is defined but this is not,
+    // then repoUrl is included in the sandbox panel.
+    refUrl?: string;
 }
 
 

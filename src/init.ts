@@ -81,6 +81,9 @@ function parseRootData(root: HTMLDivElement): CodeRuntimeInfo
     if ('repo' in root.dataset) {
         coderi.repoUrl = root.dataset['repo'];
     }
+    if ('refurl' in root.dataset) {
+        coderi.refUrl = root.dataset['refurl'];
+    }
     if ('iscript' in root.dataset) {
         coderi.repoScript = root.dataset['iscript'];
     }
@@ -220,10 +223,24 @@ export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRunti
     statusBar.className = 'docslabStatus';
     controlPanel.appendChild(statusBar);
 
+    const moreInfoSection = document.createElement('div');
+    moreInfoSection.className = 'docslabMoreInfo';
+
+    if (coderi.refUrl || coderi.repoUrl) {
+        const refUrl = coderi.refUrl || coderi.repoUrl as string;
+        const repoUrlLink: HTMLAnchorElement = document.createElement('a');
+        repoUrlLink.href = refUrl;
+        repoUrlLink.target = '_blank';
+        repoUrlLink.innerText = 'go to repository';
+        repoUrlLink.className = 'docslabRepo';
+        moreInfoSection.appendChild(repoUrlLink);
+    }
+
     const poweredBy = document.createElement('span');
     poweredBy.innerHTML = 'powered by <a href="https://github.com/rerobots/docslab" target="_blank">docslab</a>';
     poweredBy.className = 'docslabPowered';
-    controlPanel.appendChild(poweredBy);
+    moreInfoSection.appendChild(poweredBy);
+    controlPanel.appendChild(moreInfoSection);
 
     root.appendChild(controlPanel);
 
