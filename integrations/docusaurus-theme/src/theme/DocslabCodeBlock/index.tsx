@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 
+import 'docslab/lib/main.css';
 import type { CodeRuntimeInfo, PreludeKey } from 'docslab';
 
 import type { DocslabCodeBlockProps } from '../types';
