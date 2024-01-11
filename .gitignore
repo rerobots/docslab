@@ -4,3 +4,4 @@ node_modules/
 /integrations/docusaurus-theme/lib/
 *.tsbuildinfo
 yarn-error.log
+/cypress/
