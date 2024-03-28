@@ -67,7 +67,7 @@ function parseRootData(root: HTMLDivElement): CodeRuntimeInfo
         hardshareO: root.dataset['hardshareo'] as string,
         hardshareId: root.dataset['hardshareid'] as string,
     };
-    const exampleBlockElement = document.getElementById(`cb-${coderi.hardshareId}`);
+    const exampleBlockElement = root.getElementsByTagName('code')[0];
     if (exampleBlockElement) {
         coderi.exampleCode = exampleBlockElement.innerText;
         root.removeChild(exampleBlockElement.parentElement as Node);

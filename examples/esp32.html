@@ -13,7 +13,7 @@
     <p>We begin with a <a href="https://github.com/platformio/platform-espressif32/tree/f1fce6c1a8d20fe63a74676f76213a7f1490bc39/examples/espidf-arduino-wifiscan" target="_blank">WiFi scanning example</a> from the <a href="https://github.com/platformio/platform-espressif32" target="_blank">Espressif 32 repository</a>.</p>
     <div class="docslab" data-readonly data-hardshareo="scott" data-hardshareid="esp32-examples" data-path="platform-espressif32/examples/espidf-arduino-wifiscan/src/main.cpp" data-command="source .platformio/penv/bin/activate && cd platform-espressif32/examples/espidf-arduino-wifiscan && pio run -t upload && pio device monitor">
       <a href="https://rerobots.net/u/scott/esp32-examples" target="_blank">Try it</a>
-      <pre><code id="cb-esp32-examples">/* WiFi scan Example
+      <pre><code>/* WiFi scan Example
   This example code is in the Public Domain (or CC0 licensed, at your option.)
   Unless required by applicable law or agreed to in writing, this
   software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
@@ -94,7 +94,7 @@ void loop() {
     <p>There is a lot in this example, so let's consider a simple "hola, mundo" program instead:</p>
     <div class="docslab" data data-hardshareo="scott" data-hardshareid="esp32-examples" data-path="platform-espressif32/examples/espidf-arduino-wifiscan/src/main.cpp" data-command="source .platformio/penv/bin/activate && cd platform-espressif32/examples/espidf-arduino-wifiscan && pio run -t upload && pio device monitor">
       <a href="https://rerobots.net/u/scott/esp32-examples" target="_blank">Try it</a>
-      <pre><code id="cb-esp32-examples">#include &lt;Arduino.h&gt;
+      <pre><code>#include &lt;Arduino.h&gt;
 
 void setup() {
     Serial.begin(115200);

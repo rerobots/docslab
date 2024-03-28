@@ -11,7 +11,7 @@
     <p>First, let's write some text:</p>
     <div class="docslab" data-readonly data-hardshareo="heliumdev" data-hardshareid="cubecell-draw-demo" data-path="platform-heltec-cubecell/examples/LoRa/LoRaWAN/LoRaWAN/src/main.cpp" data-command="source .platformio/penv/bin/activate && cd platform-heltec-cubecell/examples/LoRa/LoRaWAN/LoRaWAN && pio run -t upload">
       <a href="https://rerobots.net/u/heliumdev/cubecell-draw-demo" target="_blank">Try it</a>
-      <pre><code id="cb-cubecell-draw-demo">#include &lt;Wire.h&gt;
+      <pre><code>#include &lt;Wire.h&gt;
 #include "HT_SH1107Wire.h"
 
 SH1107Wire  display(0x3c, 500000, SDA, SCL, GEOMETRY_128_64, GPIO10); // addr, freq, sda, scl, resolution, rst
@@ -59,7 +59,7 @@ void loop() { }
     <p>Next, let's draw some lines:</p>
     <div class="docslab" data-readonly data-hardshareo="heliumdev" data-hardshareid="cubecell-draw-demo" data-path="platform-heltec-cubecell/examples/LoRa/LoRaWAN/LoRaWAN/src/main.cpp" data-command="source .platformio/penv/bin/activate && cd platform-heltec-cubecell/examples/LoRa/LoRaWAN/LoRaWAN && pio run -t upload">
       <a href="https://rerobots.net/u/heliumdev/cubecell-draw-demo" target="_blank">Try it</a>
-      <pre><code id="cb-cubecell-draw-demo">#include &lt;Wire.h&gt;
+      <pre><code>#include &lt;Wire.h&gt;
 #include "HT_SH1107Wire.h"
 
 SH1107Wire  display(0x3c, 500000, SDA, SCL, GEOMETRY_128_64, GPIO10); // addr, freq, sda, scl, resolution, rst
@@ -154,7 +154,7 @@ void loop() { }
     <p>Now that we have experience writing to the screen, let's learn to send data on the Helium network. Consider the following code simplified from <a href="https://github.com/HelTecAutomation/platform-heltec-cubecell/blob/6df74f88f241d9ee6c14dedaf8506b70042d4aff/examples/LoRa/LoRaWAN/LoRaWAN/src/LoRaWan.ino" target="_blank-">an example in the Heltec Automation repository</a>:</p>
     <div class="docslab" data-hardshareo="heliumdev" data-hardshareid="cubecell-draw-demo" data-path="platform-heltec-cubecell/examples/LoRa/LoRaWAN/LoRaWAN/src/main.cpp" data-command="source .platformio/penv/bin/activate && cd platform-heltec-cubecell/examples/LoRa/LoRaWAN/LoRaWAN && pio run -t upload && pio device monitor" data-lrange="4,7">
       <a href="https://rerobots.net/u/heliumdev/cubecell-draw-demo" target="_blank">Try it</a>
-      <pre><code id="cb-cubecell-draw-demo">#include "LoRaWan_APP.h"
+      <pre><code>#include "LoRaWan_APP.h"
 #include "Arduino.h"
 
 /* OTAA parameters */
