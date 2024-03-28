@@ -1,2 +1,0 @@
-# docslab Sphinx extension
-

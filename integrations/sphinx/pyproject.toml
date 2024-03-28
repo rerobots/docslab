@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sphinx-docslab"
+description = "Sphinx docslab extension for interactive code"
+dynamic = ["version"]
+requires-python = ">=3.9"
+dependencies = [
+    "sphinx",
+]
+authors = [{name = "rerobots, Inc.", email = "q@rerobots.net"}]
+license = {text = "Apache-2.0"}
+readme = "README.rst"
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Development Status :: 4 - Beta",
+]
+
+[project.urls]
+source = "https://github.com/rerobots/docslab"
+
+[tool.setuptools]
+packages = ["sphinx_docslab"]
