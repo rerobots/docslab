@@ -28,18 +28,9 @@ var config = {
                 use: 'ts-loader',
                 exclude: /node_modules/,
             },
-            {
-                test: /\.css$/i,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    'css-loader',
-                ],
-            }
         ],
     },
-    plugins: [
-        new MiniCssExtractPlugin(),
-    ],
+    plugins: [],
 };
 
 module.exports = (env, argv) => {
@@ -52,13 +43,30 @@ module.exports = (env, argv) => {
         config.entry = './src/indexAutoload.ts';
     }
 
-    if (!env.fullBundle) {
+    if (env.fullBundle) {
+        config.output.filename = 'index.all.js';
+        config.module.rules.push({
+            test: /\.css$/i,
+            use: [
+                'style-loader',
+                'css-loader',
+            ],
+        });
+    } else {
         config.externals = {
             'ace-code': 'ace-code',
             xterm: 'xterm',
             'xterm-addon-attach': 'xterm-addon-attach',
             'xterm-addon-fit': 'xterm-addon-fit',
         };
+        config.module.rules.push({
+            test: /\.css$/i,
+            use: [
+                MiniCssExtractPlugin.loader,
+                'css-loader',
+            ],
+        });
+        config.plugins.push(new MiniCssExtractPlugin());
     }
 
     if (env.example) {
