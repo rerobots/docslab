@@ -294,7 +294,7 @@ export function runCode(coderi: CodeRuntimeInfo, controlPanel: HTMLElement, edit
     getApiToken(coderi.hardshareO, coderi.hardshareId, cancelFlag).then((instanceInfo: InstanceInfo) => {
         return launchInstance(coderi, instanceInfo, cancelFlag);
     }).then((instanceInfo: InstanceInfo) => {
-        const instanceStatusWatcherFn = (instanceStatusWatcher: NodeJS.Timer) => {
+        const instanceStatusWatcherFn = (instanceStatusWatcher: NodeJS.Timeout) => {
             if (teardownButton.parentElement === null) {
                 clearInterval(instanceStatusWatcher);
                 return;
