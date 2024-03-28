@@ -17,6 +17,13 @@ There are three ways to use docslab:
 3. use an integration for frameworks like Sphinx or Docusaurus.
 
 
+Integrations
+------------
+
+* Docusaurus, https://www.npmjs.com/package/docslab-docusaurus
+* Sphinx, https://pypi.org/project/sphinx-docslab/
+
+
 Contributing to docslab itself
 ------------------------------
 
