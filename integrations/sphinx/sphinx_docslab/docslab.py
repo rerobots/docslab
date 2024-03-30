@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 import html
 import urllib
 
@@ -9,6 +9,7 @@ import sphinx
 from sphinx.util.docutils import SphinxDirective
 
 if TYPE_CHECKING:
+    from docutils.nodes import Node
     from sphinx.application import Sphinx
     from sphinx.util.typing import ExtensionMetadata
 
@@ -20,8 +21,17 @@ DOCSLAB_VERSION = '0.3.8'
 DOCSLAB_URL = f'https://cdn.jsdelivr.net/npm/docslab@{DOCSLAB_VERSION}/lib/index.all.js'
 
 
-def install_docslab():
-    pass
+def install_docslab(app: Sphinx, pagename: str, templatename: str, context: dict[str, Any], doctree: Node) -> None:
+    if app.builder.format != 'html' or doctree is None:
+        return
+    has_one = False
+    for node in doctree.findall():
+        if isinstance(node, DocslabNode):
+            has_one = True
+            break
+    if has_one:
+        app.add_js_file(DOCSLAB_URL)
+        app.add_js_file(None, body='document.addEventListener("DOMContentLoaded", (event) => { docslab.loadAll(); });')
 
 
 def is_known_language(lang: str) -> str:
@@ -100,9 +110,7 @@ class DocslabDirective(SphinxDirective):
 def setup(app: Sphinx) -> ExtensionMetadata:
     app.add_node(DocslabNode, html=(visit_docslab_html, depart_docslab_html))
     app.add_directive('docslab', DocslabDirective)
-    app.add_js_file(DOCSLAB_URL)
-    app.add_js_file(None, body='document.addEventListener("DOMContentLoaded", (event) => { docslab.loadAll(); });')
-    app.connect
+    app.connect('html-page-context', install_docslab)
     return {
         'version': sphinx.__display_version__,
         'parallel_read_safe': True,
