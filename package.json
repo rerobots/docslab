@@ -18,13 +18,14 @@
   "files": [
     "lib/**/*.d.ts",
     "lib/**/*.css",
+    "dist/index.all.js",
     "yarn.lock"
   ],
   "scripts": {
     "build": "webpack",
-    "build:release": "webpack --mode production && webpack --mode production --env fullBundle",
+    "build:release": "mkdir dist && webpack --mode production --env fullBundle && cp lib/index.all.js dist/ && webpack --mode production",
     "pub": "test -f lib/index.js && yarn publish",
-    "clean": "rm -r -f lib",
+    "clean": "rm -r -f lib dist",
     "lint": "eslint --ext .ts,.tsx src integrations/docusaurus-theme/src && tsc --noEmit",
     "lint:fix": "eslint --fix --ext .ts,.tsx src integrations/docusaurus-theme/src",
     "test": "jest",
