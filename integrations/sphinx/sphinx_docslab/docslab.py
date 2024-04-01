@@ -18,7 +18,7 @@ logger = sphinx.util.logging.getLogger(__name__)
 
 
 DOCSLAB_VERSION = '0.3.8'
-DOCSLAB_URL = f'https://cdn.jsdelivr.net/npm/docslab@{DOCSLAB_VERSION}/lib/index.all.js'
+DOCSLAB_URL = f'https://cdn.jsdelivr.net/npm/docslab@{DOCSLAB_VERSION}/dist/index.all.js'
 
 
 def install_docslab(app: Sphinx, pagename: str, templatename: str, context: dict[str, Any], doctree: Node) -> None:
