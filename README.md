@@ -30,6 +30,9 @@ Contributing to docslab itself
 Please report errors, odd behavior, or feature requests at
 <https://github.com/rerobots/docslab/issues>
 
+Current [CI report](https://github.com/rerobots/docslab/actions/workflows/main.yml):
+![build status from GitHub Actions](https://github.com/rerobots/docslab/actions/workflows/main.yml/badge.svg)
+
 For local development, clone the repository, and then `yarn install`.
 To run the examples,
 
