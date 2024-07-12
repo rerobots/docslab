@@ -22,3 +22,7 @@ jobs:
               run: yarn lint
             - name: Test
               run: yarn test
+            - name: Run end-to-end tests
+              uses: cypress-io/github-action@v6
+              with:
+                start: yarn start
