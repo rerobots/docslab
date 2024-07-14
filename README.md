@@ -21,6 +21,7 @@ Integrations
 ------------
 
 * Docusaurus, https://www.npmjs.com/package/docslab-docusaurus
+* mdBook, https://crates.io/crates/mdbook-docslab
 * MkDocs, https://pypi.org/project/mkdocs-docslab/
 * Sphinx, https://pypi.org/project/sphinx-docslab/
 
