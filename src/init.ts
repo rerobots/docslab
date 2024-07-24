@@ -8,7 +8,6 @@ import { runCode } from './sandbox';
 import { getCodeRegion } from './util';
 import type {
     CodeRuntimeInfo,
-    HardsharePath,
 } from './types';
 
 
@@ -100,20 +99,6 @@ function parseRootData(root: HTMLDivElement): CodeRuntimeInfo
         coderi.lineRange = [Number(parts[0]), Number(parts[1])];
     }
     return coderi;
-}
-
-
-export function parseHardsharePath(hspath: string): HardsharePath
-{
-    const sep = hspath.indexOf('/');
-    if (sep < 1 || sep >= hspath.length - 1) {
-        throw new Error(`separator '/' not found in '${hspath}'`);
-    }
-
-    return {
-        hardshareO: hspath.substring(0, sep),
-        hardshareId: hspath.substring(sep + 1),
-    };
 }
 
 

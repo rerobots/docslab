@@ -1,4 +1,5 @@
 import type {
+    HardsharePath,
     LineRange,
     PreludeKey,
     PreludeMap,
@@ -51,6 +52,20 @@ export function getCodeRegion(codeBlob: string, lineRange: LineRange, lineEnding
     }
 
     return [startLineIndex, endLineIndex, currentLine];
+}
+
+
+export function parseHardsharePath(hspath: string): HardsharePath
+{
+    const sep = hspath.indexOf('/');
+    if (sep < 1 || sep >= hspath.length - 1) {
+        throw new Error(`separator '/' not found in '${hspath}'`);
+    }
+
+    return {
+        hardshareO: hspath.substring(0, sep),
+        hardshareId: hspath.substring(sep + 1),
+    };
 }
 
 

@@ -1,9 +1,9 @@
 export {
     loadAll,
-    parseHardsharePath,
     prepareSnippet,
 } from './init';
 export {
+    parseHardsharePath,
     parsePrelude,
 } from './util';
 export type {

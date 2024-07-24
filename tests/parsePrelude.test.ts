@@ -1,4 +1,4 @@
-import { parsePrelude } from '../src/util';
+import { parseHardsharePath, parsePrelude } from '../src/util';
 
 
 test('test prelude parsing for C++', () => {
@@ -16,4 +16,12 @@ test('test prelude parsing for C++', () => {
     const result = parsePrelude(text);
     expect(result.command).toBe('pio run -t upload && pio device monitor');
     expect(result.lineRange).toEqual([2, 5]);
+});
+
+
+test('test hardshare path parsing', () => {
+    const text = 'heliumdev/cubecell-draw-demo';
+    const result = parseHardsharePath(text);
+    expect(result.hardshareO).toEqual('heliumdev');
+    expect(result.hardshareId).toEqual('cubecell-draw-demo');
 });
