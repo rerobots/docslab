@@ -74,11 +74,11 @@ export function parsePrelude(codeBlob: string): PreludeMap
     const knownKeys: PreludeKey[] = [
         'command',
         'destpath',
-        'repoUrl',
+        'lineRange',
         'refUrl',
         'repoScript',
+        'repoUrl',
         'urlfile',
-        'lineRange',
     ];
     const pm: PreludeMap = {};
 
