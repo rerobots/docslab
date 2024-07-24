@@ -14,8 +14,25 @@ test('test prelude parsing for C++', () => {
     }
     `;
     const result = parsePrelude(text);
+    expect(result.hardshare).toBeUndefined();
     expect(result.command).toBe('pio run -t upload && pio device monitor');
     expect(result.lineRange).toEqual([2, 5]);
+});
+
+
+test('test prelude with hardshare path in it', () => {
+    const text = `// hardshare: heliumdev/cubecell-draw-demo
+    // command: pio run -t upload
+    // destpath: m/Heltec-CubeCell-Board/examples/cubecell-helium-us915-basic/src/main.cpp
+    // ---
+    int main()
+    {
+        return 0;
+    }
+    `;
+    const result = parsePrelude(text);
+    expect(result.hardshare?.hardshareO).toBe('heliumdev');
+    expect(result.hardshare?.hardshareId).toBe('cubecell-draw-demo');
 });
 
 

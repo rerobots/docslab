@@ -11,6 +11,9 @@ export interface PreludeMap {
     // defined, then refUrl is used. If repoUrl is defined but this is not,
     // then repoUrl is included in the sandbox panel.
     refUrl?: string;
+
+    // For better style, prefer to specify this outside the prelude
+    hardshare?: HardsharePath;
 }
 
 

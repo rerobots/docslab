@@ -74,6 +74,7 @@ export function parsePrelude(codeBlob: string): PreludeMap
     const knownKeys: PreludeKey[] = [
         'command',
         'destpath',
+        'hardshare',
         'lineRange',
         'refUrl',
         'repoScript',
@@ -136,6 +137,8 @@ export function parsePrelude(codeBlob: string): PreludeMap
             if (pm.lineRange[1] < -1 || pm.lineRange[1] === 0) {
                 throw new Error('end line must be -1 or >= 1');
             }
+        } else if (key === 'hardshare') {
+            pm.hardshare = parseHardsharePath(line.substring(sep + 1).trim());
         } else {
             pm[key] = line.substring(sep + 1).trim();
         }
