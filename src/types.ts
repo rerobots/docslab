@@ -1,4 +1,4 @@
-export interface PreludeMap {
+interface PreludeMapBase {
     command?: string;
     destpath?: string;
     repoUrl?: string;
@@ -11,7 +11,9 @@ export interface PreludeMap {
     // defined, then refUrl is used. If repoUrl is defined but this is not,
     // then repoUrl is included in the sandbox panel.
     refUrl?: string;
+}
 
+export interface PreludeMap extends PreludeMapBase {
     // For better style, prefer to specify this outside the prelude
     hardshare?: HardsharePath;
 }
@@ -28,7 +30,7 @@ export interface HardsharePath {
     hardshareId: string;
 }
 
-export interface CodeRuntimeInfo extends HardsharePath, PreludeMap {
+export interface CodeRuntimeInfo extends HardsharePath, PreludeMapBase {
     readOnly: boolean;
     startShowIndex?: number;  // Index corresponding to lineRange[0]
     endShowIndex?: number;  // Index corresponding to lineRange[1]

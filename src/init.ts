@@ -5,7 +5,7 @@ import * as aceShMode from 'ace-code/src/mode/sh';
 
 import './main.css';
 import { runCode } from './sandbox';
-import { getCodeRegion } from './util';
+import { getCodeRegion, parsePrelude } from './util';
 import type {
     CodeRuntimeInfo,
 } from './types';
@@ -53,13 +53,19 @@ function hideSurroundingCode(coderi: CodeRuntimeInfo, editor: ace.Ace.Editor)
 }
 
 
-function parseRootData(root: HTMLDivElement): CodeRuntimeInfo
+function parseRootData(root: HTMLDivElement | HTMLPreElement, strict?: boolean): CodeRuntimeInfo | null
 {
     if (!('hardshareo' in root.dataset)) {
-        throw new Error('hardshareo not defined');
+        if (strict) {
+            throw new Error('hardshareo not defined');
+        }
+        return null;
     }
     if (!('hardshareid' in root.dataset)) {
-        throw new Error('hardshareid not defined');
+        if (strict) {
+            throw new Error('hardshareid not defined');
+        }
+        return null;
     }
     const coderi: CodeRuntimeInfo = {
         readOnly: ('readonly' in root.dataset) || false,
@@ -103,9 +109,42 @@ function parseRootData(root: HTMLDivElement): CodeRuntimeInfo
 
 
 // If codeRuntimeInfo is provided, then do not read values from given element.
-export function prepareSnippet(root: HTMLDivElement, codeRuntimeInfo?: CodeRuntimeInfo, syntaxHighlight?: string)
+export function prepareSnippet(root: HTMLDivElement | HTMLPreElement, codeRuntimeInfo?: CodeRuntimeInfo, syntaxHighlight?: string)
 {
-    const coderi: CodeRuntimeInfo = codeRuntimeInfo || parseRootData(root);
+    const coderi: CodeRuntimeInfo = codeRuntimeInfo || parseRootData(root) || {
+        readOnly: false,
+        hardshareO: '',
+        hardshareId: '',
+    };
+    if (coderi.hardshareO === '') {
+        const pm = parsePrelude(root.innerText);
+        if (!pm.hardshare) {
+            throw new Error('hardshare path not defined');
+        }
+        coderi.hardshareO = pm.hardshare.hardshareO;
+        coderi.hardshareId = pm.hardshare.hardshareId;
+        coderi.command = pm.command;
+        coderi.destpath = pm.destpath;
+        coderi.repoUrl = pm.repoUrl;
+        coderi.repoScript = pm.repoScript;
+        coderi.urlfile = pm.urlfile;
+        coderi.exampleCode = pm.exampleCode;
+        coderi.lineRange = pm.lineRange;
+        coderi.refUrl = pm.refUrl;
+
+        const exampleBlockElement = root.getElementsByTagName('code')[0];
+        if (exampleBlockElement) {
+            if (!syntaxHighlight && exampleBlockElement.className.startsWith('language-')) {
+                syntaxHighlight = exampleBlockElement.className.substring(9);
+            }
+            root.removeChild(exampleBlockElement);
+        }
+
+        const newRoot = document.createElement('div');
+        newRoot.className = root.className;
+        root.replaceWith(newRoot);
+        root = newRoot;
+    }
 
     const editorDiv = document.createElement('div');
     editorDiv.className = 'docslabEditor';
@@ -258,6 +297,6 @@ export function loadAll()
 {
     const codeBlocks = document.getElementsByClassName("docslab");
     for (let j = 0; j < codeBlocks.length; j++) {
-        prepareSnippet(codeBlocks[j] as HTMLDivElement);
+        prepareSnippet(codeBlocks[j] as HTMLDivElement | HTMLPreElement);
     }
 }
