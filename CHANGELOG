@@ -1,3 +1,12 @@
+docslab (0.3.9)
+
+  * Support prelude when code is given in HTML
+
+  * First release of MkDocs extension
+
+ -- Scott C. Livingston <scott@rerobots.net>  Wed, 24 Jul 2024 20:53:54 -0700
+
+
 docslab (0.3.8)
 
   * Optional link to repository, declared with `refurl`
