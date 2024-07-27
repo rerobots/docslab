@@ -1,4 +1,4 @@
-interface PreludeMapBase {
+export interface PreludeMapBase {
     command?: string;
     destpath?: string;
     repoUrl?: string;

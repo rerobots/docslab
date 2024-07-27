@@ -10,4 +10,5 @@ export type {
     CodeRuntimeInfo,
     PreludeKey,
     PreludeMap,
+    PreludeMapBase,
 } from './types';
