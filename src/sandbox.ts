@@ -240,14 +240,17 @@ export function runCode(coderi: CodeRuntimeInfo, controlPanel: HTMLElement, edit
 {
     const keyboardInterruptButton = document.createElement('button');
     keyboardInterruptButton.innerText = 'Interrupt';
+    keyboardInterruptButton.classList.add('dl-interruptButton');
     controlPanel.insertBefore(keyboardInterruptButton, statusBar);
 
     const clearTerminalButton = document.createElement('button');
     clearTerminalButton.innerText = 'Clear terminal';
+    clearTerminalButton.classList.add('dl-clearTerminalButton');
     controlPanel.insertBefore(clearTerminalButton, statusBar);
 
     const teardownButton = document.createElement('button');
     teardownButton.innerText = 'Teardown sandbox';
+    teardownButton.classList.add('dl-teardownButton');
     controlPanel.insertBefore(teardownButton, statusBar);
 
     statusBar.innerText = 'Searching for available hardware...';
@@ -257,6 +260,7 @@ export function runCode(coderi: CodeRuntimeInfo, controlPanel: HTMLElement, edit
     term.loadAddon(fitAddon);
 
     const termDiv = document.createElement('div');
+    termDiv.classList.add('dl-terminalContainer');
 
     const root = controlPanel.parentElement as HTMLElement;
     root.appendChild(termDiv);
@@ -265,6 +269,7 @@ export function runCode(coderi: CodeRuntimeInfo, controlPanel: HTMLElement, edit
     fitAddon.fit();
 
     const cameraImg = document.createElement('img');
+    cameraImg.classList.add('dl-cameraImg');
 
     clearTerminalButton.addEventListener('click', () => {
         term.reset();

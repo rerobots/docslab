@@ -169,6 +169,7 @@ export function prepareSnippet(root: HTMLDivElement | HTMLPreElement, codeRuntim
 
     const runButton = document.createElement('button');
     runButton.innerText = 'Run';
+    runButton.classList.add('dl-runButton');
     controlPanel.appendChild(runButton);
 
     let resetShowingAllCode: (() => void) | null = null;
@@ -232,6 +233,7 @@ export function prepareSnippet(root: HTMLDivElement | HTMLPreElement, codeRuntim
     if (!coderi.readOnly) {
         resetButton = document.createElement('button');
         resetButton.innerText = 'Reset code';
+        resetButton.classList.add('dl-resetButton');
         controlPanel.appendChild(resetButton);
         resetButton.addEventListener('click', () => {
             coderi.exampleCode ||= '';
