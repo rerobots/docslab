@@ -1,3 +1,10 @@
+docslab (0.3.11)
+
+  *  Export base type of PreludeMap
+
+ -- Scott C. Livingston <scott@rerobots.net>  Sat, 27 Jul 2024 16:51:14 -0700
+
+
 docslab (0.3.10)
 
   * Add classes for styling (https://github.com/rerobots/docslab/pull/1)
