@@ -1,3 +1,10 @@
+docslab (0.3.10)
+
+  * Add classes for styling (https://github.com/rerobots/docslab/pull/1)
+
+ -- Scott C. Livingston <scott@rerobots.net>  Sat, 27 Jul 2024 16:22:23 -0700
+
+
 docslab (0.3.9)
 
   * Support prelude when code is given in HTML
