@@ -2,10 +2,13 @@ import React, { useEffect, useRef } from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 
 import 'docslab/lib/main.css';
-import type { CodeRuntimeInfo, PreludeKey } from 'docslab';
+import type { CodeRuntimeInfo, PreludeKey, PreludeMapBase } from 'docslab';
 
 import type { DocslabCodeBlockProps } from '../types';
 import { LineRange } from '../../../../../lib/types';
+
+
+type PreludeMapBaseKey = keyof PreludeMapBase;
 
 
 function Main(props: DocslabCodeBlockProps): JSX.Element
@@ -30,8 +33,9 @@ function Main(props: DocslabCodeBlockProps): JSX.Element
 
             if (!noPrelude && props.children) {
                 const pm = docslab.parsePrelude(props.children);
+
                 for (const k in pm) {
-                    coderi[k as PreludeKey] = pm[k as PreludeKey] as string & LineRange;
+                    coderi[k as PreludeMapBaseKey] = pm[k as PreludeMapBaseKey] as string & LineRange;
                 }
             }
 
@@ -43,7 +47,7 @@ function Main(props: DocslabCodeBlockProps): JSX.Element
                 'urlfile',
             ].forEach((k) => {
                 if (props[k as PreludeKey]) {
-                    coderi[k as PreludeKey] = props[k as PreludeKey] as string & LineRange;
+                    coderi[k as PreludeMapBaseKey] = props[k as PreludeMapBaseKey] as string & LineRange;
                 }
             });
 
