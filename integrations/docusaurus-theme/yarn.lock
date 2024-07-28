@@ -3193,10 +3193,10 @@ dns-packet@^5.2.2:
   dependencies:
     "@leichtgewicht/ip-codec" "^2.0.1"
 
-docslab@^0.3.10:
-  version "0.3.10"
-  resolved "https://registry.yarnpkg.com/docslab/-/docslab-0.3.10.tgz#f3d24462acc08c1d4785d57b586f7e34e599c19b"
-  integrity sha512-Yc9XPg1YECKtPd8FKAZU74m7HOdru7Qv6k/pZztIqZP02U/RIhuyhL1zAjR07LAgUi0ESB2mKfBq5hiz6dmm0Q==
+docslab@^0.3.12:
+  version "0.3.12"
+  resolved "https://registry.yarnpkg.com/docslab/-/docslab-0.3.12.tgz#fb7ec65e2b77a9f1f61b4c1125c275adffd32abd"
+  integrity sha512-+E6AqnrCHlUsjPfatNk3vMEdXPbn30IpQsMU0eX5kMENtcLERja/YgKBJarm32gpOUqejn9mhby7Sk8/KijDsA==
   dependencies:
     ace-code "^1.23.4"
     xterm "^5.2.1"
