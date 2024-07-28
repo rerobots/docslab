@@ -1,6 +1,8 @@
-docslab (0.3.11)
+docslab (0.3.12)
 
-  *  Export base type of PreludeMap
+  * Export base type of PreludeMap
+
+  * Version 0.3.11 was a no-op (no diff with v0.3.10)
 
  -- Scott C. Livingston <scott@rerobots.net>  Sat, 27 Jul 2024 16:51:14 -0700
 
