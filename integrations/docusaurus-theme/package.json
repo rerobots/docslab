@@ -25,6 +25,7 @@
     "pub": "test -f lib/index.js && yarn publish",
     "clean": "rm -r -f lib tsconfig.client.tsbuildinfo"
   },
+  "author": "rerobots, Inc. <q@rerobots.net>",
   "license": "Apache-2.0",
   "dependencies": {
     "docslab": "^0.3.12"

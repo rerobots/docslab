@@ -32,6 +32,7 @@
     "test:end-to-end": "cypress run",
     "start": "webpack serve --env fullBundle --env example"
   },
+  "author": "rerobots, Inc. <q@rerobots.net>",
   "license": "Apache-2.0",
   "dependencies": {
     "ace-code": "^1.23.4",
