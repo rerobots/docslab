@@ -80,13 +80,13 @@ module.exports = (env, argv) => {
             config.plugins.push(new HtmlWebpackPlugin({
                 title: 'docslab',
                 filename: filename,
-                template: 'examples/' + filename,
+                template: 'examples/html/' + filename,
             }));
         });
         config.plugins.push(new HtmlWebpackPlugin({
             title: 'docslab',
             filename: 'index.html',
-            template: 'examples/index.ejs',
+            template: 'examples/html/index.ejs',
             templateParameters: {
                 examples: examples,
             }
