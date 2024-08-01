@@ -4,8 +4,8 @@ docslab
 Summary
 -------
 
-The aim of this project is to support learning and development [on the Helium
-network](https://docs.helium.com/) by making documentation interactive.
+The aim of this project is to support learning and development by making
+documentation about robots and electronics interactive.
 Run examples on real hardware in a safe and reproducible way.
 
 https://www.npmjs.com/package/docslab
