@@ -18,7 +18,7 @@ Then, add it to your ``mkdocs.yml`` file.
 To make a code block interactive, add ``docslab`` to the meta string, e.g., ::
 
     ```{ .cpp .docslab }
-    // hardshare=heliumdev/cubecell-draw-demo
+    // hardshare: heliumdev/cubecell-draw-demo
     // command: source .platformio/penv/bin/activate && cd m/Heltec-CubeCell-Board/examples/cubecell-helium-us915-basic && pio run -t upload && pio device monitor
     // destpath: m/Heltec-CubeCell-Board/examples/cubecell-helium-us915-basic/src/main.cpp
     // repoUrl: https://github.com/helium/longfi-platformio.git
