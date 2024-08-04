@@ -2,6 +2,7 @@
 node_modules/
 /lib/
 /integrations/docusaurus-theme/lib/
+.docusaurus/
 *.tsbuildinfo
 yarn-error.log
 /cypress/
