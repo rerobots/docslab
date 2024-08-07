@@ -29,6 +29,7 @@ jobs:
                 wait-on: 'http://localhost:8080'
 
     docs:
+        needs: [build-and-test]
         name: Documentation examples
         runs-on: ubuntu-22.04
         if: github.ref == 'refs/heads/main'
