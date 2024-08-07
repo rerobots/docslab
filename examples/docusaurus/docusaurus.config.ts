@@ -4,7 +4,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
     title: 'Docslab Examples',
     url: 'http://localhost',
-    baseUrl: '/docslab/examples/docusaurus/',
+    baseUrl: '/examples/docusaurus/',
 
     presets: [
         [
