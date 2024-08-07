@@ -78,6 +78,7 @@ jobs:
                 git checkout -b $PAGES_BRANCH
                 rm -rf docs
                 mv new-docs docs
+                touch docs/.nojekyll
                 git add -f docs
                 git commit -m 'GitHub Pages: built documentation'
                 git push -f origin $PAGES_BRANCH
