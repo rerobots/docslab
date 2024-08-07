@@ -62,3 +62,22 @@ jobs:
                 pip install mkdocs-docslab
                 mkdocs build
                 cd ../..
+            - name: Gather the examples
+              run: |
+                mkdir -p docs/examples
+                mv examples/docusaurus/build docs/examples/docusaurus
+                mv examples/sphinx/build docs/examples/sphinx
+                mv examples/mkdocs/site docs/examples/mkdocs
+            - name: Push to GitHub Pages branch
+              run: |
+                PAGES_BRANCH="github_pages"
+                git config --global user.name 'GitHub Actions'
+                git config --global user.email '<>'
+                mv docs new-docs
+                git fetch origin $PAGES_BRANCH
+                git checkout -b $PAGES_BRANCH
+                rm -rf docs
+                mv new-docs docs
+                git add -f docs
+                git commit -m 'GitHub Pages: built documentation'
+                git push -f origin $PAGES_BRANCH
