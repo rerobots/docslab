@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 logger = sphinx.util.logging.getLogger(__name__)
 
 
-DOCSLAB_VERSION = '0.3.8'
+DOCSLAB_VERSION = '0.3.12'
 DOCSLAB_URL = f'https://cdn.jsdelivr.net/npm/docslab@{DOCSLAB_VERSION}/dist/index.all.js'
 
 
