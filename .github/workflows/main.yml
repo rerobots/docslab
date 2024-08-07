@@ -68,6 +68,7 @@ jobs:
                 mv examples/docusaurus/build docs/examples/docusaurus
                 mv examples/sphinx/build docs/examples/sphinx
                 mv examples/mkdocs/site docs/examples/mkdocs
+                cp doc/index.html docs/
             - name: Push to GitHub Pages branch
               run: |
                 PAGES_BRANCH="github_pages"
