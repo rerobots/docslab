@@ -51,11 +51,13 @@ jobs:
               run: |
                 cd examples/sphinx
                 pip install sphinx
+                pip install sphinx-docslab
                 sphinx-build . build
                 cd ../..
             - name: Build MkDocs example
               run: |
                 cd examples/mkdocs
                 pip install mkdocs
+                pip install mkdocs-docslab
                 mkdocs build
                 cd ../..
