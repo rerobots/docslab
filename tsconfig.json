@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "outDir": "./lib/",
-    "noImplicitAny": true,
+    "declaration": true,
     "esModuleInterop": true,
     "module": "nodenext",
-    "target": "es5",
-    "declaration": true,
-    "moduleResolution": "nodenext"
+    "moduleResolution": "nodenext",
+    "noImplicitAny": true,
+    "outDir": "./lib/",
+    "strict": true,
+    "target": "es5"
   },
   "include": [
     "src/**/*"
