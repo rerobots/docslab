@@ -77,6 +77,7 @@ jobs:
                 mv docs new-docs
                 git fetch origin $PAGES_BRANCH
                 git checkout -b $PAGES_BRANCH
+                cp docs/CNAME new-docs/
                 rm -rf docs
                 mv new-docs docs
                 touch docs/.nojekyll
