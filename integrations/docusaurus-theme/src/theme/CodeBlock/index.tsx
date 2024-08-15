@@ -8,13 +8,13 @@ import { DocslabCodeBlock } from '../DocslabCodeBlock';
 
 function parseMetastring(metastring: string): string | null
 {
-    let parts = metastring.split(' ');
+    const parts = metastring.split(' ');
     if (parts.length >= 3) {
         return null;
     }
 
-    let parseHardshareKV = (x: string) => {
-        let sep = x.indexOf('=');
+    const parseHardshareKV = (x: string) => {
+        const sep = x.indexOf('=');
         if (sep < 0) {
             return null;
         }
