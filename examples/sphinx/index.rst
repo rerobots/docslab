@@ -21,3 +21,10 @@ Examples of docslab in MkDocs
         delay(1000);
         Serial.println("Hola, mundo!");
     }
+
+
+References
+----------
+
+* `Source code of this example <https://github.com/rerobots/docslab/tree/main/examples/sphinx>`_
+* `Live deployment <https://docslab.org/examples/sphinx/>`_

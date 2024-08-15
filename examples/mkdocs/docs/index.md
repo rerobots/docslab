@@ -1,5 +1,6 @@
 # Examples of docslab in MkDocs
 
+
 ```{ .cpp .docslab }
 // hardshare: heliumdev/cubecell-draw-demo
 // command: source .platformio/penv/bin/activate && cd m/Heltec-CubeCell-Board/examples/cubecell-helium-us915-basic && pio run -t upload && pio device monitor
@@ -19,3 +20,9 @@ void loop()
     Serial.println("Hola, mundo!");
 }
 ```
+
+
+## References
+
+* [Source code of this example](https://github.com/rerobots/docslab/tree/main/examples/mkdocs)
+* [Live deployment](https://docslab.org/examples/mkdocs/)
