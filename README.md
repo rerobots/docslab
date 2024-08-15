@@ -16,6 +16,8 @@ There are three ways to use docslab:
 2. import docslab as a TypeScript/ES6 dependency,
 3. use an integration for frameworks like Sphinx or Docusaurus.
 
+Live examples are shown at https://docslab.org/
+
 
 Integrations
 ------------
