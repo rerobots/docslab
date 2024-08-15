@@ -3559,10 +3559,10 @@ dns-packet@^5.2.2:
   dependencies:
     "@leichtgewicht/ip-codec" "^2.0.1"
 
-docslab-docusaurus@^0.2.9:
-  version "0.2.9"
-  resolved "https://registry.yarnpkg.com/docslab-docusaurus/-/docslab-docusaurus-0.2.9.tgz#f020702d29552c351a8d1bd4cb4c881e3b576fd4"
-  integrity sha512-jqTwTDaJ7Kp+yXD3+JvvDg53io5XgdcLMEqEP9zVKxarBOpMluVbWUOgilGdceyiMdX5SBzRvreG68yMJuZspQ==
+docslab-docusaurus@^0.2.10:
+  version "0.2.10"
+  resolved "https://registry.yarnpkg.com/docslab-docusaurus/-/docslab-docusaurus-0.2.10.tgz#de61f597e092dc7b36be3333f7386916039779b3"
+  integrity sha512-7+Rnu0W2R0DCLgKZYn+pkI5MPFpADT+6HI68r5oYXP9AYoaezxT0VwbP1O43EfLXtM9jFOtFDRF+ZBiJlrHvNg==
   dependencies:
     docslab "^0.3.12"
 
