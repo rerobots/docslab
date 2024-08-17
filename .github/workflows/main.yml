@@ -62,12 +62,17 @@ jobs:
                 pip install mkdocs-docslab
                 mkdocs build
                 cd ../..
+            - name: Build simple HTML examples
+              run: |
+                yarn run webpack build --env fullBundle --env example
+                mv lib examples-html
             - name: Gather the examples
               run: |
                 mkdir -p docs/examples
                 mv examples/docusaurus/build docs/examples/docusaurus
                 mv examples/sphinx/build docs/examples/sphinx
                 mv examples/mkdocs/site docs/examples/mkdocs
+                mv examples-html docs/examples/html
                 cp doc/index.html docs/
             - name: Push to GitHub Pages branch
               run: |
