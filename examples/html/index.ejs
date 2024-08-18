@@ -6,10 +6,17 @@
     <title>docslab examples</title>
   </head>
   <body>
+    <h1>Examples of docslab in simple HTML</h1>
     <ul>
         <% examples.forEach(function(ex) { %>
             <li><a href="<%= ex %>"><%= ex %></a></li>
         <% }); %>
+    </ul>
+
+    <h2>References</h2>
+    <ul>
+      <li><a href="https://github.com/rerobots/docslab/tree/main/examples/html">Source code of these examples</a></li>
+      <li><a href="https://docslab.org/examples/html/">Live deployment</a></li>
     </ul>
   </body>
 </html>
