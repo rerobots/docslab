@@ -64,6 +64,7 @@ jobs:
                 cd ../..
             - name: Build simple HTML examples
               run: |
+                yarn install
                 yarn run webpack build --env fullBundle --env example
                 mv lib examples-html
             - name: Gather the examples
