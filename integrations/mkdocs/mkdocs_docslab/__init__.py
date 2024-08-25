@@ -1,4 +1,4 @@
-import mkdocs
+import mkdocs.plugins
 from mkdocs.structure.files import File
 
 try:
