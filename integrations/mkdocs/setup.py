@@ -4,7 +4,7 @@ from setuptools import setup
 # Version of this package
 MAJOR=0
 MINOR=1
-PATCH=1
+PATCH=2
 devel=True
 
 version = '{}.{}.{}'.format(MAJOR, MINOR, PATCH)
