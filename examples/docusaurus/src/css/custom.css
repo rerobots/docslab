@@ -1,3 +1,16 @@
 .docslabEditor {
     width: 100%;
+    border: 1px solid #000;
+}
+
+.dl-runButton, .dl-resetButton, .dl-interruptButton, .dl-clearTerminalButton, .dl-teardownButton {
+    height: 2em;
+}
+
+.dl-terminalContainer {
+    width: 100%;
+}
+
+.dl-cameraImg {
+    max-width: 400px;
 }
