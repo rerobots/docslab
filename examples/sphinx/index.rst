@@ -1,4 +1,4 @@
-Examples of docslab in MkDocs
+Examples of docslab in Sphinx
 =============================
 
 .. docslab:: heliumdev/cubecell-draw-demo
