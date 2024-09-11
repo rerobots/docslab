@@ -1,18 +1,15 @@
-import type {
-    HardsharePath,
-    LineRange,
-    PreludeKey,
-    PreludeMap,
-} from './types';
+import type { HardsharePath, LineRange, PreludeKey, PreludeMap } from './types';
 
-
-export function getCodeRegion(codeBlob: string, lineRange: LineRange, lineEnding?: '\n' | '\r\n'): [number, number, number]
-{
+export function getCodeRegion(
+    codeBlob: string,
+    lineRange: LineRange,
+    lineEnding?: '\n' | '\r\n',
+): [number, number, number] {
     if (!lineEnding) {
         const firstLineFeed = codeBlob.indexOf('\n');
         if (firstLineFeed === 0) {
             lineEnding = '\n';
-        } else if (codeBlob[firstLineFeed-1] === '\r') {
+        } else if (codeBlob[firstLineFeed - 1] === '\r') {
             lineEnding = '\r\n';
         } else {
             lineEnding = '\n';
@@ -54,9 +51,7 @@ export function getCodeRegion(codeBlob: string, lineRange: LineRange, lineEnding
     return [startLineIndex, endLineIndex, currentLine];
 }
 
-
-export function parseHardsharePath(hspath: string): HardsharePath
-{
+export function parseHardsharePath(hspath: string): HardsharePath {
     const sep = hspath.indexOf('/');
     if (sep < 1 || sep >= hspath.length - 1) {
         throw new Error(`separator '/' not found in '${hspath}'`);
@@ -68,9 +63,7 @@ export function parseHardsharePath(hspath: string): HardsharePath
     };
 }
 
-
-export function parsePrelude(codeBlob: string): PreludeMap
-{
+export function parsePrelude(codeBlob: string): PreludeMap {
     const knownKeys: PreludeKey[] = [
         'command',
         'destpath',
@@ -93,7 +86,8 @@ export function parsePrelude(codeBlob: string): PreludeMap
 
         if (line.startsWith('#')) {
             line = line.replace(/#+/, '');
-        } if (line.startsWith(';')) {
+        }
+        if (line.startsWith(';')) {
             line = line.replace(/;+/, '');
         } else if (line.startsWith('/*')) {
             const matchingEnd = line.endsWith('*/');
@@ -124,9 +118,11 @@ export function parsePrelude(codeBlob: string): PreludeMap
             break;
         }
         if (key === 'lineRange') {
-            const parts = line.substring(sep + 1).trim().split(',').map((x) => (
-                x.trim()
-            ));
+            const parts = line
+                .substring(sep + 1)
+                .trim()
+                .split(',')
+                .map((x) => x.trim());
             if (parts.length !== 2) {
                 throw new Error('unexpected number of parameters in lineRange');
             }

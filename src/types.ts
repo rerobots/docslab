@@ -18,7 +18,6 @@ export interface PreludeMap extends PreludeMapBase {
     hardshare?: HardsharePath;
 }
 
-
 // Starting and ending lines of code; the ending can be -1,
 // in which case it implies the last line.
 export type LineRange = [number, number];
@@ -32,7 +31,7 @@ export interface HardsharePath {
 
 export interface CodeRuntimeInfo extends HardsharePath, PreludeMapBase {
     readOnly: boolean;
-    startShowIndex?: number;  // Index corresponding to lineRange[0]
-    endShowIndex?: number;  // Index corresponding to lineRange[1]
+    startShowIndex?: number; // Index corresponding to lineRange[0]
+    endShowIndex?: number; // Index corresponding to lineRange[1]
     maxLine?: number;
 }

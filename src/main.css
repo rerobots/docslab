@@ -21,7 +21,7 @@
 
 .docslabPowered a {
     color: #999;
-    padding-left: .3vw;
+    padding-left: 0.3vw;
 }
 
 .docslabRepo {
@@ -30,7 +30,7 @@
 }
 
 .docslabStatus {
-    padding-left: .4vw;
+    padding-left: 0.4vw;
     flex: 1 1 auto;
     display: flex;
     align-items: center;
