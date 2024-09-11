@@ -19,7 +19,9 @@ jobs:
             - name: Installation
               run: yarn install --frozen-lockfile
             - name: Lint
-              run: yarn lint
+              run: |
+                yarn prettier src --check
+                yarn lint
             - name: Test
               run: yarn test
             - name: Run end-to-end tests
