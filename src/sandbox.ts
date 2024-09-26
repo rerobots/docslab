@@ -24,6 +24,7 @@ interface InstanceParams {
         url: string;
         path?: string;
     };
+    keepalive: boolean;
 }
 
 interface CancelFlag {
@@ -140,6 +141,7 @@ function launchInstance(
                         allow_noop: true,
                         wds: payload.wds,
                         expire_d: payload.expire_d.anon,
+                        keepalive: true,
                     };
                     if (coderi.repoUrl) {
                         newInstanceParams.repo = {
@@ -177,6 +179,12 @@ function launchInstance(
                     if (!payload) {
                         return;
                     }
+                    setTimeout(() => {
+                        instanceKeepAlive(
+                            payload.id,
+                            instanceInfo.token as string,
+                        );
+                    }, 45000);
                     instanceInfo.id = payload.id;
                     instanceInfo.status = 'INIT';
                     resolve(instanceInfo);
@@ -536,5 +544,26 @@ export function runCode(
                 statusBar.innerText = 'None available; try again soon.';
             }
             // If cancelFlag.cancelled true, then cleanUp() was already called
+        });
+}
+
+function instanceKeepAlive(instanceId: string, token: string) {
+    fetch(`https://api.rerobots.net/instance/${instanceId}/ka`, {
+        method: 'POST',
+        headers: {
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    })
+        .then((res) => {
+            if (res.ok) {
+                setTimeout(() => {
+                    instanceKeepAlive(instanceId, token);
+                }, 45000);
+                return;
+            }
+        })
+        .catch((err) => {
+            console.log(err);
         });
 }
