@@ -26,6 +26,8 @@
     "build:release": "mkdir dist && webpack --mode production --env fullBundle && cp lib/index.all.js dist/ && webpack --mode production",
     "pub": "test -f lib/index.js && yarn publish",
     "clean": "rm -r -f lib dist",
+    "format": "yarn prettier --write src",
+    "format:check": "yarn prettier --check src",
     "lint": "eslint --ext .ts,.tsx src integrations/docusaurus-theme/src && tsc --noEmit",
     "lint:fix": "eslint --fix --ext .ts,.tsx src integrations/docusaurus-theme/src",
     "test": "jest",
