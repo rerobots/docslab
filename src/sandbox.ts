@@ -179,12 +179,7 @@ function launchInstance(
                     if (!payload) {
                         return;
                     }
-                    setTimeout(() => {
-                        instanceKeepAlive(
-                            payload.id,
-                            instanceInfo.token as string,
-                        );
-                    }, 45000);
+                    instanceKeepAlive(payload.id, instanceInfo.token as string);
                     instanceInfo.id = payload.id;
                     instanceInfo.status = 'INIT';
                     resolve(instanceInfo);
