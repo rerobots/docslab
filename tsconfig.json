@@ -1,15 +1,15 @@
 {
-  "compilerOptions": {
-    "declaration": true,
-    "esModuleInterop": true,
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "noImplicitAny": true,
-    "outDir": "./lib/",
-    "strict": true,
-    "target": "es5"
-  },
-  "include": [
-    "src/**/*"
-  ]
+    "compilerOptions": {
+        "declaration": true,
+        "esModuleInterop": true,
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "noImplicitAny": true,
+        "outDir": "./lib/",
+        "strict": true,
+        "target": "es5"
+    },
+    "include": [
+        "src/**/*"
+    ]
 }
