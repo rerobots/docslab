@@ -1,3 +1,4 @@
+import { instanceKeepAlive } from 'rerobots';
 import * as ace from 'ace-code';
 import { Terminal } from 'xterm';
 import 'xterm/css/xterm.css';
@@ -539,26 +540,5 @@ export function runCode(
                 statusBar.innerText = 'None available; try again soon.';
             }
             // If cancelFlag.cancelled true, then cleanUp() was already called
-        });
-}
-
-function instanceKeepAlive(instanceId: string, token: string) {
-    fetch(`https://api.rerobots.net/instance/${instanceId}/ka`, {
-        method: 'POST',
-        headers: {
-            Authorization: 'Bearer ' + token,
-            'Content-Type': 'application/json',
-        },
-    })
-        .then((res) => {
-            if (res.ok) {
-                setTimeout(() => {
-                    instanceKeepAlive(instanceId, token);
-                }, 45000);
-                return;
-            }
-        })
-        .catch((err) => {
-            console.log(err);
         });
 }
