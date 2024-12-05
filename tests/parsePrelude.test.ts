@@ -1,6 +1,5 @@
 import { parseHardsharePath, parsePrelude } from '../src/util';
 
-
 test('test prelude parsing for C++', () => {
     const text = `// command: pio run -t upload && pio device monitor
     // destpath: m/Heltec-CubeCell-Board/examples/cubecell-helium-us915-basic/src/main.cpp
@@ -19,7 +18,6 @@ test('test prelude parsing for C++', () => {
     expect(result.lineRange).toEqual([2, 5]);
 });
 
-
 test('test prelude with hardshare path in it', () => {
     const text = `// hardshare: heliumdev/cubecell-draw-demo
     // command: pio run -t upload
@@ -34,7 +32,6 @@ test('test prelude with hardshare path in it', () => {
     expect(result.hardshare?.hardshareO).toBe('heliumdev');
     expect(result.hardshare?.hardshareId).toBe('cubecell-draw-demo');
 });
-
 
 test('test hardshare path parsing', () => {
     const text = 'heliumdev/cubecell-draw-demo';
