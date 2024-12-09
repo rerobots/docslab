@@ -12,10 +12,17 @@ void setup()
     expect(endShowIndex).toEqual(63);
     expect(maxLine).toEqual(5);
 
+    // -1 ending => automatically determine end line
     [startShowIndex, endShowIndex, maxLine] = getCodeRegion(text, [2, -1]);
     expect(startShowIndex).toEqual(21);
     expect(endShowIndex).toEqual(63);
     expect(maxLine).toEqual(5);
+
+    // Single line case
+    [startShowIndex, endShowIndex, maxLine] = getCodeRegion(text, [2, 2]);
+    expect(startShowIndex).toEqual(21);
+    expect(endShowIndex).toEqual(33);
+    expect(maxLine).toEqual(2);
 
     [startShowIndex, endShowIndex, maxLine] = getCodeRegion(text, [1, 5]);
     expect(startShowIndex).toEqual(0);

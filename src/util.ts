@@ -29,7 +29,8 @@ export function getCodeRegion(
         currentLine += 1;
         if (startLineIndex === undefined && currentLine === lineRange[0]) {
             startLineIndex = start;
-        } else if (endLineIndex === undefined && currentLine === lineRange[1]) {
+        }
+        if (endLineIndex === undefined && currentLine === lineRange[1]) {
             endLineIndex = end;
             break;
         }
