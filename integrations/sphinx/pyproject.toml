@@ -21,5 +21,13 @@ classifiers = [
 [project.urls]
 source = "https://github.com/rerobots/docslab"
 
+[project.optional-dependencies]
+test = [
+    "black",
+]
+
 [tool.setuptools]
 packages = ["sphinx_docslab"]
+
+[tool.black]
+skip-string-normalization = true

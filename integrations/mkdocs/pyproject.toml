@@ -21,8 +21,16 @@ classifiers = [
 [project.urls]
 source = "https://github.com/rerobots/docslab"
 
+[project.optional-dependencies]
+test = [
+    "black",
+]
+
 [project.entry-points."mkdocs.plugins"]
 docslab = "mkdocs_docslab:DocslabPlugin"
 
 [tool.setuptools]
 packages = ["mkdocs_docslab"]
+
+[tool.black]
+skip-string-normalization = true

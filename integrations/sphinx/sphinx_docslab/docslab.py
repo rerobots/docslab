@@ -18,10 +18,18 @@ logger = sphinx.util.logging.getLogger(__name__)
 
 
 DOCSLAB_VERSION = '0.3.12'
-DOCSLAB_URL = f'https://cdn.jsdelivr.net/npm/docslab@{DOCSLAB_VERSION}/dist/index.all.js'
+DOCSLAB_URL = (
+    f'https://cdn.jsdelivr.net/npm/docslab@{DOCSLAB_VERSION}/dist/index.all.js'
+)
 
 
-def install_docslab(app: Sphinx, pagename: str, templatename: str, context: dict[str, Any], doctree: Node) -> None:
+def install_docslab(
+    app: Sphinx,
+    pagename: str,
+    templatename: str,
+    context: dict[str, Any],
+    doctree: Node,
+) -> None:
     if app.builder.format != 'html' or doctree is None:
         return
     has_one = False
@@ -31,7 +39,10 @@ def install_docslab(app: Sphinx, pagename: str, templatename: str, context: dict
             break
     if has_one:
         app.add_js_file(DOCSLAB_URL)
-        app.add_js_file(None, body='document.addEventListener("DOMContentLoaded", (event) => { docslab.loadAll(); });')
+        app.add_js_file(
+            None,
+            body='document.addEventListener("DOMContentLoaded", (event) => { docslab.loadAll(); });',
+        )
 
 
 def is_known_language(lang: str) -> str:
@@ -41,6 +52,7 @@ def is_known_language(lang: str) -> str:
     ]:
         raise ValueError(f'unknown language: {lang}')
     return lang
+
 
 def is_url(x: str) -> str:
     u = urllib.parse.urlparse(x)
@@ -54,7 +66,17 @@ def is_url(x: str) -> str:
 
 
 class DocslabNode(nodes.Element):
-    def __init__(self, hardshare_ref, readonly=False, text=None, lang=None, command=None, path=None, repo=None, urlfile=None):
+    def __init__(
+        self,
+        hardshare_ref,
+        readonly=False,
+        text=None,
+        lang=None,
+        command=None,
+        path=None,
+        repo=None,
+        urlfile=None,
+    ):
         self.hardshare_owner, self.hardshare_id = hardshare_ref.split('/')
         self.readonly = readonly
         self.text = text
@@ -64,6 +86,7 @@ class DocslabNode(nodes.Element):
         self.urlfile = urlfile
         super().__init__()
 
+
 def visit_docslab_html(self, node):
     elem = f'<div class="docslab" data-hardshareo="{node.hardshare_owner}" data-hardshareid="{node.hardshare_id}"'
     if node.readonly:
@@ -72,12 +95,14 @@ def visit_docslab_html(self, node):
         if getattr(node, kw, None):
             elem += f' data-{kw}="{getattr(node, kw)}"'
     elem += '>'
-    self.body.append(elem +
-        f'<a href="https://rerobots.net/u/{node.hardshare_owner}/{node.hardshare_id}" target="_blank">Try it</a>'
+    self.body.append(
+        elem
+        + f'<a href="https://rerobots.net/u/{node.hardshare_owner}/{node.hardshare_id}" target="_blank">Try it</a>'
         f'<pre><code>'
     )
     if node.text:
         self.body.append(html.escape(node.text))
+
 
 def depart_docslab_html(self, node):
     self.body.append('</code></pre></div>')
@@ -100,11 +125,7 @@ class DocslabDirective(SphinxDirective):
             text = '\n'.join(self.content)
         else:
             text = None
-        return [DocslabNode(
-            hardshare_ref=self.arguments[0],
-            text=text,
-            **self.options
-        )]
+        return [DocslabNode(hardshare_ref=self.arguments[0], text=text, **self.options)]
 
 
 def setup(app: Sphinx) -> ExtensionMetadata:
