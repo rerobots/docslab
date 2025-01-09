@@ -18,6 +18,14 @@ jobs:
                 cache: yarn
             - name: Installation
               run: yarn install --frozen-lockfile
+            - name: Integration installations
+              run: |
+                pushd integrations/sphinx
+                pip install .[test]
+                popd
+                pushd integrations/mkdocs
+                pip install .[test]
+                popd
             - name: Lint
               run: |
                 yarn format:check
