@@ -3,5 +3,5 @@ export default () => ({
 
     getThemePath() {
         return './theme';
-    }
+    },
 });

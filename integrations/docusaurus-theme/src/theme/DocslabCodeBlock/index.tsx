@@ -7,12 +7,9 @@ import type { CodeRuntimeInfo, PreludeKey, PreludeMapBase } from 'docslab';
 import type { DocslabCodeBlockProps } from '../types';
 import { LineRange } from '../../../../../lib/types';
 
-
 type PreludeMapBaseKey = keyof PreludeMapBase;
 
-
-function Main(props: DocslabCodeBlockProps): JSX.Element
-{
+function Main(props: DocslabCodeBlockProps): JSX.Element {
     const mainDiv = useRef<HTMLDivElement>(null);
     const noPrelude = !!props.noPrelude;
 
@@ -28,28 +25,28 @@ function Main(props: DocslabCodeBlockProps): JSX.Element
 
             const coderi: CodeRuntimeInfo = {
                 readOnly: !!props.readOnly,
-                ...(docslab.parseHardsharePath(props.hardshare))
+                ...docslab.parseHardsharePath(props.hardshare),
             };
 
             if (!noPrelude && props.children) {
                 const pm = docslab.parsePrelude(props.children);
 
                 for (const k in pm) {
-                    coderi[k as PreludeMapBaseKey] = pm[k as PreludeMapBaseKey] as string & LineRange;
+                    coderi[k as PreludeMapBaseKey] = pm[
+                        k as PreludeMapBaseKey
+                    ] as string & LineRange;
                 }
             }
 
-            [
-                'command',
-                'destpath',
-                'repoUrl',
-                'repoScript',
-                'urlfile',
-            ].forEach((k) => {
-                if (props[k as PreludeKey]) {
-                    coderi[k as PreludeMapBaseKey] = props[k as PreludeMapBaseKey] as string & LineRange;
-                }
-            });
+            ['command', 'destpath', 'repoUrl', 'repoScript', 'urlfile'].forEach(
+                (k) => {
+                    if (props[k as PreludeKey]) {
+                        coderi[k as PreludeMapBaseKey] = props[
+                            k as PreludeMapBaseKey
+                        ] as string & LineRange;
+                    }
+                },
+            );
 
             if (props.exampleCode) {
                 coderi.exampleCode = props.exampleCode;
@@ -57,9 +54,17 @@ function Main(props: DocslabCodeBlockProps): JSX.Element
                 coderi.exampleCode = props.children;
             }
 
-            if (props.className && props.className !== 'language-docslab' && props.className.startsWith('language-')) {
+            if (
+                props.className &&
+                props.className !== 'language-docslab' &&
+                props.className.startsWith('language-')
+            ) {
                 const syntaxHighlight = props.className.substring(9);
-                docslab.prepareSnippet(mainDiv.current, coderi, syntaxHighlight);
+                docslab.prepareSnippet(
+                    mainDiv.current,
+                    coderi,
+                    syntaxHighlight,
+                );
             } else {
                 docslab.prepareSnippet(mainDiv.current, coderi);
             }
@@ -70,19 +75,13 @@ function Main(props: DocslabCodeBlockProps): JSX.Element
         };
     }, [mainDiv]);
 
-    return (
-        <div ref={mainDiv}></div>
-    );
+    return <div ref={mainDiv}></div>;
 }
 
-
-export function DocslabCodeBlock(props: DocslabCodeBlockProps): JSX.Element
-{
+export function DocslabCodeBlock(props: DocslabCodeBlockProps): JSX.Element {
     return (
         <BrowserOnly fallback={<div>loading...</div>}>
-            {() => (
-                <Main {...props} />
-            )}
+            {() => <Main {...props} />}
         </BrowserOnly>
     );
 }

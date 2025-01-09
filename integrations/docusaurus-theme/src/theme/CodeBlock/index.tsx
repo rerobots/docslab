@@ -5,9 +5,7 @@ import CodeBlock from '@theme-init/CodeBlock';
 import type { CodeBlockSwitchProps, DocslabCodeBlockProps } from '../types';
 import { DocslabCodeBlock } from '../DocslabCodeBlock';
 
-
-function parseMetastring(metastring: string): string | null
-{
+function parseMetastring(metastring: string): string | null {
     const parts = metastring.split(' ');
     if (parts.length >= 3) {
         return null;
@@ -34,20 +32,26 @@ function parseMetastring(metastring: string): string | null
     }
 }
 
-
 function SwitchedCodeBlock(props: CodeBlockSwitchProps): JSX.Element {
-    if (props.hardshare && (props.docslab || props.className === 'language-docslab')) {
+    if (
+        props.hardshare &&
+        (props.docslab || props.className === 'language-docslab')
+    ) {
         const extProps: DocslabCodeBlockProps = {
             hardshare: props.hardshare,
-            ...props
+            ...props,
         };
         return <DocslabCodeBlock {...extProps} />;
-    } else if (props.metastring && (props.className === 'language-docslab' || props.metastring.includes('docslab'))) {
+    } else if (
+        props.metastring &&
+        (props.className === 'language-docslab' ||
+            props.metastring.includes('docslab'))
+    ) {
         const hardshare = parseMetastring(props.metastring);
         if (hardshare) {
             const extProps: DocslabCodeBlockProps = {
                 hardshare: hardshare,
-                ...props
+                ...props,
             };
             return <DocslabCodeBlock {...extProps} />;
         }
