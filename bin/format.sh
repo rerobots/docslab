@@ -10,6 +10,10 @@ if [ "$1" = "check" ]; then
     cd integrations/mkdocs
     black --check setup.py mkdocs_docslab
     cd ../..
+
+    cd integrations/mdbook
+    cargo fmt --check
+    cd ../..
 else
     yarn prettier --write src tests integrations/docusaurus-theme/src
 
@@ -19,5 +23,9 @@ else
 
     cd integrations/mkdocs
     black setup.py mkdocs_docslab
+    cd ../..
+
+    cd integrations/mdbook
+    cargo fmt
     cd ../..
 fi
