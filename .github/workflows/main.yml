@@ -60,6 +60,8 @@ jobs:
               with:
                   python-version: '3.10'
                   cache: 'pip'
+            - run: rustup toolchain install stable --profile minimal
+            - uses: Swatinem/rust-cache@v2
             - name: Build Docusaurus example
               run: |
                 cd examples/docusaurus
@@ -80,6 +82,12 @@ jobs:
                 pip install mkdocs-docslab
                 mkdocs build
                 cd ../..
+            - name: Build mdBook example
+              run: |
+                cd examples/mdbook
+                cargo install --path .
+                mdbook build
+                cd ../..
             - name: Build simple HTML examples
               run: |
                 yarn install
@@ -91,6 +99,7 @@ jobs:
                 mv examples/docusaurus/build docs/examples/docusaurus
                 mv examples/sphinx/build docs/examples/sphinx
                 mv examples/mkdocs/site docs/examples/mkdocs
+                mv example/mdbook/book docs/examples/mdbook
                 mv examples-html docs/examples/html
                 cp doc/index.html docs/
             - name: Push to GitHub Pages branch
