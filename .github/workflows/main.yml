@@ -70,13 +70,18 @@ jobs:
                 cd ../..
             - name: Build Sphinx example
               run: |
+                cd integrations/sphinx
+                pip install .
+                cd ../..
                 cd examples/sphinx
                 pip install sphinx
-                pip install sphinx-docslab
                 sphinx-build . build
                 cd ../..
             - name: Build MkDocs example
               run: |
+                cd integrations/mkdocs
+                pip install .
+                cd ../..
                 cd examples/mkdocs
                 pip install mkdocs
                 pip install mkdocs-docslab
@@ -84,8 +89,10 @@ jobs:
                 cd ../..
             - name: Build mdBook example
               run: |
-                cd examples/mdbook
+                cd integrations/mdbook
                 cargo install --path .
+                cd ../..
+                cd examples/mdbook
                 mdbook build
                 cd ../..
             - name: Build simple HTML examples
