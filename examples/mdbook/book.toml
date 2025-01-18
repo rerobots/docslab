@@ -4,3 +4,8 @@ language = "en"
 multilingual = false
 src = "src"
 title = "Docslab Examples"
+
+[preprocessor.docslab]
+
+[output.html]
+additional-js = ["docslab.js", "docslabl.js"]
