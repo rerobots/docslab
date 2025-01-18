@@ -112,7 +112,7 @@ jobs:
                 mv examples/docusaurus/build docs/examples/docusaurus
                 mv examples/sphinx/build docs/examples/sphinx
                 mv examples/mkdocs/site docs/examples/mkdocs
-                mv example/mdbook/book docs/examples/mdbook
+                mv examples/mdbook/book docs/examples/mdbook
                 mv examples-html docs/examples/html
                 cp doc/index.html docs/
             - name: Push to GitHub Pages branch
