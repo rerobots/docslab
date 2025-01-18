@@ -29,13 +29,12 @@ impl Preprocessor for DocslabCodeblock {
     }
 }
 
-const DOCSLAB_JS: &str = include_str!("../../../dist/index.all.js");
 const DOCSLAB_JS_LOADER: &str =
     "document.addEventListener('DOMContentLoaded', (event) => { docslab.loadAll(); });";
-const FILEMAP: [(&str, &str); 2] = [
-    ("docslab.js", DOCSLAB_JS),
-    ("docslabl.js", DOCSLAB_JS_LOADER),
-];
+const JS_FILEMAP: [(&str, &str); 1] = [("docslabl.js", DOCSLAB_JS_LOADER)];
+const CUSTOM_HEADER: &str =
+    "<script src=\"https://cdn.jsdelivr.net/npm/docslab@0.3.12/dist/index.all.js\"></script>";
+const THEME_FILEMAP: [(&str, &str); 1] = [("head.hbs", CUSTOM_HEADER)];
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
@@ -100,7 +99,7 @@ fn main() {
             let arr = bookconfig["output"]["html"]["additional-js"]
                 .as_array_mut()
                 .unwrap();
-            let mut new_js_files = vec!["docslab.js", "docslabl.js"];
+            let mut new_js_files = Vec::from(JS_FILEMAP.map(|x| x.0));
             for item in arr.iter() {
                 for (index, new_js_file) in new_js_files.iter().enumerate() {
                     if &item.as_str().unwrap() == new_js_file {
@@ -119,9 +118,41 @@ fn main() {
                 std::process::exit(1);
             }
 
-            for file in FILEMAP.iter() {
+            for file in JS_FILEMAP.iter() {
                 let full_path = base_path.join(file.0);
                 if !full_path.exists() {
+                    if let Err(err) = std::fs::write(full_path, file.1) {
+                        eprintln!("Error writing {}: {}", file.0, err);
+                        std::process::exit(1);
+                    }
+                }
+            }
+
+            let theme_path = base_path.join("theme");
+            if !theme_path.exists() {
+                if let Err(err) = std::fs::create_dir(&theme_path) {
+                    eprintln!("Error creating theme directory: {}", err);
+                    std::process::exit(1);
+                }
+            }
+            for file in THEME_FILEMAP.iter() {
+                let full_path = theme_path.join(file.0);
+                if full_path.exists() {
+                    let mut current_theme_file = match std::fs::read_to_string(&full_path) {
+                        Ok(s) => s,
+                        Err(err) => {
+                            eprintln!("Error while reading {}: {}", args[2], err);
+                            std::process::exit(1);
+                        }
+                    };
+                    if !current_theme_file.contains(file.1) {
+                        current_theme_file.push_str(file.1);
+                        if let Err(err) = std::fs::write(full_path, current_theme_file) {
+                            eprintln!("Error writing {}: {}", file.0, err);
+                            std::process::exit(1);
+                        }
+                    }
+                } else {
                     if let Err(err) = std::fs::write(full_path, file.1) {
                         eprintln!("Error writing {}: {}", file.0, err);
                         std::process::exit(1);
