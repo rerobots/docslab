@@ -8,4 +8,4 @@ title = "Docslab Examples"
 [preprocessor.docslab]
 
 [output.html]
-additional-js = ["docslab.js", "docslabl.js"]
+additional-js = ["docslabl.js"]
