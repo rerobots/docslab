@@ -94,6 +94,7 @@ jobs:
             - name: Build mdBook example
               run: |
                 cd integrations/mdbook
+                cargo install mdbook
                 cargo install --path .
                 cd ../..
                 cd examples/mdbook
