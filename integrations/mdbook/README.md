@@ -4,7 +4,11 @@ docslab mdBook preprocessor
 This mdBook preprocessor uses [docslab](https://github.com/rerobots/docslab)
 to make code blocks interactive.
 
-To configure your book source to use it,
+First, install it:
+
+    cargo install mdbook-docslab
+
+Then, configure your book source to use it,
 
     mdbook-docslab install path/to/your/book
 
