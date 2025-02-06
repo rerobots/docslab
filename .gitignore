@@ -15,3 +15,4 @@ dist/
 /examples/mdbook/book/
 /examples/mkdocs/site/
 /examples/sphinx/build/
+/examples/docusaurus/build/
