@@ -11,3 +11,7 @@ __pycache__/
 _version.py
 dist/
 /integrations/mdbook/target/
+
+/examples/mdbook/book/
+/examples/mkdocs/site/
+/examples/sphinx/build/
