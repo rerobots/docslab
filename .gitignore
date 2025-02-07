@@ -13,6 +13,8 @@ dist/
 /integrations/mdbook/target/
 
 /examples/mdbook/book/
+/examples/mdbook/theme/head.hbs
+/examples/mdbook/docslabl.js
 /examples/mkdocs/site/
 /examples/sphinx/build/
 /examples/docusaurus/build/
