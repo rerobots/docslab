@@ -68,7 +68,12 @@ jobs:
                 yarn build:release
             - name: Build Docusaurus example
               run: |
+                cd integrations/docusaurus-theme
+                yarn add link:../..
+                yarn build
+                cd ../..
                 cd examples/docusaurus
+                yarn add link:../../integrations/docusaurus-theme
                 yarn install
                 yarn build
                 cd ../..
