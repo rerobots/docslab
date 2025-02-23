@@ -45,14 +45,6 @@ To run the examples,
 and open the displayed URL (likely <http://localhost:8080/>) in your browser.
 
 
-### Implementation notes
-
-Generated HTML has a `<div>` block with attributes that specify how to prepare
-the runtime environment. Optionally, the example code can be given at a URL
-declared among these attributes, or it can be written in a `<code>` block
-inside the main `<div>`.
-
-
 License
 -------
 
