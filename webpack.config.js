@@ -1,5 +1,6 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { PyodiodePlugin, default: PyodidePlugin } = require('@pyodide/webpack-plugin');
 const path = require('path');
 
 
@@ -30,7 +31,9 @@ var config = {
             },
         ],
     },
-    plugins: [],
+    plugins: [
+        new PyodidePlugin(),
+    ],
 };
 
 module.exports = (env, argv) => {
