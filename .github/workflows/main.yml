@@ -62,70 +62,23 @@ jobs:
                   cache: 'pip'
             - run: rustup toolchain install stable --profile minimal
             - uses: Swatinem/rust-cache@v2
-            - name: Build main
+            - name: Install dependencies and build examples
               run: |
-                yarn install --frozen-lockfile
-                yarn build:release
-            - name: Build Docusaurus example
+                cd doc
+                pip install -r requirements.txt -r devel-requirements.txt
+                bin/build-examples.sh
+                cd ..
+            - name: Build docs
               run: |
-                cd integrations/docusaurus-theme
-                yarn add link:../..
-                yarn build
-                cd ../..
-                cd examples/docusaurus
-                yarn add link:../../integrations/docusaurus-theme
-                yarn install
-                yarn build
-                cd ../..
-            - name: Build Sphinx example
-              run: |
-                cd integrations/sphinx
-                pip install .
-                cd ../..
-                cd examples/sphinx
-                pip install sphinx
+                cd doc
                 sphinx-build . build
-                cd ../..
-            - name: Build MkDocs example
-              run: |
-                cd integrations/mkdocs
-                pip install .
-                cd ../..
-                cd examples/mkdocs
-                pip install mkdocs
-                pip install mkdocs-docslab
-                mkdocs build
-                cd ../..
-            - name: Build mdBook example
-              run: |
-                cd integrations/mdbook
-                cargo install mdbook
-                cargo install --path .
-                cd ../..
-                cd examples/mdbook
-                mdbook-docslab install .
-                mdbook build
-                cd ../..
-            - name: Build simple HTML examples
-              run: |
-                yarn install
-                yarn run webpack build --env fullBundle --env example
-                mv lib examples-html
-            - name: Gather the examples
-              run: |
-                mkdir -p docs/examples
-                mv examples/docusaurus/build docs/examples/docusaurus
-                mv examples/sphinx/build docs/examples/sphinx
-                mv examples/mkdocs/site docs/examples/mkdocs
-                mv examples/mdbook/book docs/examples/mdbook
-                mv examples-html docs/examples/html
-                cp doc/index.html docs/
+                mv build ../new-docs
+                cd ..
             - name: Push to GitHub Pages branch
               run: |
                 PAGES_BRANCH="github_pages"
                 git config --global user.name 'GitHub Actions'
                 git config --global user.email '<>'
-                mv docs new-docs
                 git fetch origin $PAGES_BRANCH
                 git checkout -b $PAGES_BRANCH
                 echo -n 'docslab.org' > new-docs/CNAME
