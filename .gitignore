@@ -11,6 +11,7 @@ __pycache__/
 _version.py
 dist/
 /integrations/mdbook/target/
+/doc/build/
 
 /examples/mdbook/book/
 /examples/mdbook/theme/head.hbs

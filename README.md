@@ -16,7 +16,7 @@ There are three ways to use docslab:
 2. import docslab as a TypeScript/ES6 dependency,
 3. use an integration for frameworks like Sphinx or Docusaurus.
 
-Live examples are shown at https://docslab.org/
+Live examples and documentation at https://docslab.org/
 
 
 Integrations
@@ -43,6 +43,12 @@ To run the examples,
     yarn start
 
 and open the displayed URL (likely <http://localhost:8080/>) in your browser.
+
+To build the docs,
+
+    cd doc
+    pip install -r requirements.txt
+    sphinx-build . build
 
 
 License
