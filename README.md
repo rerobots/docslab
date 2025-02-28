@@ -51,6 +51,8 @@ To build the docs,
     bin/build-examples.sh
     sphinx-autobuild . build
 
+In your browser, visit http://127.0.0.1:8000
+
 
 License
 -------
