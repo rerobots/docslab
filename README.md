@@ -47,8 +47,9 @@ and open the displayed URL (likely <http://localhost:8080/>) in your browser.
 To build the docs,
 
     cd doc
-    pip install -r requirements.txt
-    sphinx-build . build
+    pip install -r requirements.txt -r devel-requirements.txt
+    bin/build-examples.sh
+    sphinx-autobuild . build
 
 
 License
