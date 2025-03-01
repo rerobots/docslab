@@ -1,4 +1,11 @@
 #!/bin/sh -e
+#
+# Usage:
+#
+#     build-examples.sh [clean]
+#
+# Try to use this without "clean" first. If an error occurs involving
+# links or dependencies, try `bin/build-examples.sh clean`
 
 mkdir -p build/examples
 
