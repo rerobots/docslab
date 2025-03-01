@@ -28,8 +28,8 @@ Integrations
 * Sphinx, https://pypi.org/project/sphinx-docslab/
 
 
-Contributing to docslab itself
-------------------------------
+Contributing
+------------
 
 Please report errors, odd behavior, or feature requests at
 <https://github.com/rerobots/docslab/issues>
