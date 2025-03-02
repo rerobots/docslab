@@ -1,5 +1,5 @@
 project = 'docslab'
-copyright = '2025 rerobots, Inc.'
+copyright = '2025 rerobots, Inc'  # Theme appends "." to copyright declaration, so omit it here to avoid double ".."
 author = 'rerobots, Inc.'
 
 html_theme = 'sphinx_book_theme'
