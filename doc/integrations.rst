@@ -1,6 +1,16 @@
 Integrations
 ============
 
+docslab has integrations (also known as plug-ins, extensions, etc.) with
+several generators and frameworks:
+
+.. toctree::
+
+  integrations/docusaurus
+  integrations/mkdocs
+  integrations/sphinx
+  integrations/mdbook
+
 Examples
 --------
 

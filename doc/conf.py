@@ -29,3 +29,7 @@ html_title = 'docslab'
 source_suffix = '.rst'
 master_doc = 'index'
 html_static_path = ['static']
+
+extensions = [
+    'sphinx_mdinclude',
+]
