@@ -6,16 +6,16 @@ several generators and frameworks:
 
 .. toctree::
 
-  integrations/docusaurus
-  integrations/mkdocs
-  integrations/sphinx
-  integrations/mdbook
+  Docusaurus <integrations/docusaurus>
+  mdBook <integrations/mdbook>
+  Mkdocs <integrations/mkdocs>
+  Sphinx <integrations/sphinx>
 
 Examples
 --------
 
 * `Docusaurus <examples/docusaurus>`_
+* `mdBook <examples/mdbook>`_
 * `MkDocs <examples/mkdocs>`_
 * `Sphinx <examples/sphinx>`_
-* `mdBook <examples/mdbook>`_
 * `simple HTML <examples/html>`_
