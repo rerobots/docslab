@@ -1,7 +1,8 @@
 docslab MkDocs plugin
 =====================
 
-This MkDocs plugin uses `docslab <https://github.com/rerobots/docslab>`_
+This `MkDocs <https://www.mkdocs.org/>`_ plugin uses
+`docslab <https://github.com/rerobots/docslab>`_
 to make code blocks interactive.
 
 First, install it from PyPI::

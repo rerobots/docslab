@@ -1,7 +1,8 @@
 docslab mdBook preprocessor
 ===========================
 
-This mdBook preprocessor uses [docslab](https://github.com/rerobots/docslab)
+This [mdBook](https://rust-lang.github.io/mdBook/) preprocessor uses
+[docslab](https://github.com/rerobots/docslab)
 to make code blocks interactive.
 
 First, install it:
