@@ -18,4 +18,3 @@ Examples
 * `mdBook <examples/mdbook>`_
 * `MkDocs <examples/mkdocs>`_
 * `Sphinx <examples/sphinx>`_
-* `simple HTML <examples/html>`_
