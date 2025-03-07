@@ -12,6 +12,8 @@ Getting started
 interactive. The kind of interactivity provided depends on the target hardware,
 but in all cases, hardware is provisioned with hardshare_.
 
+To learn how to use docslab with a documentation generator like Sphinx or
+Docusaurus, read the section about :doc:`integrations`.
 
 Complete examples written in HTML are shown at `<examples/html>`_
 
