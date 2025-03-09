@@ -23,7 +23,7 @@ typically pull from public package registries, e.g., https://pypi.org/project/sp
 
 .. warning::
 
-  bin/clean-examples.sh uses `git checkout` on example and integration
+  bin/clean-examples.sh uses ``git checkout`` on example and integration
   configurations, including package.json, and thus will cause unsaved changes
   in these files to be lost.
 
