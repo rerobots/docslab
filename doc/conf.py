@@ -25,6 +25,7 @@ html_theme_options = {
     ],
 }
 html_title = 'docslab'
+html_favicon = 'static/favicon.ico'
 
 source_suffix = '.rst'
 master_doc = 'index'
