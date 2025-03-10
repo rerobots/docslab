@@ -5,7 +5,8 @@ This [mdBook](https://rust-lang.github.io/mdBook/) preprocessor uses
 [docslab](https://github.com/rerobots/docslab)
 to make code blocks interactive.
 
-First, install it:
+First, install the [mdbook-docslab](https://crates.io/crates/mdbook-docslab)
+crate:
 
     cargo install mdbook-docslab
 

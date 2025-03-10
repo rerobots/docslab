@@ -5,7 +5,8 @@ This `Sphinx <https://www.sphinx-doc.org/>`_ extension uses
 `docslab <https://github.com/rerobots/docslab>`_
 to make code blocks interactive.
 
-First, install it from PyPI::
+First, install the `sphinx-docslab <https://pypi.org/project/sphinx-docslab/>`_
+package from PyPI::
 
     pip install sphinx-docslab
 
