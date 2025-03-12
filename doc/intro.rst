@@ -31,6 +31,9 @@ Docusaurus, read the section about :doc:`integrations`.
         </code></pre>
     </div>
 
+Note that ``<`` and ``>`` have special significance in HTML and, therefore, are
+expressed using ``&lt;`` and ``&gt;``, respectively.
+
 Complete examples written in HTML are shown at `<examples/html>`_
 
 
