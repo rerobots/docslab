@@ -1,0 +1,5 @@
+/// <reference types="node" />
+import * as ace from 'ace-code';
+import 'xterm/css/xterm.css';
+import { CodeRuntimeInfo } from './types';
+export declare function runCode(coderi: CodeRuntimeInfo, controlPanel: HTMLElement, editor: ace.Ace.Editor, runButton: HTMLButtonElement, initRunButton: () => void, statusBar: HTMLSpanElement, assignTerminationTimeout: (x: NodeJS.Timeout | null) => void): void;
