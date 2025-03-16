@@ -12,8 +12,8 @@ To build the documentation, ::
   bin/build-examples.sh
   sphinx-autobuild . build
 
-If the `build-examples.sh` command fails due to docslab-related dependencies,
-then try again using the `clean` option::
+If the ``build-examples.sh`` command fails due to docslab-related dependencies,
+then try again using the ``clean`` option::
 
   bin/build-examples.sh clean
 
