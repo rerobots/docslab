@@ -76,6 +76,7 @@ module.exports = (env, argv) => {
         const examples = [
             'cubecell.html',
             'esp32.html',
+            'httpproxy.html',
             'repo.html',
             'wisblock.html',
         ];
