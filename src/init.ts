@@ -80,11 +80,22 @@ function parseRootData(
         readOnly: 'readonly' in root.dataset || false,
         hardshareO: root.dataset['hardshareo'] as string,
         hardshareId: root.dataset['hardshareid'] as string,
+        runEnv: 'ssh',
     };
     const exampleBlockElement = root.getElementsByTagName('code')[0];
     if (exampleBlockElement) {
         coderi.exampleCode = exampleBlockElement.innerText;
         root.removeChild(exampleBlockElement.parentElement as Node);
+    }
+    if ('runenv' in root.dataset) {
+        if (
+            root.dataset['runenv'] === 'py' ||
+            root.dataset['runenv'] === 'ssh'
+        ) {
+            coderi.runEnv = root.dataset['runenv'];
+        } else {
+            throw new Error(`unexpected runenv: ${root.dataset['runenv']}`);
+        }
     }
     if ('command' in root.dataset) {
         coderi.command = root.dataset['command'];
@@ -125,6 +136,7 @@ export function prepareSnippet(
             readOnly: false,
             hardshareO: '',
             hardshareId: '',
+            runEnv: 'ssh',
         };
     if (coderi.hardshareO === '') {
         const pm = parsePrelude(root.innerText);

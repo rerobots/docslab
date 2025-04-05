@@ -11,6 +11,9 @@ export interface PreludeMapBase {
     // defined, then refUrl is used. If repoUrl is defined but this is not,
     // then repoUrl is included in the sandbox panel.
     refUrl?: string;
+
+    // Default is ssh
+    runEnv: 'py' | 'ssh';
 }
 
 export interface PreludeMap extends PreludeMapBase {

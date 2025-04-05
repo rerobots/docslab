@@ -75,7 +75,9 @@ export function parsePrelude(codeBlob: string): PreludeMap {
         'repoUrl',
         'urlfile',
     ];
-    const pm: PreludeMap = {};
+    const pm: PreludeMap = {
+        runEnv: 'ssh',
+    };
 
     let start = 0;
     let end = codeBlob.indexOf('\n');
@@ -136,6 +138,13 @@ export function parsePrelude(codeBlob: string): PreludeMap {
             }
         } else if (key === 'hardshare') {
             pm.hardshare = parseHardsharePath(line.substring(sep + 1).trim());
+        } else if (key === 'runEnv') {
+            const runEnv = line.substring(sep + 1).trim();
+            if (runEnv === 'py' || runEnv === 'ssh') {
+                pm['runEnv'] = runEnv;
+            } else {
+                throw new Error(`unexpected runEnv: ${runEnv}`);
+            }
         } else {
             pm[key] = line.substring(sep + 1).trim();
         }
