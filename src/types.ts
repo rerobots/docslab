@@ -14,6 +14,9 @@ export interface PreludeMapBase {
 
     // Default is ssh
     runEnv: 'py' | 'ssh';
+
+    // These are defined by rerobots
+    addons?: string[];
 }
 
 export interface PreludeMap extends PreludeMapBase {

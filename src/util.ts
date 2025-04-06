@@ -141,16 +141,24 @@ export function parsePrelude(codeBlob: string): PreludeMap {
         } else if (key === 'runEnv') {
             const runEnv = line.substring(sep + 1).trim();
             if (runEnv === 'py' || runEnv === 'ssh') {
-                pm['runEnv'] = runEnv;
+                pm.runEnv = runEnv;
             } else {
                 throw new Error(`unexpected runEnv: ${runEnv}`);
             }
+        } else if (key === 'addons') {
+            const addons = line.substring(sep + 1).trim();
+            pm.addons = addons.split(',').map((w) => w.trim());
         } else {
             pm[key] = line.substring(sep + 1).trim();
         }
     }
     if (end > 0) {
         pm.exampleCode = codeBlob.substring(start);
+    }
+
+    // Default add-ons
+    if (pm.runEnv === 'ssh' && (!pm.addons || pm.addons.length === 0)) {
+        pm.addons = ['cmdsh'];
     }
 
     return pm;
