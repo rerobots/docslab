@@ -16,6 +16,8 @@ test('test prelude parsing for C++', () => {
     expect(result.hardshare).toBeUndefined();
     expect(result.command).toBe('pio run -t upload && pio device monitor');
     expect(result.lineRange).toEqual([2, 5]);
+    expect(result.runEnv).toBe('ssh');
+    expect(result.addons).toEqual(['cmdsh']);
 });
 
 test('test prelude with hardshare path in it', () => {
