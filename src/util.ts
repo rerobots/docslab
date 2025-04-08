@@ -1,4 +1,10 @@
-import type { HardsharePath, LineRange, PreludeKey, PreludeMap } from './types';
+import type {
+    CodeRuntimeInfo,
+    HardsharePath,
+    LineRange,
+    PreludeKey,
+    PreludeMap,
+} from './types';
 
 export function getCodeRegion(
     codeBlob: string,
@@ -162,4 +168,81 @@ export function parsePrelude(codeBlob: string): PreludeMap {
     }
 
     return pm;
+}
+
+export function parseRootData(
+    root: HTMLDivElement | HTMLPreElement,
+    strict?: boolean,
+): CodeRuntimeInfo | null {
+    if (!('hardshareo' in root.dataset)) {
+        if (strict) {
+            throw new Error('hardshareo not defined');
+        }
+        return null;
+    }
+    if (!('hardshareid' in root.dataset)) {
+        if (strict) {
+            throw new Error('hardshareid not defined');
+        }
+        return null;
+    }
+    const coderi: CodeRuntimeInfo = {
+        readOnly: 'readonly' in root.dataset || false,
+        hardshareO: root.dataset['hardshareo'] as string,
+        hardshareId: root.dataset['hardshareid'] as string,
+        runEnv: 'ssh',
+    };
+    const exampleBlockElement = root.getElementsByTagName('code')[0];
+    if (exampleBlockElement) {
+        coderi.exampleCode = exampleBlockElement.innerText;
+        root.removeChild(exampleBlockElement.parentElement as Node);
+    }
+    if ('runenv' in root.dataset) {
+        if (
+            root.dataset['runenv'] === 'py' ||
+            root.dataset['runenv'] === 'ssh'
+        ) {
+            coderi.runEnv = root.dataset['runenv'];
+        } else {
+            throw new Error(`unexpected runenv: ${root.dataset['runenv']}`);
+        }
+    }
+    if ('addons' in root.dataset && root.dataset['addons']) {
+        coderi.addons = root.dataset.addons.split(',').map((w) => w.trim());
+    }
+    if ('command' in root.dataset) {
+        coderi.command = root.dataset['command'];
+    }
+    if ('path' in root.dataset) {
+        coderi.destpath = root.dataset['path'];
+    }
+    if ('repo' in root.dataset) {
+        coderi.repoUrl = root.dataset['repo'];
+    }
+    if ('refurl' in root.dataset) {
+        coderi.refUrl = root.dataset['refurl'];
+    }
+    if ('iscript' in root.dataset) {
+        coderi.repoScript = root.dataset['iscript'];
+    }
+    if ('urlfile' in root.dataset) {
+        coderi.urlfile = root.dataset['urlfile'];
+    }
+    if ('lrange' in root.dataset && root.dataset['lrange']) {
+        const parts = root.dataset['lrange'].split(',').map((x) => x.trim());
+        if (parts.length !== 2) {
+            throw new Error('unexpected number of parameters in lrange');
+        }
+        coderi.lineRange = [Number(parts[0]), Number(parts[1])];
+    }
+
+    // Default add-ons
+    if (
+        coderi.runEnv === 'ssh' &&
+        (!coderi.addons || coderi.addons.length === 0)
+    ) {
+        coderi.addons = ['cmdsh'];
+    }
+
+    return coderi;
 }
