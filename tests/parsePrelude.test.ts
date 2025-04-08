@@ -43,3 +43,39 @@ test('hardshare path parsing', () => {
     expect(result.hardshareO).toEqual('heliumdev');
     expect(result.hardshareId).toEqual('cubecell-draw-demo');
 });
+
+test('prelude from HTML dataset that is missing values', () => {
+    const { document } = new JSDOM(`
+        <!DOCTYPE html>
+        <div
+            id="emptyExample"
+            class="docslab"
+        ></div>
+`).window;
+    const emptyRoot = document.getElementById('emptyExample') as HTMLDivElement;
+    expect(parseRootData(emptyRoot)).toBeNull();
+});
+
+test('prelude from HTML dataset in repo-style div', () => {
+    const { document } = new JSDOM(`
+        <!DOCTYPE html>
+        <div
+            id="repoExample"
+            class="docslab"
+            data-hardshareo="heliumdev"
+            data-hardshareid="cubecell-draw-demo"
+            data-path="m/Heltec-CubeCell-Board/examples/cubecell-helium-us915-basic/src/main.cpp"
+            data-command="source .platformio/penv/bin/activate && cd m/Heltec-CubeCell-Board/examples/cubecell-helium-us915-basic && pio run -t upload && pio device monitor"
+            data-urlfile="https://raw.githubusercontent.com/helium/longfi-platformio/master/Heltec-CubeCell-Board/examples/cubecell-helium-us915-basic/src/main.cpp"
+            data-repo="https://github.com/helium/longfi-platformio.git"
+        ></div>
+`).window;
+    const root = document.getElementById('repoExample') as HTMLDivElement;
+    const coderi = parseRootData(root);
+    if (coderi === null) {
+        throw new Error();
+    }
+    expect(coderi.hardshareO).toBe('heliumdev');
+    expect(coderi.runEnv).toBe('ssh');
+    expect(coderi.addons).toEqual(['cmdsh']);
+});
