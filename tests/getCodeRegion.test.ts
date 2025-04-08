@@ -1,6 +1,6 @@
 import { getCodeRegion } from '../src/util';
 
-test('test simple C++ example with prelude', () => {
+test('simple C++ example with prelude', () => {
     const text = `#include "Arduino.h"
 void setup()
 {

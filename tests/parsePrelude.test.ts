@@ -1,6 +1,8 @@
-import { parseHardsharePath, parsePrelude } from '../src/util';
+import { JSDOM } from 'jsdom';
 
-test('test prelude parsing for C++', () => {
+import { parseHardsharePath, parsePrelude, parseRootData } from '../src/util';
+
+test('prelude parsing for C++', () => {
     const text = `// command: pio run -t upload && pio device monitor
     // destpath: m/Heltec-CubeCell-Board/examples/cubecell-helium-us915-basic/src/main.cpp
     // repoUrl: https://github.com/helium/longfi-platformio.git
@@ -20,7 +22,7 @@ test('test prelude parsing for C++', () => {
     expect(result.addons).toEqual(['cmdsh']);
 });
 
-test('test prelude with hardshare path in it', () => {
+test('prelude with hardshare path in it', () => {
     const text = `// hardshare: heliumdev/cubecell-draw-demo
     // command: pio run -t upload
     // destpath: m/Heltec-CubeCell-Board/examples/cubecell-helium-us915-basic/src/main.cpp
@@ -35,7 +37,7 @@ test('test prelude with hardshare path in it', () => {
     expect(result.hardshare?.hardshareId).toBe('cubecell-draw-demo');
 });
 
-test('test hardshare path parsing', () => {
+test('hardshare path parsing', () => {
     const text = 'heliumdev/cubecell-draw-demo';
     const result = parseHardsharePath(text);
     expect(result.hardshareO).toEqual('heliumdev');
