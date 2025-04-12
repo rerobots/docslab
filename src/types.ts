@@ -41,3 +41,24 @@ export interface CodeRuntimeInfo extends HardsharePath, PreludeMapBase {
     endShowIndex?: number; // Index corresponding to lineRange[1]
     maxLine?: number;
 }
+
+export interface InstanceInfo {
+    id?: string;
+    status?: string;
+    expiration?: number;
+    token?: string;
+    token64?: string;
+    destpath?: string;
+    command?: string;
+}
+
+export interface InstanceParams {
+    allow_noop: boolean;
+    wds: string[];
+    expire_d: string;
+    repo?: {
+        url: string;
+        path?: string;
+    };
+    keepalive: boolean;
+}
