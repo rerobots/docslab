@@ -40,6 +40,7 @@ export interface CodeRuntimeInfo extends HardsharePath, PreludeMapBase {
     startShowIndex?: number; // Index corresponding to lineRange[0]
     endShowIndex?: number; // Index corresponding to lineRange[1]
     maxLine?: number;
+    instance?: InstanceInfo;
 }
 
 export interface InstanceInfo {
