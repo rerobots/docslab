@@ -5,7 +5,12 @@ import * as aceShMode from 'ace-code/src/mode/sh';
 
 import './main.css';
 import { runCode } from './sandbox';
-import { getCodeRegion, parsePrelude, parseRootData } from './util';
+import {
+    getCodeRegion,
+    initCodeRuntimeInfo,
+    parsePrelude,
+    parseRootData,
+} from './util';
 import type { CodeRuntimeInfo } from './types';
 
 const highlightMap: { [key: string]: typeof aceCppMode } = {
@@ -66,13 +71,8 @@ export function prepareSnippet(
     codeRuntimeInfo?: CodeRuntimeInfo,
     syntaxHighlight?: string,
 ) {
-    const coderi: CodeRuntimeInfo = codeRuntimeInfo ||
-        parseRootData(root) || {
-            readOnly: false,
-            hardshareO: '',
-            hardshareId: '',
-            runEnv: 'ssh',
-        };
+    const coderi: CodeRuntimeInfo =
+        codeRuntimeInfo || parseRootData(root) || initCodeRuntimeInfo();
     if (coderi.hardshareO === '') {
         const pm = parsePrelude(root.innerText);
         if (!pm.hardshare) {

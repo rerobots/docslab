@@ -246,3 +246,21 @@ export function parseRootData(
 
     return coderi;
 }
+
+export function initCodeRuntimeInfo(
+    readOnly?: boolean,
+    hspath?: string,
+): CodeRuntimeInfo {
+    const coderi: CodeRuntimeInfo = {
+        hardshareO: '',
+        hardshareId: '',
+        readOnly: !!readOnly,
+        runEnv: 'ssh',
+    };
+    if (hspath) {
+        const hs = parseHardsharePath(hspath);
+        coderi.hardshareO = hs.hardshareO;
+        coderi.hardshareId = hs.hardshareId;
+    }
+    return coderi;
+}

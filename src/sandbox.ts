@@ -4,8 +4,15 @@ import 'xterm/css/xterm.css';
 import { AttachAddon } from 'xterm-addon-attach';
 import { FitAddon } from 'xterm-addon-fit';
 
-import { getApiToken, launchInstance, prepareShell } from './hardshare';
-import type { CodeRuntimeInfo, InstanceInfo } from './types';
+import {
+    attachCameraStream,
+    getApiToken,
+    getInstanceInfo,
+    launchInstance,
+    prepareShell,
+    terminateInstance,
+} from './hardshare';
+import type { CodeRuntimeInfo } from './types';
 
 export function runCode(
     coderi: CodeRuntimeInfo,
@@ -75,10 +82,14 @@ export function runCode(
     teardownButton.addEventListener('click', cleanUp);
 
     getApiToken(coderi.hardshareO, coderi.hardshareId, cancelFlag)
-        .then((instanceInfo: InstanceInfo) => {
-            return launchInstance(coderi, instanceInfo, cancelFlag);
+        .then((tokens: string[]) => {
+            coderi.instance = {
+                token: tokens[0],
+                token64: tokens[1],
+            };
+            return launchInstance(coderi, cancelFlag);
         })
-        .then((instanceInfo: InstanceInfo) => {
+        .then((coderi: CodeRuntimeInfo) => {
             const instanceStatusWatcherFn = (
                 instanceStatusWatcher: NodeJS.Timeout,
             ) => {
@@ -86,18 +97,7 @@ export function runCode(
                     clearInterval(instanceStatusWatcher);
                     return;
                 }
-                fetch('https://api.rerobots.net/instance/' + instanceInfo.id, {
-                    headers: {
-                        Authorization: 'Bearer ' + instanceInfo.token,
-                        'Content-Type': 'application/json',
-                    },
-                })
-                    .then((res) => {
-                        if (res.ok) {
-                            return res.json();
-                        }
-                        throw new Error(res.url);
-                    })
+                getInstanceInfo(coderi)
                     .then((payload) => {
                         if (teardownButton.parentElement === null) {
                             clearInterval(instanceStatusWatcher);
@@ -106,7 +106,7 @@ export function runCode(
 
                         if (
                             payload.status === 'READY' &&
-                            instanceInfo.status === 'INIT'
+                            coderi.instance?.status === 'INIT'
                         ) {
                             clearInterval(instanceStatusWatcher);
                             const instanceStatusWatcherSlow = setInterval(
@@ -118,51 +118,13 @@ export function runCode(
                                 10000,
                             );
 
-                            fetch(
-                                'https://api.rerobots.net/addon/cam/' +
-                                    instanceInfo.id,
-                                {
-                                    method: 'GET',
-                                    headers: {
-                                        Authorization:
-                                            'Bearer ' + instanceInfo.token,
-                                        'Content-Type': 'application/json',
-                                    },
-                                },
-                            )
-                                .then((res) => {
-                                    if (res.ok) {
-                                        return res.json();
-                                    }
-                                    if (res.status === 404) {
-                                        return;
-                                    }
-                                    throw new Error(res.url);
-                                })
-                                .then((payload) => {
-                                    if (payload.status === 'active') {
-                                        root.appendChild(cameraImg);
-                                        const camWs = new WebSocket(
-                                            `wss://api.rerobots.net/addon/cam/${instanceInfo.id}/0/feed/${instanceInfo.token64}`,
-                                        );
-                                        camWs.addEventListener(
-                                            'message',
-                                            function (event) {
-                                                cameraImg.src = event.data;
-                                            },
-                                        );
-                                    }
-                                })
-                                .catch((err) => {
-                                    console.log(err);
-                                });
+                            attachCameraStream(coderi, root, cameraImg);
                         }
-                        instanceInfo.status = payload.status;
+                        coderi.instance ||= {};
+                        coderi.instance.status = payload.status;
 
-                        if (!instanceInfo.expiration) {
-                            instanceInfo.expiration = new Date(
-                                payload.expires + 'Z',
-                            ).valueOf();
+                        if (!coderi.instance.expiration) {
+                            coderi.instance.expiration = payload.expiration;
                         }
                         if (
                             payload.status !== 'INIT' &&
@@ -178,8 +140,10 @@ export function runCode(
                             }
                             clearInterval(instanceStatusWatcher);
                         } else if (
-                            (instanceInfo.expiration - Date.now()) / 1000.0 <=
-                            60
+                            coderi.instance.expiration &&
+                            (coderi.instance.expiration - Date.now()) /
+                                1000.0 <=
+                                60
                         ) {
                             statusBar.innerText =
                                 'Less than 60 seconds of access remaining';
@@ -197,31 +161,25 @@ export function runCode(
             teardownButton.addEventListener('click', () => {
                 const timeout = setTimeout(() => {
                     assignTerminationTimeout(null);
-                    fetch(
-                        'https://api.rerobots.net/terminate/' + instanceInfo.id,
-                        {
-                            method: 'POST',
-                            headers: {
-                                Authorization: 'Bearer ' + instanceInfo.token,
-                                'Content-Type': 'application/json',
-                            },
-                        },
-                    );
+                    terminateInstance(coderi);
                 }, 3000);
                 assignTerminationTimeout(timeout);
             });
             statusBar.innerText = 'Hardware reserved; preparing sandbox...';
-            return prepareShell(instanceInfo, cancelFlag);
+            return prepareShell(coderi, cancelFlag);
         })
-        .then((instanceInfo: InstanceInfo) => {
+        .then((coderi: CodeRuntimeInfo) => {
+            if (!coderi.instance?.id || !coderi.instance?.token) {
+                throw new Error('cannot create ssh terminal without ID/token');
+            }
             if (coderi.command) {
-                instanceInfo.command = coderi.command;
+                coderi.instance.command = coderi.command;
             }
             if (coderi.destpath) {
-                instanceInfo.destpath = coderi.destpath;
+                coderi.instance.destpath = coderi.destpath;
             }
             const cmdshWs = new WebSocket(
-                `wss://api.rerobots.net/addon/cmdsh/${instanceInfo.id}/new/${instanceInfo.token64}`,
+                `wss://api.rerobots.net/addon/cmdsh/${coderi.instance.id}/new/${coderi.instance.token64}`,
             );
             keyboardInterruptButton.addEventListener('click', () => {
                 cmdshWs.send(String.fromCharCode(3));
@@ -230,28 +188,32 @@ export function runCode(
                 bidirectional: !coderi.readOnly,
             });
             term.loadAddon(attachAddon);
+
+            const instanceId = coderi.instance.id;
+            const token = coderi.instance.token;
+            const command = coderi.instance.command;
+            const destpath = coderi.instance.destpath;
+
             runButtonCallback = () => {
                 fetch(
                     'https://api.rerobots.net/addon/cmdsh/' +
-                        instanceInfo.id +
+                        instanceId +
                         '/file',
                     {
                         method: 'POST',
                         headers: {
-                            Authorization: 'Bearer ' + instanceInfo.token,
+                            Authorization: 'Bearer ' + token,
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
-                            path: instanceInfo.destpath,
+                            path: destpath,
                             data: editor.getValue(),
                         }),
                     },
                 ).then((res) => {
                     if (res.ok) {
                         cmdshWs.send(String.fromCharCode(3));
-                        cmdshWs.send(
-                            "bash -c '" + instanceInfo.command + "'\r",
-                        );
+                        cmdshWs.send("bash -c '" + command + "'\r");
                         return;
                     }
                     throw new Error(res.url);

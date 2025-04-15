@@ -19,8 +19,13 @@ export function getApiToken(
     hardshareO: string,
     hardshareId: string,
     cancelFlag?: CancelFlag,
-): Promise<InstanceInfo> {
+): Promise<string[]> {
     return new Promise((resolve, reject) => {
+        if (hardshareO === 'test') {
+            resolve(['fake', 'fake64']);
+            return;
+        }
+
         let anon_id: null | string = localStorage.getItem(
             'rr-api-token-anon-id',
         );
@@ -54,10 +59,6 @@ export function getApiToken(
                     throw new Error(res.url);
                 })
                 .then((payload) => {
-                    const instanceInfo: InstanceInfo = {
-                        token: payload.tok,
-                        token64: payload.tok64,
-                    };
                     if (payload.nonce && !anon_id) {
                         anon_id = payload.u.substring(
                             payload.u.lastIndexOf('_') + 1,
@@ -68,7 +69,7 @@ export function getApiToken(
                             payload.nonce,
                         );
                     }
-                    resolve(instanceInfo);
+                    resolve([payload.tok, payload.tok64]);
                 })
                 .catch((err) => {
                     if (err === 'cancel') {
@@ -90,10 +91,19 @@ export function getApiToken(
 
 export function launchInstance(
     coderi: CodeRuntimeInfo,
-    instanceInfo: InstanceInfo,
     cancelFlag?: CancelFlag,
-): Promise<InstanceInfo> {
+): Promise<CodeRuntimeInfo> {
     return new Promise((resolve, reject) => {
+        if (coderi.hardshareO === 'test') {
+            coderi.instance ||= {};
+            Object.assign(coderi.instance, {
+                id: '1926b858-0d00-4b84-b7ca-5c56be880525', // fake
+                status: 'INIT',
+            });
+            resolve(coderi);
+            return;
+        }
+
         let retryCounter = 0;
         const requestSandboxInfo = () => {
             checkIfCancelled(cancelFlag, reject);
@@ -125,14 +135,17 @@ export function launchInstance(
                             newInstanceParams.repo.path = coderi.repoScript;
                         }
                     }
-                    instanceInfo.destpath = payload.destpath;
-                    instanceInfo.command =
-                        payload.btn_command || 'echo "no run command set"';
+                    coderi.instance ||= {};
+                    Object.assign(coderi.instance, {
+                        destpath: payload.destpath,
+                        command:
+                            payload.btn_command || 'echo "no run command set"',
+                    });
                     checkIfCancelled(cancelFlag);
                     return fetch('https://api.rerobots.net/new', {
                         method: 'POST',
                         headers: {
-                            Authorization: 'Bearer ' + instanceInfo.token,
+                            Authorization: 'Bearer ' + coderi.instance.token,
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify(newInstanceParams),
@@ -153,10 +166,14 @@ export function launchInstance(
                     if (!payload) {
                         return;
                     }
-                    instanceKeepAlive(payload.id, instanceInfo.token as string);
-                    instanceInfo.id = payload.id;
-                    instanceInfo.status = 'INIT';
-                    resolve(instanceInfo);
+                    coderi.instance ||= {};
+                    instanceKeepAlive(
+                        payload.id,
+                        coderi.instance.token as string,
+                    );
+                    coderi.instance.id = payload.id;
+                    coderi.instance.status = 'INIT';
+                    resolve(coderi);
                 })
                 .catch((err) => {
                     if (err === 'cancel') {
@@ -177,21 +194,40 @@ export function launchInstance(
 }
 
 export function prepareShell(
-    instanceInfo: InstanceInfo,
+    coderi: CodeRuntimeInfo,
     cancelFlag?: CancelFlag,
-): Promise<InstanceInfo> {
+): Promise<CodeRuntimeInfo> {
     return new Promise((resolve, reject) => {
+        if (coderi.hardshareO === 'test') {
+            resolve(coderi);
+            return;
+        }
+
         let retryCounter = 0;
         const timer = setInterval(() => {
             checkIfCancelled(cancelFlag, () => {
                 clearInterval(timer);
                 reject();
             });
-            fetch('https://api.rerobots.net/addon/cmdsh/' + instanceInfo.id, {
-                headers: {
-                    Authorization: 'Bearer ' + instanceInfo.token,
+
+            if (!coderi.instance?.id || !coderi.instance?.token) {
+                clearInterval(timer);
+                const err = new Error(
+                    'prepareShell called without instance ID/token',
+                );
+                console.error(err);
+                reject(err);
+                return;
+            }
+
+            fetch(
+                'https://api.rerobots.net/addon/cmdsh/' + coderi.instance.id,
+                {
+                    headers: {
+                        Authorization: 'Bearer ' + coderi.instance.token,
+                    },
                 },
-            })
+            )
                 .then((res) => {
                     checkIfCancelled(cancelFlag);
                     if (res.ok) {
@@ -204,14 +240,25 @@ export function prepareShell(
                 .then((data) => {
                     if (data.status === 'notfound') {
                         checkIfCancelled(cancelFlag);
+
+                        if (!coderi.instance?.id || !coderi.instance?.token) {
+                            clearInterval(timer);
+                            const err = new Error(
+                                'prepareShell called without instance ID/token',
+                            );
+                            console.error(err);
+                            reject(err);
+                            return;
+                        }
+
                         fetch(
                             'https://api.rerobots.net/addon/cmdsh/' +
-                                instanceInfo.id,
+                                coderi.instance.id,
                             {
                                 method: 'POST',
                                 headers: {
                                     Authorization:
-                                        'Bearer ' + instanceInfo.token,
+                                        'Bearer ' + coderi.instance.token,
                                 },
                             },
                         );
@@ -223,7 +270,7 @@ export function prepareShell(
                         }
                     } else if (data.status === 'active') {
                         clearInterval(timer);
-                        resolve(instanceInfo);
+                        resolve(coderi);
                     } else {
                         retryCounter++;
                         if (retryCounter > 30) {
@@ -244,5 +291,145 @@ export function prepareShell(
                     console.log(err);
                 });
         }, 1000);
+    });
+}
+
+export function getInstanceInfo(
+    coderi: CodeRuntimeInfo,
+    cancelFlag?: CancelFlag,
+): Promise<InstanceInfo> {
+    return new Promise((resolve, reject) => {
+        if (coderi.hardshareO === 'test') {
+            resolve({
+                id: '1926b858-0d00-4b84-b7ca-5c56be880525', // fake
+                status: 'READY',
+                expiration: Date.now() + 300e3, // 5 minutes in future
+                token: 'fake',
+                token64: 'fakeb64',
+            });
+            return;
+        }
+
+        if (!coderi.instance?.id || !coderi.instance?.token) {
+            const err = new Error(
+                'getInstanceInfo called without instance ID/token',
+            );
+            console.error(err);
+            reject(err);
+            return;
+        }
+        const instanceId = coderi.instance.id;
+        const token = coderi.instance.token;
+
+        let retryCounter = 0;
+        const requestInstanceInfo = () => {
+            fetch('https://api.rerobots.net/instance/' + instanceId, {
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                },
+            })
+                .then((res) => {
+                    checkIfCancelled(cancelFlag);
+                    if (res.ok) {
+                        return res.json();
+                    }
+                    throw new Error(res.url);
+                })
+                .then((payload) => {
+                    resolve({
+                        id: payload.id,
+                        status: payload.status,
+                        expiration: new Date(payload.expires + 'Z').valueOf(),
+                    });
+                })
+                .catch((err) => {
+                    if (err === 'cancel') {
+                        reject();
+                        return;
+                    }
+                    console.log(err);
+                    retryCounter++;
+                    if (retryCounter > 8) {
+                        reject();
+                        return;
+                    }
+                    setTimeout(requestInstanceInfo, 1000 * 2 ** retryCounter);
+                });
+        };
+        requestInstanceInfo();
+    });
+}
+
+export function attachCameraStream(
+    coderi: CodeRuntimeInfo,
+    root: HTMLElement,
+    el: HTMLImageElement,
+): Promise<void> {
+    if (coderi.hardshareO === 'test') {
+        return Promise.resolve();
+    }
+
+    if (!coderi.instance?.id || !coderi.instance?.token) {
+        throw new Error('attachCameraStream called without instance ID/token');
+    }
+
+    const instanceId = coderi.instance.id;
+    const token = coderi.instance.token;
+    const token64 = coderi.instance.token64;
+
+    return fetch('https://api.rerobots.net/addon/cam/' + instanceId, {
+        method: 'GET',
+        headers: {
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    })
+        .then((res) => {
+            if (res.ok) {
+                return res.json();
+            }
+            if (res.status === 404) {
+                return;
+            }
+            throw new Error(res.url);
+        })
+        .then((payload) => {
+            if (payload.status === 'active') {
+                root.appendChild(el);
+                const camWs = new WebSocket(
+                    `wss://api.rerobots.net/addon/cam/${instanceId}/0/feed/${token64}`,
+                );
+                camWs.addEventListener('message', function (event) {
+                    el.src = event.data;
+                });
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
+export function terminateInstance(coderi: CodeRuntimeInfo): Promise<void> {
+    if (coderi.hardshareO === 'test') {
+        return Promise.resolve();
+    }
+
+    if (!coderi.instance?.id || !coderi.instance?.token) {
+        throw new Error('terminateInstance called without instance ID/token');
+    }
+
+    const instanceId = coderi.instance.id;
+    const token = coderi.instance.token;
+
+    return fetch('https://api.rerobots.net/terminate/' + instanceId, {
+        method: 'POST',
+        headers: {
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    }).then((res) => {
+        if (!res.ok) {
+            throw new Error(res.url);
+        }
     });
 }
