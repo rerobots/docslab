@@ -110,6 +110,10 @@ export function prepareSnippet(
     editorDiv.className = 'docslabEditor';
     root.appendChild(editorDiv);
 
+    if (coderi.runEnv === 'py' && !syntaxHighlight) {
+        syntaxHighlight = 'python';
+    }
+
     const editor = ace.edit(editorDiv);
     if (syntaxHighlight) {
         if (syntaxHighlight === 'c' || syntaxHighlight === 'cpp') {
@@ -240,12 +244,12 @@ export function prepareSnippet(
         terminationTimeout = x;
     };
     const initRunButton = () => {
-        const runButtonCallback = () => {
+        const runButtonCallback = async () => {
             if (terminationTimeout !== null) {
                 clearTimeout(terminationTimeout);
             }
             runButton.removeEventListener('click', runButtonCallback);
-            runCode(
+            await runCode(
                 coderi,
                 controlPanel,
                 editor,
