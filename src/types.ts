@@ -13,7 +13,7 @@ export interface PreludeMapBase {
     refUrl?: string;
 
     // Default is ssh
-    runEnv: 'py' | 'ssh';
+    runEnv: RunEnvType;
 
     // These are defined by rerobots
     addons?: string[];
@@ -28,7 +28,10 @@ export interface PreludeMap extends PreludeMapBase {
 // in which case it implies the last line.
 export type LineRange = [number, number];
 
+type RunEnvType = 'py' | 'ssh';
+
 export type PreludeKey = keyof PreludeMap;
+export type PreludeValue = string & string[] & LineRange & RunEnvType;
 
 export interface HardsharePath {
     hardshareO: string;

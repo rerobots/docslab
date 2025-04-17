@@ -6,4 +6,5 @@ export type {
     PreludeKey,
     PreludeMap,
     PreludeMapBase,
+    PreludeValue,
 } from './types';
