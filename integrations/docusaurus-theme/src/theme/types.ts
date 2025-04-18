@@ -5,7 +5,8 @@ import type { Props } from '@theme-init/CodeBlock';
 export interface CodeBlockSwitchProps extends Props {
     readonly docslab?: boolean;
     readonly hardshare?: string;
-    readonly readonly?: boolean;
+    readonly readOnly?: boolean;
+    readonly runEnv?: 'py' | 'ssh';
 }
 
 export interface DocslabCodeBlockProps extends PreludeMapBase, Props {

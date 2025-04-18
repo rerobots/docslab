@@ -2,10 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 
 import 'docslab/lib/main.css';
-import type { CodeRuntimeInfo, PreludeKey, PreludeMapBase } from 'docslab';
+import type { PreludeKey, PreludeMapBase, PreludeValue } from 'docslab';
 
 import type { DocslabCodeBlockProps } from '../types';
-import { LineRange } from '../../../../../lib/types';
 
 type PreludeMapBaseKey = keyof PreludeMapBase;
 
@@ -23,10 +22,10 @@ function Main(props: DocslabCodeBlockProps): JSX.Element {
                 return;
             }
 
-            const coderi: CodeRuntimeInfo = {
-                readOnly: !!props.readOnly,
-                ...docslab.parseHardsharePath(props.hardshare),
-            };
+            const coderi = docslab.initCodeRuntimeInfo(
+                !!props.readOnly,
+                props.hardshare,
+            );
 
             if (!noPrelude && props.children) {
                 const pm = docslab.parsePrelude(props.children);
@@ -34,19 +33,24 @@ function Main(props: DocslabCodeBlockProps): JSX.Element {
                 for (const k in pm) {
                     coderi[k as PreludeMapBaseKey] = pm[
                         k as PreludeMapBaseKey
-                    ] as string & LineRange;
+                    ] as PreludeValue;
                 }
             }
 
-            ['command', 'destpath', 'repoUrl', 'repoScript', 'urlfile'].forEach(
-                (k) => {
-                    if (props[k as PreludeKey]) {
-                        coderi[k as PreludeMapBaseKey] = props[
-                            k as PreludeMapBaseKey
-                        ] as string & LineRange;
-                    }
-                },
-            );
+            [
+                'command',
+                'destpath',
+                'repoUrl',
+                'repoScript',
+                'runEnv',
+                'urlfile',
+            ].forEach((k) => {
+                if (props[k as PreludeKey]) {
+                    coderi[k as PreludeMapBaseKey] = props[
+                        k as PreludeMapBaseKey
+                    ] as PreludeValue;
+                }
+            });
 
             if (props.exampleCode) {
                 coderi.exampleCode = props.exampleCode;
