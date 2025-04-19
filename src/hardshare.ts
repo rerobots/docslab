@@ -153,7 +153,7 @@ export function launchInstance(
                 })
                 .then((res) => {
                     checkIfCancelled(cancelFlag);
-                    if (res.status === 503) {
+                    if (res.status === 400) {
                         reject();
                         return;
                     }
