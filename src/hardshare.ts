@@ -199,6 +199,9 @@ export function prepareShell(
 ): Promise<CodeRuntimeInfo> {
     return new Promise((resolve, reject) => {
         if (coderi.hardshareO === 'test') {
+            coderi.instance ||= {};
+            coderi.instance.addons ||= {};
+            coderi.instance.addons.cmdsh = true;
             resolve(coderi);
             return;
         }
@@ -270,6 +273,9 @@ export function prepareShell(
                         }
                     } else if (data.status === 'active') {
                         clearInterval(timer);
+                        coderi.instance ||= {};
+                        coderi.instance.addons ||= {};
+                        coderi.instance.addons.cmdsh = true;
                         resolve(coderi);
                     } else {
                         retryCounter++;
@@ -278,6 +284,112 @@ export function prepareShell(
                             console.log(
                                 'timeout: command shell did not become active',
                             );
+                            reject();
+                        }
+                    }
+                })
+                .catch((err) => {
+                    if (err === 'cancel') {
+                        clearInterval(timer);
+                        reject();
+                        return;
+                    }
+                    console.log(err);
+                });
+        }, 1000);
+    });
+}
+
+export function createMistyProxy(
+    coderi: CodeRuntimeInfo,
+    cancelFlag?: CancelFlag,
+): Promise<CodeRuntimeInfo> {
+    return new Promise((resolve, reject) => {
+        if (coderi.hardshareO === 'test') {
+            coderi.instance ||= {};
+            coderi.instance.addons ||= {};
+            coderi.instance.addons.mistyproxy = 'http://localhost/mistyproxy';
+            resolve(coderi);
+            return;
+        }
+
+        let retryCounter = 0;
+        const timer = setInterval(() => {
+            checkIfCancelled(cancelFlag, () => {
+                clearInterval(timer);
+                reject();
+            });
+
+            if (!coderi.instance?.id || !coderi.instance?.token) {
+                clearInterval(timer);
+                const err = new Error(
+                    'prepareShell called without instance ID/token',
+                );
+                console.error(err);
+                reject(err);
+                return;
+            }
+
+            fetch(
+                'https://api.rerobots.net/addon/mistyproxy/' +
+                    coderi.instance.id,
+                {
+                    headers: {
+                        Authorization: 'Bearer ' + coderi.instance.token,
+                    },
+                },
+            )
+                .then((res) => {
+                    checkIfCancelled(cancelFlag);
+                    if (res.ok) {
+                        return res.json();
+                    } else if (res.status === 404) {
+                        return { status: 'notfound' };
+                    }
+                    throw new Error(res.url);
+                })
+                .then((data) => {
+                    if (data.status === 'notfound') {
+                        checkIfCancelled(cancelFlag);
+
+                        if (!coderi.instance?.id || !coderi.instance?.token) {
+                            clearInterval(timer);
+                            const err = new Error(
+                                'prepareShell called without instance ID/token',
+                            );
+                            console.error(err);
+                            reject(err);
+                            return;
+                        }
+
+                        fetch(
+                            'https://api.rerobots.net/addon/mistyproxy/' +
+                                coderi.instance.id,
+                            {
+                                method: 'POST',
+                                headers: {
+                                    Authorization:
+                                        'Bearer ' + coderi.instance.token,
+                                },
+                            },
+                        );
+                        retryCounter++;
+                        if (retryCounter > 30) {
+                            clearInterval(timer);
+                            console.log('timeout: mistyproxy did not start');
+                            reject();
+                        }
+                    } else if (data.status === 'active') {
+                        clearInterval(timer);
+                        coderi.instance ||= {};
+                        coderi.instance.addons ||= {};
+                        coderi.instance.addons.mistyproxy = data.url[1];
+                        resolve(coderi);
+                    } else {
+                        retryCounter++;
+                        if (retryCounter > 30) {
+                            clearInterval(timer);
+                            console.log('timeout: mistyproxy not active');
                             reject();
                         }
                     }

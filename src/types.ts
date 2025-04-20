@@ -54,6 +54,10 @@ export interface InstanceInfo {
     token64?: string;
     destpath?: string;
     command?: string;
+    addons?: {
+        cmdsh?: boolean;
+        mistyproxy?: string;
+    };
 }
 
 export interface InstanceParams {

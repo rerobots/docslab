@@ -8,6 +8,7 @@ import type { PyodideInterface } from 'pyodide';
 
 import {
     attachCameraStream,
+    createMistyProxy,
     getApiToken,
     getInstanceInfo,
     launchInstance,
@@ -167,8 +168,11 @@ export async function runCode(
         });
         statusBar.innerText = 'Hardware reserved; preparing sandbox...';
 
-        if (coderi.runEnv === 'ssh') {
+        if (coderi.runEnv === 'ssh' || coderi.addons?.includes('cmdsh')) {
             await prepareShell(coderi, cancelFlag);
+        }
+        if (coderi.addons?.includes('mistyproxy')) {
+            await createMistyProxy(coderi, cancelFlag);
         }
 
         if (!coderi.instance?.id || !coderi.instance?.token) {
@@ -183,6 +187,10 @@ export async function runCode(
 
         if (coderi.runEnv === 'py') {
             runButtonCallback = async () => {
+                if (!coderi.instance) {
+                    // Ignore if no instance data
+                    return;
+                }
                 if (!pyodide) {
                     const stdout = (msg: string) => {
                         term.writeln(msg);
@@ -197,7 +205,13 @@ export async function runCode(
                         stderr: stderr,
                     });
                 }
-                const codeBlob = editor.getValue();
+                let codeBlob = editor.getValue();
+                if (coderi.instance.addons?.mistyproxy) {
+                    codeBlob = codeBlob.replace(
+                        '{{ MISTY_URL }}',
+                        coderi.instance.addons.mistyproxy,
+                    );
+                }
                 try {
                     await pyodide.loadPackagesFromImports(codeBlob);
                     pyodide.runPython(codeBlob);
