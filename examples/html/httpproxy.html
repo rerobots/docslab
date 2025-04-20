@@ -15,5 +15,27 @@
             <pre><code>print("hola")
 </code></pre>
         </div>
+
+        <p>When the code is executed, <code>{{ MISTY_URL }}</code> is replaced with the proxy URL through which commands can be sent directly to a <a href="https://www.mistyrobotics.com/">Misty robot</a>.</p>
+        <div class="docslab" data-runenv="py" data-addons="mistyproxy" data-hardshareo="docslab" data-hardshareid="example-misty">
+            <a href="https://github.com/rerobots/examples" target="_blank">Try it</a>
+            <pre><code>"""
+Output will have the form of
+
+    charge: 99.0 %
+    state: Charging
+"""
+
+import requests
+
+res = requests.get("{{ MISTY_URL }}/api/battery")
+assert res.ok
+payload = res.json()
+
+print(f"charge: {payload['result']['chargePercent']*100} %")
+print("state:", payload['result']['state'])
+
+</code></pre>
+        </div>
     </body>
 </html>
