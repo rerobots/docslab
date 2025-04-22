@@ -1,8 +1,8 @@
 import * as ace from 'ace-code';
-import { Terminal } from 'xterm';
-import 'xterm/css/xterm.css';
-import { AttachAddon } from 'xterm-addon-attach';
-import { FitAddon } from 'xterm-addon-fit';
+import { Terminal } from '@xterm/xterm';
+import '@xterm/xterm/css/xterm.css';
+import { AttachAddon } from '@xterm/addon-attach';
+import { FitAddon } from '@xterm/addon-fit';
 import { loadPyodide, version as pyodideVersion } from 'pyodide';
 import type { PyodideInterface } from 'pyodide';
 
