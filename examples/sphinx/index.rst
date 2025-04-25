@@ -23,6 +23,12 @@ Examples of docslab in Sphinx
     }
 
 
+.. docslab:: test/test
+    :runenv: py
+
+    print("hola")
+
+
 References
 ----------
 
