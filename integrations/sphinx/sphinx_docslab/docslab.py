@@ -54,6 +54,15 @@ def is_known_language(lang: str) -> str:
     return lang
 
 
+def is_known_runenv(runenv: str) -> str:
+    if runenv not in [
+        'py',
+        'ssh',
+    ]:
+        raise ValueError(f'unknown runEnv: {runenv}')
+    return runenv
+
+
 def is_url(x: str) -> str:
     u = urllib.parse.urlparse(x)
     if not (
@@ -69,6 +78,7 @@ class DocslabNode(nodes.Element):
     def __init__(
         self,
         hardshare_ref,
+        runenv=None,
         readonly=False,
         text=None,
         lang=None,
@@ -78,6 +88,7 @@ class DocslabNode(nodes.Element):
         urlfile=None,
     ):
         self.hardshare_owner, self.hardshare_id = hardshare_ref.split('/')
+        self.runenv = runenv
         self.readonly = readonly
         self.text = text
         self.command = command
@@ -91,7 +102,7 @@ def visit_docslab_html(self, node):
     elem = f'<div class="docslab" data-hardshareo="{node.hardshare_owner}" data-hardshareid="{node.hardshare_id}"'
     if node.readonly:
         elem += ' data-readonly'
-    for kw in ['command', 'path', 'repo', 'urlfile']:
+    for kw in ['runenv', 'command', 'path', 'repo', 'urlfile']:
         if getattr(node, kw, None):
             elem += f' data-{kw}="{getattr(node, kw)}"'
     elem += '>'
@@ -110,8 +121,9 @@ def depart_docslab_html(self, node):
 
 class DocslabDirective(SphinxDirective):
     has_content = True
-    optional_arguments = 6
+    optional_arguments = 7
     option_spec = {
+        'runenv': is_known_runenv,
         'readonly': lambda x: x is None,
         'lang': is_known_language,
         'command': lambda x: x,
