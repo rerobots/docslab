@@ -40,7 +40,10 @@ cd ../integrations/sphinx
 pip install .
 cd ../..
 cd examples/sphinx
+mkdir -p static
+cp ../../dist/index.all.js static/docslab.all.js
 pip install sphinx
+export DOCSLAB_USE_LOCAL=1
 sphinx-build . build
 cd ../../doc
 

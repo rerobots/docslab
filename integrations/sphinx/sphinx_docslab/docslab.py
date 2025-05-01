@@ -38,7 +38,7 @@ def install_docslab(
             has_one = True
             break
     if has_one:
-        app.add_js_file(DOCSLAB_URL)
+        app.add_js_file(app.config.docslab_url)
         app.add_js_file(
             None,
             body='document.addEventListener("DOMContentLoaded", (event) => { docslab.loadAll(); });',
@@ -141,6 +141,7 @@ class DocslabDirective(SphinxDirective):
 
 
 def setup(app: Sphinx) -> ExtensionMetadata:
+    app.add_config_value('docslab_url', DOCSLAB_URL, 'html', types=frozenset({str}))
     app.add_node(DocslabNode, html=(visit_docslab_html, depart_docslab_html))
     app.add_directive('docslab', DocslabDirective)
     app.connect('html-page-context', install_docslab)
