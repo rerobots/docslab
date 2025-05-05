@@ -9,6 +9,7 @@ dynamic = ["version"]
 requires-python = ">=3.9"
 dependencies = [
     "mkdocs",
+    "Markdown",
 ]
 authors = [{name = "rerobots, Inc.", email = "q@rerobots.net"}]
 license = {text = "Apache-2.0"}
