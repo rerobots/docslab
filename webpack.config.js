@@ -1,3 +1,4 @@
+const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { PyodidePlugin } = require('@pyodide/webpack-plugin');
@@ -94,6 +95,14 @@ module.exports = (env, argv) => {
             templateParameters: {
                 examples: examples,
             }
+        }));
+        config.plugins.push(new CopyPlugin({
+            patterns: [
+                {
+                    from: path.resolve(__dirname, 'examples', 'html', 'static', 'examples.css'),
+                    to: path.resolve(__dirname, 'lib'),
+                }
+            ],
         }));
     }
 
