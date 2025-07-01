@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 if [ "$1" = "check" ]; then
-    yarn prettier --check src tests integrations/docusaurus-theme/src
+    yarn exec biome format src tests integrations/docusaurus-theme/src
 
     cd integrations/sphinx
     black --check setup.py sphinx_docslab
@@ -15,7 +15,7 @@ if [ "$1" = "check" ]; then
     cargo fmt --check
     cd ../..
 else
-    yarn prettier --write src tests integrations/docusaurus-theme/src
+    yarn exec biome format --write src tests integrations/docusaurus-theme/src
 
     cd integrations/sphinx
     black setup.py sphinx_docslab
