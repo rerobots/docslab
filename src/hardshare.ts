@@ -145,7 +145,7 @@ export function launchInstance(
                     return fetch('https://api.rerobots.net/new', {
                         method: 'POST',
                         headers: {
-                            Authorization: 'Bearer ' + coderi.instance.token,
+                            Authorization: `Bearer ${coderi.instance.token}`,
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify(newInstanceParams),
@@ -224,10 +224,10 @@ export function prepareShell(
             }
 
             fetch(
-                'https://api.rerobots.net/addon/cmdsh/' + coderi.instance.id,
+                `https://api.rerobots.net/addon/cmdsh/${coderi.instance.id}`,
                 {
                     headers: {
-                        Authorization: 'Bearer ' + coderi.instance.token,
+                        Authorization: `fBearer ${coderi.instance.token}`,
                     },
                 },
             )
@@ -261,7 +261,7 @@ export function prepareShell(
                                 method: 'POST',
                                 headers: {
                                     Authorization:
-                                        'Bearer ' + coderi.instance.token,
+                                        `Bearer ${coderi.instance.token}`,
                                 },
                             },
                         );
@@ -335,7 +335,7 @@ export function createMistyProxy(
                     coderi.instance.id,
                 {
                     headers: {
-                        Authorization: 'Bearer ' + coderi.instance.token,
+                        Authorization: `Bearer ${coderi.instance.token}`,
                     },
                 },
             )
@@ -369,7 +369,7 @@ export function createMistyProxy(
                                 method: 'POST',
                                 headers: {
                                     Authorization:
-                                        'Bearer ' + coderi.instance.token,
+                                        `Bearer ${coderi.instance.token}`,
                                 },
                             },
                         );
@@ -435,9 +435,9 @@ export function getInstanceInfo(
 
         let retryCounter = 0;
         const requestInstanceInfo = () => {
-            fetch('https://api.rerobots.net/instance/' + instanceId, {
+            fetch(`https://api.rerobots.net/instance/${instanceId}`, {
                 headers: {
-                    Authorization: 'Bearer ' + token,
+                    Authorization: `Bearer ${token}`,
                 },
             })
                 .then((res) => {
@@ -451,7 +451,7 @@ export function getInstanceInfo(
                     resolve({
                         id: payload.id,
                         status: payload.status,
-                        expiration: new Date(payload.expires + 'Z').valueOf(),
+                        expiration: new Date(`${payload.expires}Z`).valueOf(),
                     });
                 })
                 .catch((err) => {
@@ -489,10 +489,10 @@ export function attachCameraStream(
     const token = coderi.instance.token;
     const token64 = coderi.instance.token64;
 
-    return fetch('https://api.rerobots.net/addon/cam/' + instanceId, {
+    return fetch(`https://api.rerobots.net/addon/cam/${instanceId}`, {
         method: 'GET',
         headers: {
-            Authorization: 'Bearer ' + token,
+            Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
         },
     })
@@ -533,10 +533,10 @@ export function terminateInstance(coderi: CodeRuntimeInfo): Promise<void> {
     const instanceId = coderi.instance.id;
     const token = coderi.instance.token;
 
-    return fetch('https://api.rerobots.net/terminate/' + instanceId, {
+    return fetch(`https://api.rerobots.net/terminate/${instanceId}`, {
         method: 'POST',
         headers: {
-            Authorization: 'Bearer ' + token,
+            Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
         },
     }).then((res) => {
