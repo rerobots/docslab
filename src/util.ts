@@ -188,8 +188,8 @@ export function parseRootData(
     }
     const coderi: CodeRuntimeInfo = {
         readOnly: 'readonly' in root.dataset || false,
-        hardshareO: root.dataset['hardshareo'] as string,
-        hardshareId: root.dataset['hardshareid'] as string,
+        hardshareO: root.dataset.hardshareo as string,
+        hardshareId: root.dataset.hardshareid as string,
         runEnv: 'ssh',
     };
     const exampleBlockElement = root.getElementsByTagName('code')[0];
@@ -198,38 +198,35 @@ export function parseRootData(
         root.removeChild(exampleBlockElement.parentElement as Node);
     }
     if ('runenv' in root.dataset) {
-        if (
-            root.dataset['runenv'] === 'py' ||
-            root.dataset['runenv'] === 'ssh'
-        ) {
-            coderi.runEnv = root.dataset['runenv'];
+        if (root.dataset.runenv === 'py' || root.dataset.runenv === 'ssh') {
+            coderi.runEnv = root.dataset.runenv;
         } else {
-            throw new Error(`unexpected runenv: ${root.dataset['runenv']}`);
+            throw new Error(`unexpected runenv: ${root.dataset.runenv}`);
         }
     }
-    if ('addons' in root.dataset && root.dataset['addons']) {
+    if ('addons' in root.dataset && root.dataset.addons) {
         coderi.addons = root.dataset.addons.split(',').map((w) => w.trim());
     }
     if ('command' in root.dataset) {
-        coderi.command = root.dataset['command'];
+        coderi.command = root.dataset.command;
     }
     if ('path' in root.dataset) {
-        coderi.destpath = root.dataset['path'];
+        coderi.destpath = root.dataset.path;
     }
     if ('repo' in root.dataset) {
-        coderi.repoUrl = root.dataset['repo'];
+        coderi.repoUrl = root.dataset.repo;
     }
     if ('refurl' in root.dataset) {
-        coderi.refUrl = root.dataset['refurl'];
+        coderi.refUrl = root.dataset.refurl;
     }
     if ('iscript' in root.dataset) {
-        coderi.repoScript = root.dataset['iscript'];
+        coderi.repoScript = root.dataset.iscript;
     }
     if ('urlfile' in root.dataset) {
-        coderi.urlfile = root.dataset['urlfile'];
+        coderi.urlfile = root.dataset.urlfile;
     }
-    if ('lrange' in root.dataset && root.dataset['lrange']) {
-        const parts = root.dataset['lrange'].split(',').map((x) => x.trim());
+    if ('lrange' in root.dataset && root.dataset.lrange) {
+        const parts = root.dataset.lrange.split(',').map((x) => x.trim());
         if (parts.length !== 2) {
             throw new Error('unexpected number of parameters in lrange');
         }

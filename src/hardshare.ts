@@ -260,8 +260,7 @@ export function prepareShell(
                             {
                                 method: 'POST',
                                 headers: {
-                                    Authorization:
-                                        `Bearer ${coderi.instance.token}`,
+                                    Authorization: `Bearer ${coderi.instance.token}`,
                                 },
                             },
                         );
@@ -368,8 +367,7 @@ export function createMistyProxy(
                             {
                                 method: 'POST',
                                 headers: {
-                                    Authorization:
-                                        `Bearer ${coderi.instance.token}`,
+                                    Authorization: `Bearer ${coderi.instance.token}`,
                                 },
                             },
                         );

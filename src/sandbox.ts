@@ -231,7 +231,7 @@ export async function runCode(
 
                 runButtonCallback = () => {
                     term.write(
-                        String.fromCharCode(3) + "bash -c '" + command + "'\r",
+                        `${String.fromCharCode(3)}bash -c '${command}'\r`,
                     );
                 };
             } else {
@@ -259,7 +259,7 @@ export async function runCode(
                         {
                             method: 'POST',
                             headers: {
-                                Authorization: 'Bearer ' + token,
+                                Authorization: `Bearer ${token}`,
                                 'Content-Type': 'application/json',
                             },
                             body: JSON.stringify({
@@ -270,7 +270,7 @@ export async function runCode(
                     ).then((res) => {
                         if (res.ok) {
                             cmdshWs.send(String.fromCharCode(3));
-                            cmdshWs.send("bash -c '" + command + "'\r");
+                            cmdshWs.send(`bash -c '${command}'\r`);
                             return;
                         }
                         throw new Error(res.url);
