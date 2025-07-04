@@ -509,7 +509,7 @@ export function attachCameraStream(
                 const camWs = new WebSocket(
                     `wss://api.rerobots.net/addon/cam/${instanceId}/0/feed/${token64}`,
                 );
-                camWs.addEventListener('message', function (event) {
+                camWs.addEventListener('message', (event) => {
                     el.src = event.data;
                 });
             }
