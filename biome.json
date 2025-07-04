@@ -6,6 +6,11 @@
         "useIgnoreFile": false
     },
     "files": {
+        "includes": [
+            "src/**/*.{ts,css,js}",
+            "tests/**/*.{ts,css,js}",
+            "integrations/docusaurus-theme/src/**/*.{ts,tsx,css,js}"
+        ],
         "ignoreUnknown": false
     },
     "formatter": {
