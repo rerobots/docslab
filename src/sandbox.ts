@@ -1,10 +1,10 @@
-import * as ace from 'ace-code';
 import { Terminal } from '@xterm/xterm';
+import * as ace from 'ace-code';
 import '@xterm/xterm/css/xterm.css';
 import { AttachAddon } from '@xterm/addon-attach';
 import { FitAddon } from '@xterm/addon-fit';
-import { loadPyodide, version as pyodideVersion } from 'pyodide';
 import type { PyodideInterface } from 'pyodide';
+import { loadPyodide, version as pyodideVersion } from 'pyodide';
 
 import {
     attachCameraStream,

@@ -1,6 +1,5 @@
-import type { PreludeMapBase } from 'docslab';
-
 import type { Props } from '@theme-init/CodeBlock';
+import type { PreludeMapBase } from 'docslab';
 
 export interface CodeBlockSwitchProps extends Props {
     readonly docslab?: boolean;

@@ -5,13 +5,13 @@ import * as aceShMode from 'ace-code/src/mode/sh';
 
 import './main.css';
 import { runCode } from './sandbox';
+import type { CodeRuntimeInfo } from './types';
 import {
     getCodeRegion,
     initCodeRuntimeInfo,
     parsePrelude,
     parseRootData,
 } from './util';
-import type { CodeRuntimeInfo } from './types';
 
 const highlightMap: { [key: string]: typeof aceCppMode } = {
     c_cpp: aceCppMode,

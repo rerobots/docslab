@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
+import React, { useEffect, useRef } from 'react';
 
 import 'docslab/lib/main.css';
 import type { PreludeKey, PreludeMapBase, PreludeValue } from 'docslab';

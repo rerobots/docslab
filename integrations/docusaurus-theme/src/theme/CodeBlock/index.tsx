@@ -1,9 +1,7 @@
-import * as React from 'react';
-
 import CodeBlock from '@theme-init/CodeBlock';
-
-import type { CodeBlockSwitchProps, DocslabCodeBlockProps } from '../types';
+import * as React from 'react';
 import { DocslabCodeBlock } from '../DocslabCodeBlock';
+import type { CodeBlockSwitchProps, DocslabCodeBlockProps } from '../types';
 
 interface Meta {
     hardshare: string;

@@ -1,5 +1,4 @@
 export { loadAll, prepareSnippet } from './init';
-export { initCodeRuntimeInfo, parsePrelude } from './util';
 export type {
     CodeRuntimeInfo,
     LineRange,
@@ -8,3 +7,4 @@ export type {
     PreludeMapBase,
     PreludeValue,
 } from './types';
+export { initCodeRuntimeInfo, parsePrelude } from './util';
