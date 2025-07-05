@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 if [ "$1" = "check" ]; then
-    yarn exec biome format
+    yarn biome format
 
     cd integrations/sphinx
     black --check setup.py sphinx_docslab
@@ -15,7 +15,7 @@ if [ "$1" = "check" ]; then
     cargo fmt --check
     cd ../..
 else
-    yarn exec biome format --write
+    yarn biome format --write
 
     cd integrations/sphinx
     black setup.py sphinx_docslab
