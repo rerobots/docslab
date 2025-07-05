@@ -1,5 +1,5 @@
 import { Terminal } from '@xterm/xterm';
-import * as ace from 'ace-code';
+import type * as ace from 'ace-code';
 import '@xterm/xterm/css/xterm.css';
 import { AttachAddon } from '@xterm/addon-attach';
 import { FitAddon } from '@xterm/addon-fit';

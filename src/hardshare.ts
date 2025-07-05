@@ -6,7 +6,7 @@ interface CancelFlag {
 }
 
 function checkIfCancelled(cancelFlag?: CancelFlag, reject?: () => void) {
-    if (cancelFlag && cancelFlag.cancelled) {
+    if (cancelFlag?.cancelled) {
         if (reject) {
             reject();
         } else {

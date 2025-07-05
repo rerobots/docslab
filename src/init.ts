@@ -197,7 +197,7 @@ export function prepareSnippet(
         editor.setReadOnly(true);
     }
 
-    let resetButton;
+    let resetButton: HTMLButtonElement;
     if (!coderi.readOnly) {
         resetButton = document.createElement('button');
         resetButton.innerText = 'Reset code';

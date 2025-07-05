@@ -21,8 +21,8 @@ export function getCodeRegion(
             lineEnding = '\n';
         }
     }
-    let startLineIndex;
-    let endLineIndex;
+    let startLineIndex: number;
+    let endLineIndex: number;
 
     if (lineRange[1] === -1) {
         endLineIndex = codeBlob.length - 1;

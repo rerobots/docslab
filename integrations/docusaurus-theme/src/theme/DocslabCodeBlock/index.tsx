@@ -1,5 +1,5 @@
 import BrowserOnly from '@docusaurus/BrowserOnly';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import 'docslab/lib/main.css';
 import type { PreludeKey, PreludeMapBase, PreludeValue } from 'docslab';
@@ -77,7 +77,15 @@ function Main(props: DocslabCodeBlockProps): JSX.Element {
         return () => {
             mainDiv.current?.replaceChildren();
         };
-    }, [mainDiv]);
+    }, [
+        noPrelude,
+        props.children,
+        props.className,
+        props.exampleCode,
+        props.hardshare,
+        props.readOnly,
+        props[k as PreludeMapBaseKey],
+    ]);
 
     return <div ref={mainDiv}></div>;
 }
