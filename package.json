@@ -28,8 +28,8 @@
     "clean": "rm -r -f lib dist",
     "format": "bin/format.sh",
     "format:check": "bin/format.sh check",
-    "lint": "eslint src integrations/docusaurus-theme/src && tsc --noEmit",
-    "lint:fix": "eslint --fix src integrations/docusaurus-theme/src",
+    "lint": "yarn biome lint",
+    "lint:fix": "yarn biome lint --write",
     "test": "jest",
     "test:end-to-end": "cypress run",
     "start": "webpack serve --env fullBundle --env example"
