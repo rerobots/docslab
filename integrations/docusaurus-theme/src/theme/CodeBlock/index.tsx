@@ -1,4 +1,5 @@
 import CodeBlock from '@theme-init/CodeBlock';
+import * as React from 'react';
 import { DocslabCodeBlock } from '../DocslabCodeBlock';
 import type { CodeBlockSwitchProps, DocslabCodeBlockProps } from '../types';
 
