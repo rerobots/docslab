@@ -227,7 +227,7 @@ export function prepareShell(
                 `https://api.rerobots.net/addon/cmdsh/${coderi.instance.id}`,
                 {
                     headers: {
-                        Authorization: `fBearer ${coderi.instance.token}`,
+                        Authorization: `Bearer ${coderi.instance.token}`,
                     },
                 },
             )
