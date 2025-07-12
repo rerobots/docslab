@@ -1,0 +1,7 @@
+{% extends "!layout.html" %}
+{%- block extrahead %}
+{{ super() }}
+{% if DOCSLAB_ANALYTICS_ID %}
+<script defer src="https://cloud.umami.is/script.js" data-website-id="{{ DOCSLAB_ANALYTICS_ID }}"></script>
+{% endif %}
+{% endblock %}

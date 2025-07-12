@@ -50,6 +50,8 @@ jobs:
         name: Documentation examples
         runs-on: ubuntu-22.04
         if: github.ref == 'refs/heads/main'
+        env:
+          DOCSLAB_ANALYTICS_ID: ${{ secrets.DOCSLAB_ANALYTICS_ID }}
         steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4

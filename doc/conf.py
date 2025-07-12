@@ -1,3 +1,6 @@
+import os
+
+
 project = 'docslab'
 copyright = '2025 rerobots, Inc, et al'  # Theme appends "." to copyright declaration, so omit it here to avoid double ".."
 author = 'the docslab developers'
@@ -30,6 +33,11 @@ html_favicon = 'static/favicon.ico'
 source_suffix = '.rst'
 master_doc = 'index'
 html_static_path = ['static']
+templates_path = ['templates']
+if 'DOCSLAB_ANALYTICS_ID' in os.environ:
+    html_context = {
+        'DOCSLAB_ANALYTICS_ID': os.environ['DOCSLAB_ANALYTICS_ID'],
+    }
 
 extensions = [
     'sphinx_mdinclude',
