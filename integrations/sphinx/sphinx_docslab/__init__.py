@@ -3,4 +3,4 @@ try:
 except ImportError:
     __version__ = '0.0.0.dev0+Unknown'
 
-from .docslab import setup
+from .docslab import setup as setup
