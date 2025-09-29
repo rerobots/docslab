@@ -18,4 +18,5 @@ dist/
 /examples/mdbook/docslabl.js
 /examples/mkdocs/site/
 /examples/sphinx/build/
+/examples/sphinx/static/docslab.all.js
 /examples/docusaurus/build/
