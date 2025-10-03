@@ -207,7 +207,7 @@ export async function runCode(
                 }
                 let codeBlob = editor.getValue();
                 if (coderi.instance.addons?.mistyproxy) {
-                    codeBlob = codeBlob.replace(
+                    codeBlob = codeBlob.replaceAll(
                         '{{ MISTY_URL }}',
                         coderi.instance.addons.mistyproxy,
                     );
