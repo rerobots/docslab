@@ -322,7 +322,7 @@ export function createMistyProxy(
             if (!coderi.instance?.id || !coderi.instance?.token) {
                 clearInterval(timer);
                 const err = new Error(
-                    'prepareShell called without instance ID/token',
+                    'createMistyProxy called without instance ID/token',
                 );
                 console.error(err);
                 reject(err);
@@ -354,7 +354,7 @@ export function createMistyProxy(
                         if (!coderi.instance?.id || !coderi.instance?.token) {
                             clearInterval(timer);
                             const err = new Error(
-                                'prepareShell called without instance ID/token',
+                                'createMistyProxy called without instance ID/token',
                             );
                             console.error(err);
                             reject(err);
