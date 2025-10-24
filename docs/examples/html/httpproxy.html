@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>docslab example with HTTP proxy</title>
+        <link href="examples.css" rel="stylesheet">
+    <script defer src="index.all.js"></script></head>
+    <body>
+        <p>This tutorial explores development on a robot that is controlled using HTTP requests.</p>
+
+        <p>We begin by showing an example of Python code that runs locally in your browser. Since real hardware is not needed yet, we use the special hardshare owner "test". Besides <a href="https://docs.python.org/3/library/index.html">the standard Python library</a>, <a href="https://pyodide.org/en/stable/usage/packages-in-pyodide.html">other packages</a> will be automatically installed if you <code>import</code> them.</p>
+        <div class="docslab" data-runenv="py" data-hardshareo="test" data-hardshareid="test">
+            <a href="https://github.com/rerobots/examples" target="_blank">Try it</a>
+            <pre><code>print("hola")
+</code></pre>
+        </div>
+
+        <p>When the code is executed, <code>{{ MISTY_URL }}</code> is replaced with the proxy URL through which commands can be sent directly to a <a href="https://www.mistyrobotics.com/">Misty robot</a>.</p>
+        <div class="docslab" data-runenv="py" data-addons="mistyproxy" data-hardshareo="docslab" data-hardshareid="example-misty">
+            <a href="https://github.com/rerobots/examples" target="_blank">Try it</a>
+            <pre><code>"""
+Output will have the form of
+
+    charge: 99.0 %
+    state: Charging
+"""
+
+import requests
+
+res = requests.get("{{ MISTY_URL }}/api/battery")
+assert res.ok
+payload = res.json()
+
+print(f"charge: {payload['result']['chargePercent']*100} %")
+print("state:", payload['result']['state'])
+
+print("proxy URL: {{ MISTY_URL }}")
+
+</code></pre>
+        </div>
+    </body>
+</html>
