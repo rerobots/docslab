@@ -474,6 +474,8 @@ export function attachCameraStream(
     coderi: CodeRuntimeInfo,
     root: HTMLElement,
     el: HTMLImageElement,
+    width?: number,
+    height?: number,
 ): Promise<void> {
     if (coderi.hardshareO === 'test') {
         return Promise.resolve();
