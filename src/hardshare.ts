@@ -1,3 +1,5 @@
+import * as z from 'zod';
+
 import { instanceKeepAlive } from 'rerobots';
 import type { CodeRuntimeInfo, InstanceInfo, InstanceParams } from './types';
 
@@ -14,6 +16,13 @@ function checkIfCancelled(cancelFlag?: CancelFlag, reject?: () => void) {
         }
     }
 }
+
+const TokenUPSandboxSchema = z.object({
+    u: z.string(),
+    tok: z.jwt(),
+    tok64: z.base64(),
+    nonce: z.string().optional(),
+});
 
 export function getApiToken(
     hardshareO: string,
@@ -59,6 +68,7 @@ export function getApiToken(
                     throw new Error(res.url);
                 })
                 .then((payload) => {
+                    payload = TokenUPSandboxSchema.parse(payload);
                     if (payload.nonce && !anon_id) {
                         anon_id = payload.u.substring(
                             payload.u.lastIndexOf('_') + 1,
