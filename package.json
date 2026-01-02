@@ -28,7 +28,7 @@
     "clean": "rm -r -f lib dist",
     "format": "bin/format.sh",
     "format:check": "bin/format.sh check",
-    "lint": "yarn biome lint",
+    "lint": "yarn biome lint && tsc --noEmit",
     "lint:fix": "yarn biome lint --write",
     "test": "jest",
     "test:end-to-end": "cypress run",
