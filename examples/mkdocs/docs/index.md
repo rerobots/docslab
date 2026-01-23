@@ -1,7 +1,11 @@
 # Examples of docslab in MkDocs
 
 
-```{ .cpp .docslab }
+```{ .py docslab runEnv=py hardshare=test/test }
+print("hola")
+```
+
+```docslab
 // hardshare: heliumdev/cubecell-draw-demo
 // command: source .platformio/penv/bin/activate && cd m/Heltec-CubeCell-Board/examples/cubecell-helium-us915-basic && pio run -t upload && pio device monitor
 // destpath: m/Heltec-CubeCell-Board/examples/cubecell-helium-us915-basic/src/main.cpp
