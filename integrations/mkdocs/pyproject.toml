@@ -12,10 +12,9 @@ dependencies = [
     "Markdown",
 ]
 authors = [{name = "rerobots, Inc.", email = "q@rerobots.net"}]
-license = {text = "Apache-2.0"}
+license = "Apache-2.0"
 readme = "README.rst"
 classifiers = [
-    "License :: OSI Approved :: Apache Software License",
     "Development Status :: 4 - Beta",
 ]
 
