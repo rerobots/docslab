@@ -1,3 +1,12 @@
+docslab (0.4.0)
+
+  * Treat test/test as special hardshare ID for local testing
+
+  * More examples
+
+ -- Scott C. Livingston <scott@rerobots.net>  Sun, 25 Jan 2026 22:57:33 -0800
+
+
 docslab (0.3.12)
 
   * Export base type of PreludeMap
