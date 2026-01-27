@@ -5,14 +5,13 @@ import uuid
 import mkdocs.plugins
 from mkdocs.structure.files import File
 
-
 try:
     from ._version import __version__
 except ImportError:
     __version__ = '0.0.0.dev0+Unknown'
 
 
-DOCSLAB_VERSION = '0.3.9'
+DOCSLAB_VERSION = '0.4.1'
 DOCSLAB_URL = (
     f'https://cdn.jsdelivr.net/npm/docslab@{DOCSLAB_VERSION}/dist/index.all.js'
 )
@@ -56,7 +55,9 @@ class DocslabPlugin(mkdocs.plugins.BasePlugin):
             if block_id is None:
                 block_id = '#dl-' + str(uuid.uuid4())
             if 'docslab' in attr:
-                self.docslab_map[block_id] = attr
+                if page.file.src_path not in self.docslab_map:
+                    self.docslab_map[page.file.src_path] = {}
+                self.docslab_map[page.file.src_path][block_id] = attr
                 if not has_id:
                     if attr[-1] == '}':
                         attr.insert(len(attr) - 1, block_id)
@@ -68,3 +69,29 @@ class DocslabPlugin(mkdocs.plugins.BasePlugin):
             else:
                 patched_markdown += line + os.linesep
         return patched_markdown
+
+    def on_page_content(self, html, page, config, files):
+        if page.file.src_path not in self.docslab_map:
+            return html
+        for block_id, attr in self.docslab_map[page.file.src_path].items():
+            id_offset = html.find(block_id[1:])
+            assert id_offset >= 0
+            start_pre = html.rfind('<pre', 0, id_offset)
+            end_pre = html.find('</pre>', id_offset)
+            docslab_div = '<div class="docslab"'
+            for a in attr:
+                if a.startswith('hardshare='):
+                    hardshareO, hardshareId = a[len('hardshare=') :].split('/')
+                    docslab_div += f' data-hardshareo="{hardshareO}" data-hardshareid="{hardshareId}"'
+                elif a.startswith('runEnv='):
+                    runEnv = a[len('runEnv=') :]
+                    docslab_div += f' data-runenv="{runEnv}"'
+            docslab_div += '>'
+            html = (
+                html[:start_pre]
+                + docslab_div
+                + html[start_pre : (end_pre + 6)]
+                + '</div>'
+                + html[(end_pre + 6) :]
+            )
+        return html
