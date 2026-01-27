@@ -79,6 +79,7 @@ export function parsePrelude(codeBlob: string): PreludeMap {
         'refUrl',
         'repoScript',
         'repoUrl',
+        'runEnv',
         'urlfile',
     ];
     const pm: PreludeMap = {

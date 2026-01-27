@@ -84,6 +84,7 @@ export function prepareSnippet(
         coderi.destpath = pm.destpath;
         coderi.repoUrl = pm.repoUrl;
         coderi.repoScript = pm.repoScript;
+        coderi.runEnv = pm.runEnv;
         coderi.urlfile = pm.urlfile;
         coderi.exampleCode = pm.exampleCode;
         coderi.lineRange = pm.lineRange;
@@ -97,7 +98,7 @@ export function prepareSnippet(
             ) {
                 syntaxHighlight = exampleBlockElement.className.substring(9);
             }
-            root.removeChild(exampleBlockElement);
+            exampleBlockElement.parentNode?.removeChild(exampleBlockElement);
         }
 
         const newRoot = document.createElement('div');
@@ -120,6 +121,8 @@ export function prepareSnippet(
             syntaxHighlight = 'c_cpp';
         } else if (syntaxHighlight === 'bash') {
             syntaxHighlight = 'sh';
+        } else if (syntaxHighlight === 'py') {
+            syntaxHighlight = 'python';
         }
         if (!Object.keys(highlightMap).includes(syntaxHighlight)) {
             console.log('Unknown syntax highlighting mode:', syntaxHighlight);
