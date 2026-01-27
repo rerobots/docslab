@@ -11,7 +11,7 @@
   "homepage": "https://docslab.org/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rerobots/docslab.git"
+    "url": "git+https://github.com/rerobots/docslab.git"
   },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
