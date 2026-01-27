@@ -1,3 +1,10 @@
+docslab (0.4.1)
+
+  * Fix bug where runEnv was not read from prelude comments
+
+ -- Scott C. Livingston <scott@rerobots.net>  Tue, 27 Jan 2026 10:50:46 -0800
+
+
 docslab (0.4.0)
 
   * Treat test/test as special hardshare ID for local testing
