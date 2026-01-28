@@ -1,8 +1,8 @@
 use std::io;
 
-use mdbook::book::Book;
-use mdbook::errors::Error;
-use mdbook::preprocess::{CmdPreprocessor, Preprocessor, PreprocessorContext};
+use mdbook_preprocessor::book::Book;
+use mdbook_preprocessor::errors::Error;
+use mdbook_preprocessor::Preprocessor;
 
 struct DocslabCodeblock;
 
@@ -12,19 +12,23 @@ impl DocslabCodeblock {
     }
 
     pub fn handle_preprocessing(&self) -> Result<(), Error> {
-        let (ctx, book) = CmdPreprocessor::parse_input(io::stdin())?;
+        let (ctx, book) = mdbook_preprocessor::parse_input(io::stdin())?;
         let out = self.run(&ctx, book)?;
         serde_json::to_writer(io::stdout(), &out)?;
         Ok(())
     }
 }
 
-impl Preprocessor for DocslabCodeblock {
+impl mdbook_preprocessor::Preprocessor for DocslabCodeblock {
     fn name(&self) -> &str {
         "docslab"
     }
 
-    fn run(&self, ctx: &PreprocessorContext, mut book: Book) -> Result<Book, Error> {
+    fn run(
+        &self,
+        ctx: &mdbook_preprocessor::PreprocessorContext,
+        book: Book,
+    ) -> Result<Book, Error> {
         Ok(book)
     }
 }
