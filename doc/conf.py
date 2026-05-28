@@ -2,7 +2,7 @@ import os
 
 
 project = 'docslab'
-copyright = '2025 rerobots, Inc, et al'  # Theme appends "." to copyright declaration, so omit it here to avoid double ".."
+copyright = '2026 rerobots, Inc, et al'  # Theme appends "." to copyright declaration, so omit it here to avoid double ".."
 author = 'the docslab developers'
 
 html_theme = 'sphinx_book_theme'
