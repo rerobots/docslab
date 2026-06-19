@@ -1,7 +1,7 @@
 import os
 
 project = 'Docslab Examples'
-copyright = '2024 rerobots, Inc.'
+copyright = '2026 rerobots, Inc'
 
 source_suffix = '.rst'
 master_doc = 'index'
