@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>docslab example</title>
+    <link href="examples.css" rel="stylesheet">
+  <script defer src="index.all.js"></script></head>
+  <body>
+    <p>We begin with a <a href="https://github.com/platformio/platform-espressif32/tree/f1fce6c1a8d20fe63a74676f76213a7f1490bc39/examples/espidf-arduino-wifiscan" target="_blank">WiFi scanning example</a> from the <a href="https://github.com/platformio/platform-espressif32" target="_blank">Espressif 32 repository</a>.</p>
+    <div class="docslab" data-readonly data-hardshareo="scott" data-hardshareid="esp32-examples" data-path="platform-espressif32/examples/espidf-arduino-wifiscan/src/main.cpp" data-command="source .platformio/penv/bin/activate && cd platform-espressif32/examples/espidf-arduino-wifiscan && pio run -t upload && pio device monitor">
+      <a href="https://rerobots.net/u/scott/esp32-examples" target="_blank">Try it</a>
+      <pre><code>/* WiFi scan Example
+  This example code is in the Public Domain (or CC0 licensed, at your option.)
+  Unless required by applicable law or agreed to in writing, this
+  software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+  CONDITIONS OF ANY KIND, either express or implied.
+*/
+#include &lt;stdio.h&gt;
+#include &lt;freertos/FreeRTOS.h&gt;
+#include &lt;freertos/task.h&gt;
+#include "sdkconfig.h"
+#include &lt;Arduino.h&gt;
+#include &lt;WiFi.h&gt;
+
+void wifiScan() {
+    // WiFi.scanNetworks will return the number of networks found
+    int n = WiFi.scanNetworks();
+    Serial.println("scan done");
+    if (n == 0) {
+        Serial.println("no networks found");
+    } else {
+        Serial.print(n);
+        Serial.println(" networks found");
+        for (int i = 0; i &lt; n; ++i) {
+            // Print SSID and RSSI for each network found
+            Serial.print(i + 1);
+            Serial.print(": ");
+            Serial.print(WiFi.SSID(i));
+            Serial.print(" (");
+            Serial.print(WiFi.RSSI(i));
+            Serial.print(")");
+            Serial.println((WiFi.encryptionType(i) == WIFI_AUTH_OPEN)?" ":"*");
+            delay(10);
+        }
+    }
+    Serial.println("");
+}
+
+#if !CONFIG_AUTOSTART_ARDUINO
+void arduinoTask(void *pvParameter) {
+    // Set WiFi to station mode and disconnect from an AP if it was previously connected
+    WiFi.mode(WIFI_STA);
+    WiFi.disconnect();
+    Serial.begin(115200);
+    delay(100);
+
+    while(1) {
+        wifiScan();
+
+        // Wait a bit before scanning again
+        delay(5000);
+    }
+}
+
+extern "C" void app_main()
+{
+    // initialize arduino library before we start the tasks
+    initArduino();
+
+    xTaskCreate(&arduinoTask, "arduino_task", configMINIMAL_STACK_SIZE, NULL, 5, NULL);
+}
+#else
+void setup() {
+    // Set WiFi to station mode and disconnect from an AP if it was previously connected
+    WiFi.mode(WIFI_STA);
+    WiFi.disconnect();
+    Serial.begin(115200);
+    delay(100);
+}
+
+void loop() {
+    wifiScan();
+    // Wait a bit before scanning again
+    delay(5000);
+}
+#endif
+</code></pre>
+    </div>
+
+    <p>There is a lot in this example, so let's consider a simple "hola, mundo" program instead:</p>
+    <div class="docslab" data data-hardshareo="scott" data-hardshareid="esp32-examples" data-path="platform-espressif32/examples/espidf-arduino-wifiscan/src/main.cpp" data-command="source .platformio/penv/bin/activate && cd platform-espressif32/examples/espidf-arduino-wifiscan && pio run -t upload && pio device monitor">
+      <a href="https://rerobots.net/u/scott/esp32-examples" target="_blank">Try it</a>
+      <pre><code>#include &lt;Arduino.h&gt;
+
+void setup() {
+    Serial.begin(115200);
+    delay(100);
+}
+
+void loop() {
+    delay(1000);
+    Serial.println("Hola, mundo!");
+}
+</code></pre>
+    </div>
+    <p>If you encounter problems, hit the "Interrupt" button to interrupt the current process. Failing that, hit the "Teardown sandbox" button, then run it again. Note that "Teardown sandbox" destroys the environment that you were using and allows other users to take a turn. You may need to wait a few seconds before another board becomes available.</p>
+    <p>Can you modify the example above to print a value that increases by 1 for each loop iteration? Documentation about <a href="https://reference.arduino.cc/reference/cs/language/functions/communication/serial/println/" target="_blank">Serial.println</a> may be helpful.</p>
+  </body>
+</html>
