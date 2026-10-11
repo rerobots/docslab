@@ -88,7 +88,7 @@ export function getApiToken(
                     }
                     console.log(err);
                     retryCounter++;
-                    if (retryCounter > 8) {
+                    if (retryCounter > 4) {
                         reject();
                         return;
                     }
@@ -469,7 +469,7 @@ export function getInstanceInfo(
                     }
                     console.log(err);
                     retryCounter++;
-                    if (retryCounter > 8) {
+                    if (retryCounter > 4) {
                         reject();
                         return;
                     }
