@@ -40,7 +40,7 @@ jobs:
             - name: Test
               run: yarn test
             - name: Run end-to-end tests
-              uses: cypress-io/github-action@v6
+              uses: cypress-io/github-action@v7
               with:
                 start: yarn start
                 wait-on: 'http://localhost:8080'
