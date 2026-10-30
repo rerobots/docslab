@@ -58,7 +58,14 @@ module.exports = (env, argv) => {
         });
     } else {
         config.externals = {
-            'ace-code': 'ace-code',
+            codemirror: 'codemirror',
+            '@codemirror/commands': '@codemirror/commands',
+            '@codemirror/lang-cpp': '@codemirror/lang-cpp',
+            '@codemirror/lang-python': '@codemirror/lang-python',
+            '@codemirror/language': '@codemirror/language',
+            '@codemirror/legacy-modes/mode/shell': '@codemirror/legacy-modes/mode/shell',
+            '@codemirror/state': '@codemirror/state',
+            '@codemirror/view': '@codemirror/view',
             xterm: 'xterm',
             'xterm-addon-attach': 'xterm-addon-attach',
             'xterm-addon-fit': 'xterm-addon-fit',

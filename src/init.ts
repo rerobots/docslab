@@ -1,7 +1,11 @@
-import * as ace from 'ace-code';
-import * as aceCppMode from 'ace-code/src/mode/c_cpp';
-import * as acePythonMode from 'ace-code/src/mode/python';
-import * as aceShMode from 'ace-code/src/mode/sh';
+import { indentWithTab } from '@codemirror/commands';
+import { cpp } from '@codemirror/lang-cpp';
+import { python } from '@codemirror/lang-python';
+import { StreamLanguage } from '@codemirror/language';
+import { shell } from '@codemirror/legacy-modes/mode/shell';
+import { Compartment, EditorState, type Extension } from '@codemirror/state';
+import { EditorView, keymap, lineNumbers } from '@codemirror/view';
+import { basicSetup } from 'codemirror';
 
 import './main.css';
 import { runCode } from './sandbox';
@@ -13,13 +17,32 @@ import {
     parseRootData,
 } from './util';
 
-const highlightMap: { [key: string]: typeof aceCppMode } = {
-    c_cpp: aceCppMode,
-    python: acePythonMode,
-    sh: aceShMode,
+const highlightMap: { [key: string]: () => Extension } = {
+    c_cpp: cpp,
+    python: python,
+    sh: () => StreamLanguage.define(shell),
 };
 
-function showAllCode(coderi: CodeRuntimeInfo, editor: ace.Ace.Editor) {
+const lineNumbering = new Compartment();
+
+function setFirstLineNumber(editor: EditorView, firstLineNumber: number) {
+    editor.dispatch({
+        effects: lineNumbering.reconfigure(
+            lineNumbers({
+                formatNumber: (n) => String(n + firstLineNumber - 1),
+            }),
+        ),
+    });
+}
+
+function setCode(editor: EditorView, code: string) {
+    editor.dispatch({
+        changes: { from: 0, to: editor.state.doc.length, insert: code },
+        selection: { anchor: 0 },
+    });
+}
+
+function showAllCode(coderi: CodeRuntimeInfo, editor: EditorView) {
     if (
         !coderi.lineRange ||
         !coderi.exampleCode ||
@@ -32,37 +55,67 @@ function showAllCode(coderi: CodeRuntimeInfo, editor: ace.Ace.Editor) {
         coderi.startShowIndex,
         coderi.endShowIndex,
     );
-    const possiblyEditedRegion = editor.getValue();
+    const possiblyEditedRegion = editor.state.doc.toString();
     if (originalRegion === possiblyEditedRegion) {
-        editor.setValue(coderi.exampleCode, -1);
+        setCode(editor, coderi.exampleCode);
     } else {
         const exampleCode =
             coderi.exampleCode.substring(0, coderi.startShowIndex) +
             possiblyEditedRegion +
             coderi.exampleCode.substring(coderi.endShowIndex);
-        editor.setValue(exampleCode, -1);
+        setCode(editor, exampleCode);
     }
-    editor.setOption('firstLineNumber', 1);
-    if (coderi.maxLine) {
-        editor.setOption('maxLines', coderi.maxLine);
-    }
+    setFirstLineNumber(editor, 1);
 }
 
-function hideSurroundingCode(coderi: CodeRuntimeInfo, editor: ace.Ace.Editor) {
+function hideSurroundingCode(coderi: CodeRuntimeInfo, editor: EditorView) {
     if (!coderi.lineRange || !coderi.exampleCode || !coderi.startShowIndex) {
         throw new Error('cannot hide surrounding code');
     }
-    const region = editor.getValue()
-        ? editor
-              .getValue()
-              .substring(coderi.startShowIndex, coderi.endShowIndex)
+    const currentCode = editor.state.doc.toString();
+    const region = currentCode
+        ? currentCode.substring(coderi.startShowIndex, coderi.endShowIndex)
         : coderi.exampleCode.substring(
               coderi.startShowIndex,
               coderi.endShowIndex,
           );
-    editor.setOption('firstLineNumber', coderi.lineRange[0]);
-    editor.setValue(region, -1);
-    editor.setOption('maxLines', coderi.lineRange[1] - coderi.lineRange[0] + 1);
+    setFirstLineNumber(editor, coderi.lineRange[0]);
+    setCode(editor, region);
+}
+
+function createFullScreenButton(root: HTMLElement): HTMLButtonElement {
+    const button = document.createElement('button');
+    button.innerText = 'Full screen';
+    button.classList.add('dl-fullScreenButton');
+
+    const setFullScreen = (enabled: boolean) => {
+        root.classList.toggle('dl-fullscreen', enabled);
+        button.innerText = enabled ? 'Exit full screen' : 'Full screen';
+    };
+
+    button.addEventListener('click', () => {
+        if (root.classList.contains('dl-fullscreen')) {
+            if (document.fullscreenElement === root) {
+                document.exitFullscreen().catch((err) => {
+                    console.log(err);
+                });
+            }
+            setFullScreen(false);
+        } else {
+            setFullScreen(true);
+            if (document.fullscreenEnabled) {
+                root.requestFullscreen().catch(() => {});
+            }
+        }
+    });
+
+    root.addEventListener('fullscreenchange', () => {
+        if (document.fullscreenElement !== root) {
+            setFullScreen(false);
+        }
+    });
+
+    return button;
 }
 
 // If codeRuntimeInfo is provided, then do not read values from given element.
@@ -115,7 +168,11 @@ export function prepareSnippet(
         syntaxHighlight = 'python';
     }
 
-    const editor = ace.edit(editorDiv);
+    const extensions: Extension[] = [
+        basicSetup,
+        keymap.of([indentWithTab]),
+        lineNumbering.of([]),
+    ];
     if (syntaxHighlight) {
         if (syntaxHighlight === 'c' || syntaxHighlight === 'cpp') {
             syntaxHighlight = 'c_cpp';
@@ -127,9 +184,17 @@ export function prepareSnippet(
         if (!Object.keys(highlightMap).includes(syntaxHighlight)) {
             console.log('Unknown syntax highlighting mode:', syntaxHighlight);
         } else {
-            editor.session.setMode(new highlightMap[syntaxHighlight].Mode());
+            extensions.push(highlightMap[syntaxHighlight]());
         }
     }
+    if (coderi.readOnly) {
+        extensions.push(EditorState.readOnly.of(true));
+    }
+
+    const editor = new EditorView({
+        extensions: extensions,
+        parent: editorDiv,
+    });
 
     const controlPanel = document.createElement('div');
     controlPanel.className = 'docslabPanel';
@@ -142,12 +207,14 @@ export function prepareSnippet(
     let resetShowingAllCode: (() => void) | null = null;
 
     const initialShowCode = () => {
+        coderi.exampleCode = coderi.exampleCode?.replace(/\r\n?/g, '\n');
         if (coderi.lineRange && coderi.exampleCode) {
             [coderi.startShowIndex, coderi.endShowIndex, coderi.maxLine] =
                 getCodeRegion(coderi.exampleCode, coderi.lineRange, '\n');
             if (coderi.lineRange[1] === -1) {
                 coderi.lineRange[1] = coderi.maxLine;
             }
+            editorDiv.style.height = 'auto';
             hideSurroundingCode(coderi, editor);
 
             const showAllButton: HTMLButtonElement =
@@ -173,7 +240,7 @@ export function prepareSnippet(
                 }
             };
         } else {
-            editor.setValue(coderi.exampleCode || '', -1);
+            setCode(editor, coderi.exampleCode || '');
         }
     };
 
@@ -196,10 +263,6 @@ export function prepareSnippet(
         initialShowCode();
     }
 
-    if (coderi.readOnly) {
-        editor.setReadOnly(true);
-    }
-
     let resetButton: HTMLButtonElement;
     if (!coderi.readOnly) {
         resetButton = document.createElement('button');
@@ -208,13 +271,15 @@ export function prepareSnippet(
         controlPanel.appendChild(resetButton);
         resetButton.addEventListener('click', () => {
             coderi.exampleCode ||= '';
-            editor.setValue(coderi.exampleCode, -1);
+            setCode(editor, coderi.exampleCode);
             if (resetShowingAllCode) {
                 resetShowingAllCode();
                 hideSurroundingCode(coderi, editor);
             }
         });
     }
+
+    controlPanel.appendChild(createFullScreenButton(root));
 
     const statusBar = document.createElement('span');
     statusBar.className = 'docslabStatus';

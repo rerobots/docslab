@@ -1,5 +1,5 @@
+import type { EditorView } from '@codemirror/view';
 import { Terminal } from '@xterm/xterm';
-import type * as ace from 'ace-code';
 import '@xterm/xterm/css/xterm.css';
 import { AttachAddon } from '@xterm/addon-attach';
 import { FitAddon } from '@xterm/addon-fit';
@@ -20,7 +20,7 @@ import type { CodeRuntimeInfo } from './types';
 export async function runCode(
     coderi: CodeRuntimeInfo,
     controlPanel: HTMLElement,
-    editor: ace.Ace.Editor,
+    editor: EditorView,
     runButton: HTMLButtonElement,
     initRunButton: () => void,
     statusBar: HTMLSpanElement,
@@ -58,6 +58,20 @@ export async function runCode(
     term.open(termDiv);
     fitAddon.fit();
 
+    const defaultRows = term.rows;
+    const resizeObserver = new ResizeObserver(() => {
+        if (root.classList.contains('dl-fullscreen')) {
+            fitAddon.fit();
+        } else {
+            const dims = fitAddon.proposeDimensions();
+            if (dims && !Number.isNaN(dims.cols)) {
+                term.resize(dims.cols, defaultRows);
+            }
+        }
+    });
+    resizeObserver.observe(root);
+    resizeObserver.observe(termDiv);
+
     const cameraImg = document.createElement('img');
     cameraImg.classList.add('dl-cameraImg');
 
@@ -75,6 +89,7 @@ export async function runCode(
         if (runButtonCallback) {
             runButton.removeEventListener('click', runButtonCallback);
         }
+        resizeObserver.disconnect();
         term.dispose();
         termDiv.remove();
         teardownButton.remove();
@@ -205,7 +220,7 @@ export async function runCode(
                         stderr: stderr,
                     });
                 }
-                let codeBlob = editor.getValue();
+                let codeBlob = editor.state.doc.toString();
                 if (coderi.instance.addons?.mistyproxy) {
                     codeBlob = codeBlob.replace(
                         /{{ MISTY_URL }}/g,
@@ -264,7 +279,7 @@ export async function runCode(
                             },
                             body: JSON.stringify({
                                 path: destpath,
-                                data: editor.getValue(),
+                                data: editor.state.doc.toString(),
                             }),
                         },
                     ).then((res) => {
