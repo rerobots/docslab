@@ -21,8 +21,8 @@ describe('enter and exit full screen mode', () => {
         cy.get('@snippet').contains('button', 'Full screen').click();
         cy.get('@snippet').should('have.class', 'dl-fullscreen');
         cy.document().then((doc) => {
-            cy.get('@snippet').then(($el) => {
-                const rect = $el[0].getBoundingClientRect();
+            cy.get('@snippet').then((el) => {
+                const rect = el[0].getBoundingClientRect();
                 expect(rect.left).to.equal(0);
                 expect(rect.top).to.equal(0);
                 expect(rect.width).to.equal(doc.documentElement.clientWidth);
