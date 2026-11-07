@@ -85,12 +85,12 @@ function hideSurroundingCode(coderi: CodeRuntimeInfo, editor: EditorView) {
 
 function createFullScreenButton(root: HTMLElement): HTMLButtonElement {
     const button = document.createElement('button');
-    button.innerText = 'Full screen';
+    button.innerText = 'Fullscreen';
     button.classList.add('dl-fullScreenButton');
 
     const setFullScreen = (enabled: boolean) => {
         root.classList.toggle('dl-fullscreen', enabled);
-        button.innerText = enabled ? 'Exit full screen' : 'Full screen';
+        button.innerText = enabled ? 'Exit fullscreen' : 'Fullscreen';
     };
 
     button.addEventListener('click', () => {

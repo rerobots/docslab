@@ -14,7 +14,7 @@ describe('quickly open and close CubeCell example', () => {
     });
 });
 
-describe('enter and exit full screen mode', () => {
+describe('enter and exit fullscreen mode', () => {
     it('passes', () => {
         cy.visit('http://localhost:8080/cubecell.html');
         cy.get('div.docslab').first().as('snippet');
@@ -29,8 +29,8 @@ describe('enter and exit full screen mode', () => {
                 expect(rect.height).to.equal(doc.documentElement.clientHeight);
             });
         });
-        cy.get('@snippet').contains('button', 'Exit full screen').click();
+        cy.get('@snippet').contains('button', 'Exit fullscreen').click();
         cy.get('@snippet').should('not.have.class', 'dl-fullscreen');
-        cy.get('@snippet').contains('button', 'Full screen').should('exist');
+        cy.get('@snippet').contains('button', 'Fullscreen').should('exist');
     });
 });
