@@ -18,7 +18,7 @@ describe('enter and exit fullscreen mode', () => {
     it('passes', () => {
         cy.visit('http://localhost:8080/cubecell.html');
         cy.get('div.docslab').first().as('snippet');
-        cy.get('@snippet').contains('button', 'Full screen').click();
+        cy.get('@snippet').contains('button', 'Fullscreen').click();
         cy.get('@snippet').should('have.class', 'dl-fullscreen');
         cy.document().then((doc) => {
             cy.get('@snippet').then((el) => {
