@@ -1024,6 +1024,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/emscripten@^1.41.4":
+  version "1.41.6"
+  resolved "https://registry.yarnpkg.com/@types/emscripten/-/emscripten-1.41.6.tgz#0d852a4c29fc2c035ed9232f00135717f1a920f1"
+  integrity sha512-uN+9i8bFT5CUcZfyIEYDrSueACEyKGbUs5kC/72DGlZZoinh84sJfVV0i8UOJD1asdzkvLPBRrKs41kZ8MdEXg==
+
 "@types/eslint-scope@^3.7.7":
   version "3.7.7"
   resolved "https://registry.yarnpkg.com/@types/eslint-scope/-/eslint-scope-3.7.7.tgz#3108bd5f18b0cdb277c867b3dd449c9ed7079ac5"
@@ -4523,11 +4528,12 @@ pure-rand@^6.0.0:
   resolved "https://registry.yarnpkg.com/pure-rand/-/pure-rand-6.1.0.tgz#d173cf23258231976ccbdb05247c9787957604f2"
   integrity sha512-bVWawvoZoBYpp6yIoQtQXHZjmz35RSVHnUOTefl8Vcjr8snTPY1wnpSPMWekcFwbxI6gtmT7rSYPFvz71ldiOA==
 
-pyodide@^0.27.2:
-  version "0.27.7"
-  resolved "https://registry.yarnpkg.com/pyodide/-/pyodide-0.27.7.tgz#00f7ed8a088289e4b40070ff59e1864836449dec"
-  integrity sha512-RUSVJlhQdfWfgO9hVHCiXoG+nVZQRS5D9FzgpLJ/VcgGBLSAKoPL8kTiOikxbHQm1kRISeWUBdulEgO26qpSRA==
+pyodide@^314.0.7:
+  version "314.0.7"
+  resolved "https://registry.yarnpkg.com/pyodide/-/pyodide-314.0.7.tgz#19a6865259f8d594cdef5b7e2f44930b68f5e987"
+  integrity sha512-0YvXxEhfEdpLfb/XkM2BFAeMROq0iMUX2bzzH9pOttyMcWkwq+HbE5uyuGD82LN7y2q+SNvi/6V5JEsOlD2R1A==
   dependencies:
+    "@types/emscripten" "^1.41.4"
     ws "^8.5.0"
 
 qs@~6.14.0, qs@~6.14.1:
