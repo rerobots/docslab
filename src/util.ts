@@ -1,6 +1,7 @@
 import type {
     CodeRuntimeInfo,
     HardsharePath,
+    LayoutType,
     LineRange,
     PreludeKey,
     PreludeMap,
@@ -70,11 +71,19 @@ export function parseHardsharePath(hspath: string): HardsharePath {
     };
 }
 
+export function parseLayout(layout: string): LayoutType {
+    if (layout === 'stack' || layout === 'tabs') {
+        return layout;
+    }
+    throw new Error(`unexpected layout: ${layout}`);
+}
+
 export function parsePrelude(codeBlob: string): PreludeMap {
     const knownKeys: PreludeKey[] = [
         'command',
         'destpath',
         'hardshare',
+        'layout',
         'lineRange',
         'refUrl',
         'repoScript',
@@ -152,6 +161,8 @@ export function parsePrelude(codeBlob: string): PreludeMap {
             } else {
                 throw new Error(`unexpected runEnv: ${runEnv}`);
             }
+        } else if (key === 'layout') {
+            pm.layout = parseLayout(line.substring(sep + 1).trim());
         } else if (key === 'addons') {
             const addons = line.substring(sep + 1).trim();
             pm.addons = addons.split(',').map((w) => w.trim());
@@ -204,6 +215,9 @@ export function parseRootData(
         } else {
             throw new Error(`unexpected runenv: ${root.dataset.runenv}`);
         }
+    }
+    if ('layout' in root.dataset && root.dataset.layout) {
+        coderi.layout = parseLayout(root.dataset.layout);
     }
     if ('addons' in root.dataset && root.dataset.addons) {
         coderi.addons = root.dataset.addons.split(',').map((w) => w.trim());

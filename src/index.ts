@@ -1,6 +1,7 @@
 export { loadAll, prepareSnippet } from './init';
 export type {
     CodeRuntimeInfo,
+    LayoutType,
     LineRange,
     PreludeKey,
     PreludeMap,

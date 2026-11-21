@@ -9,10 +9,12 @@ import { basicSetup } from 'codemirror';
 
 import './main.css';
 import { runCode } from './sandbox';
+import { setupTabs } from './tabs';
 import type { CodeRuntimeInfo } from './types';
 import {
     getCodeRegion,
     initCodeRuntimeInfo,
+    parseLayout,
     parsePrelude,
     parseRootData,
 } from './util';
@@ -142,6 +144,9 @@ export function prepareSnippet(
         coderi.exampleCode = pm.exampleCode;
         coderi.lineRange = pm.lineRange;
         coderi.refUrl = pm.refUrl;
+        coderi.layout = root.dataset.layout
+            ? parseLayout(root.dataset.layout)
+            : pm.layout;
 
         const exampleBlockElement = root.getElementsByTagName('code')[0];
         if (exampleBlockElement) {
@@ -306,6 +311,10 @@ export function prepareSnippet(
     controlPanel.appendChild(moreInfoSection);
 
     root.appendChild(controlPanel);
+
+    if (coderi.layout === 'tabs') {
+        setupTabs(root, runButton);
+    }
 
     let terminationTimeout: NodeJS.Timeout | null = null;
     const assignTerminationTimeout = (x: NodeJS.Timeout | null) => {

@@ -15,6 +15,11 @@ export interface PreludeMapBase {
     // Default is ssh
     runEnv: RunEnvType;
 
+    // Arrangement of components (editor, terminal, ...):
+    // stack (default)
+    // tabs
+    layout?: LayoutType;
+
     // These are defined by rerobots
     addons?: string[];
 }
@@ -30,8 +35,14 @@ export type LineRange = [number, number];
 
 type RunEnvType = 'py' | 'ssh';
 
+export type LayoutType = 'stack' | 'tabs';
+
 export type PreludeKey = keyof PreludeMap;
-export type PreludeValue = string & string[] & LineRange & RunEnvType;
+export type PreludeValue = string &
+    string[] &
+    LineRange &
+    RunEnvType &
+    LayoutType;
 
 export interface HardsharePath {
     hardshareO: string;
