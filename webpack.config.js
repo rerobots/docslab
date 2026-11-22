@@ -82,11 +82,9 @@ module.exports = (env, argv) => {
 
     if (env.example) {
         const examples = [
-            'cubecell.html',
-            'esp32.html',
+            'devboards.html',
             'httpproxy.html',
             'repo.html',
-            'wisblock.html',
         ];
         examples.forEach((filename) => {
             config.plugins.push(new HtmlWebpackPlugin({
