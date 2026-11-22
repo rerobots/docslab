@@ -1,6 +1,6 @@
 describe('quickly open and close CubeCell example', () => {
     it('passes', () => {
-        cy.visit('http://localhost:8080/cubecell.html');
+        cy.visit('http://localhost:8080/devboards.html');
         cy.get('div.docslab')
             .first()
             .within(() => {
@@ -16,7 +16,7 @@ describe('quickly open and close CubeCell example', () => {
 
 describe('enter and exit fullscreen mode', () => {
     it('passes', () => {
-        cy.visit('http://localhost:8080/cubecell.html');
+        cy.visit('http://localhost:8080/devboards.html');
         cy.get('div.docslab').first().as('snippet');
         cy.get('@snippet').contains('button', 'Fullscreen').click();
         cy.get('@snippet').should('have.class', 'dl-fullscreen');
