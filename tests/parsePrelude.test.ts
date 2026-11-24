@@ -79,3 +79,44 @@ test('prelude from HTML dataset in repo-style div', () => {
     expect(coderi.runEnv).toBe('ssh');
     expect(coderi.addons).toEqual(['cmdsh']);
 });
+
+test('prelude parsing layout', () => {
+    const text = `# hardshare: test/test
+    # layout: tabs
+    # ---
+    echo hola
+    `;
+    expect(parsePrelude(text).layout).toBe('tabs');
+
+    const textNone = `# hardshare: test/test
+    # ---
+    echo hello
+    `;
+    expect(parsePrelude(textNone).layout).toBeUndefined();
+
+    const textNotValid = `# hardshare: test/test
+    # layout: broken
+    # ---
+    echo hello
+    `;
+    expect(() => parsePrelude(textNotValid)).toThrow();
+});
+
+test('layout in HTML dataset', () => {
+    const { document } = new JSDOM(`
+        <!DOCTYPE html>
+        <div
+            id="example"
+            class="docslab"
+            data-hardshareo="test"
+            data-hardshareid="test"
+            data-layout="tabs"
+        ></div>
+`).window;
+    const root = document.getElementById('example') as HTMLDivElement;
+    const coderi = parseRootData(root);
+    if (coderi === null) {
+        throw new Error();
+    }
+    expect(coderi.layout).toBe('tabs');
+});
