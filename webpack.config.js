@@ -84,6 +84,7 @@ module.exports = (env, argv) => {
         const examples = [
             'devboards.html',
             'httpproxy.html',
+            'layout.html',
             'repo.html',
         ];
         examples.forEach((filename) => {
