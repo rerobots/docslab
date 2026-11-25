@@ -29,6 +29,16 @@ Examples of docslab in Sphinx
     print("hola")
 
 
+For a layout with tabs, instead of the default stacked components, use
+``:layout: tabs`` as in the following example,
+
+.. docslab:: test/test
+    :runenv: py
+    :layout: tabs
+
+    print("hola")
+
+
 References
 ----------
 

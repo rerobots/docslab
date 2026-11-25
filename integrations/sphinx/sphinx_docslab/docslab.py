@@ -54,6 +54,15 @@ def is_known_language(lang: str) -> str:
     return lang
 
 
+def is_known_layout(layout: str) -> str:
+    if layout not in [
+        'stack',
+        'tabs',
+    ]:
+        raise ValueError(f'unknown layout: {layout}')
+    return layout
+
+
 def is_known_runenv(runenv: str) -> str:
     if runenv not in [
         'py',
@@ -86,6 +95,7 @@ class DocslabNode(nodes.Element):
         path=None,
         repo=None,
         urlfile=None,
+        layout=None,
     ):
         self.hardshare_owner, self.hardshare_id = hardshare_ref.split('/')
         self.runenv = runenv
@@ -95,6 +105,7 @@ class DocslabNode(nodes.Element):
         self.path = path
         self.repo = repo
         self.urlfile = urlfile
+        self.layout = layout
         super().__init__()
 
 
@@ -102,7 +113,7 @@ def visit_docslab_html(self, node):
     elem = f'<div class="docslab" data-hardshareo="{node.hardshare_owner}" data-hardshareid="{node.hardshare_id}"'
     if node.readonly:
         elem += ' data-readonly'
-    for kw in ['runenv', 'command', 'path', 'repo', 'urlfile']:
+    for kw in ['runenv', 'command', 'path', 'repo', 'urlfile', 'layout']:
         if getattr(node, kw, None):
             elem += f' data-{kw}="{getattr(node, kw)}"'
     elem += '>'
@@ -130,6 +141,7 @@ class DocslabDirective(SphinxDirective):
         'path': lambda x: x,
         'repo': is_url,
         'urlfile': is_url,
+        'layout': is_known_layout,
     }
 
     def run(self):
