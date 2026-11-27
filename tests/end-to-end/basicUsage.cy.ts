@@ -34,3 +34,44 @@ describe('enter and exit fullscreen mode', () => {
         cy.get('@snippet').contains('button', 'Fullscreen').should('exist');
     });
 });
+
+describe('changing layouts', () => {
+    it('switches among tabs', () => {
+        cy.visit('http://localhost:8080/layout.html');
+        cy.get('div#exampleWithTabs').first().as('snippet');
+        cy.get('@snippet').should('have.class', 'dl-tabs');
+        cy.get('@snippet').find('[role=tab]').should('have.length', 3);
+        cy.get('@snippet')
+            .contains('[role=tab]', 'Code')
+            .should('have.attr', 'aria-selected', 'true');
+        cy.get('@snippet')
+            .contains('[role=tab]', 'Terminal')
+            .should('be.disabled');
+        cy.get('@snippet')
+            .contains('[role=tab]', 'Camera')
+            .should('be.disabled');
+        cy.get('@snippet').find('.docslabEditor').should('be.visible');
+
+        cy.get('@snippet').contains('button', 'Run').click();
+        cy.get('@snippet')
+            .contains('[role=tab]', 'Terminal')
+            .should('not.be.disabled')
+            .and('have.attr', 'aria-selected', 'true');
+        cy.get('@snippet').find('.dl-terminalContainer').should('be.visible');
+        cy.get('@snippet').find('.docslabEditor').should('not.be.visible');
+
+        cy.get('@snippet').contains('[role=tab]', 'Code').click();
+        cy.get('@snippet').find('.docslabEditor').should('be.visible');
+        cy.get('@snippet')
+            .find('.dl-terminalContainer')
+            .should('not.be.visible');
+
+        cy.get('@snippet').contains('button', 'Teardown').click();
+        cy.get('@snippet')
+            .contains('[role=tab]', 'Terminal')
+            .should('be.disabled');
+        cy.get('@snippet')
+            .contains('[role=tab]', 'Code')
+            .should('have.attr', 'aria-selected', 'true');
+    });
+});
